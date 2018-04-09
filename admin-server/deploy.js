@@ -14,6 +14,22 @@ const REMOTE_DIR = '/var/www/admin-cl-beneficios/';
 const PM2_ID = 'admin-cl-beneficios'
 
 
+const LOCAL_DIR_CLEAR = './sessions';
+
+
+console.log("\n\n****************************************************************************");
+console.log('*  Removendo sessões locais');
+console.log("\n\n----------------------------------------------------------------------------");
+
+fs.readdir(LOCAL_DIR_CLEAR, (err, files) => {
+    if (err) throw err;
+    for (const file of files) {
+        fs.unlink(path.join(LOCAL_DIR_CLEAR, file), err => {
+            if (err) throw err;
+        });
+    }
+});
+
 ssh.connect({
         host: HOST_URL,
         username: 'ubuntu',
@@ -60,6 +76,13 @@ ssh.connect({
                 ssh.execCommand(cmd2, { cwd: REMOTE_DIR }).then(function(result) {
                     console.log(cmd2 + ' STDOUT: \n' + result.stdout);
                     console.log(cmd2 + ' STDERR: \n' + result.stderr);
+                    const cmd3 = "sudo rm -Rf " + REMOTE_DIR + "sessions/*";
+                    console.log("executando: " + cmd3 + "\n");
+                    ssh.execCommand(cmd2, { cwd: REMOTE_DIR }).then(function(result) {
+                        console.log(cmd2 + ' STDOUT: \n' + result.stdout);
+                        console.log(cmd2 + ' STDERR: \n' + result.stderr);
+                        ssh.dispose();
+                    });
                     ssh.dispose();
                 });
             });

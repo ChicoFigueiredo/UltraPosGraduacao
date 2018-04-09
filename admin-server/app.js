@@ -111,8 +111,11 @@ app.post('/login',
 app.get('/logout', function(req, res) {
     req.logout();
     req.session.destroy(function(err) {
-        res.redirect('/'); //Inside a callback… bulletproof!
+        //res.redirect('/'); //Inside a callback… bulletproof!
+        res.write("Fechou buteco!!!");
+        res.end();
     });
+    res.end();
 });
 
 // Assim como qualquer middleware, é quintessencial chamarmos next()

@@ -5,10 +5,12 @@ var express = require('express'),
     path = require('path'),
     logger = require('morgan'),
     sassMiddleware = require('node-sass-middleware'),
-    expressSession = require('express-session'),
+    session = require('express-session'),
     passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
     flash = require("connect-flash");
+
+var FileStore = require('session-file-store')(session);
 
 var indexRouter = require('./routes/index'),
     usersRouter = require('./routes/users'),
@@ -31,6 +33,9 @@ app.use(sassMiddleware({
     sourceMap: true
 }));
 
+app.use(cookieParser("asdf33g4w4hghjkuil8saef345"))
+
+
 passport.use(new LocalStrategy({ passReqToCallback: true },
     function(req, username, password, done) {
         console.log(username + '/' + JSON.stringify(password));
@@ -42,27 +47,17 @@ passport.use(new LocalStrategy({ passReqToCallback: true },
             console.log(user.password);
             console.log('passou');
             if (user.password != password) {
-                return done(null, false, { message: 'Incorrect password.' });
+                return done(null, false, req.flash('message', 'Senha Inválida'));
             }
             console.log('passou');
-            return done(null, user, { message: 'Correct password.' });
+            return done(null, user);
         });
     }
 ));
 
-app.use(expressSession({
-    secret: 'caralhim-de-asa-na-coxa-da-morena',
-    resave: true
-}));
-
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(flash());
-
-
 passport.serializeUser(function(user, done) {
     console.log("USER>" + JSON.stringify(user))
-    done(null, user._id);
+    done(null, user.username);
 });
 
 passport.deserializeUser(function(id, done) {
@@ -71,11 +66,46 @@ passport.deserializeUser(function(id, done) {
     });
 });
 
+
+app.enable('trust proxy'); // add this line
+app.use(session({
+    secret: 'asdf33g4w4hghjkuil8saef345',
+    store: new FileStore(),
+    resave: true,
+    saveUninitialized: true,
+    key: 'skey.sid',
+    proxy: true, // add this line
+    cookie: {
+        httpOnly: true,
+        maxAge: 604800000 //7 days in miliseconds
+    }
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+
+
+
 app.get('/login', function(req, res, next) {
     res.render('login', { title: 'CL Benefí­cios de ' + req.hostname });
 });
 app.post('/login',
-    passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login', failureFlash: true })
+    function(request, response, next) {
+        console.log(request.session)
+        passport.authenticate('local',
+            function(err, user, info) {
+                if (!user) { response.send(info.message); } else {
+
+                    request.login(user, function(error) {
+                        if (error) return next(error);
+                        console.log("Request Login supossedly successful.");
+                        return response.send('Login successful');
+                    });
+                    //response.send('Login successful');
+                }
+
+            })(request, response, next);
+    }
 );
 
 app.get('/signout', function(req, res) {

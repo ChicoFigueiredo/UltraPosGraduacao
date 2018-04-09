@@ -120,13 +120,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "lpc",
+      "clb",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "lpc",
+      "clb",
       "kebab-case"
     ],
     "no-output-on-prefix": true,

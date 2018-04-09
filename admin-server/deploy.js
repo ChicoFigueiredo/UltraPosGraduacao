@@ -9,8 +9,13 @@ node_ssh = require('node-ssh')
 ssh = new node_ssh()
 
 
+const HOST_URL = 'admin.academiabancaria.com.br';
+const REMOTE_DIR = '/var/www/admin-cl-beneficios/';
+const PM2_ID = 'admin-cl-beneficios'
+
+
 ssh.connect({
-        host: 'sistema.lojapopcorn.com.br',
+        host: HOST_URL,
         username: 'ubuntu',
         privateKey: 'chico.pem',
         port: 22,
@@ -19,7 +24,7 @@ ssh.connect({
         }
     })
     .then(function() {
-        ssh.putDirectory('./', '/var/www/lojaPopCorn/', {
+        ssh.putDirectory('./', REMOTE_DIR, {
             recursive: true,
             concurrency: 10,
             validate: function(itemPath) {
@@ -45,14 +50,14 @@ ssh.connect({
             console.log("\n\n----------------------------------------------------------------------------");
             const cmd1 = "sudo npm install";
             console.log("executando: " + cmd1 + "\n");
-            ssh.execCommand(cmd1, { cwd: '/var/www/lojaPopCorn/' }).then(function(result) {
+            ssh.execCommand(cmd1, { cwd: REMOTE_DIR }).then(function(result) {
                 console.log(cmd1 + ' STDOUT: ' + result.stdout);
                 console.log('');
                 console.log(cmd1 + ' STDERR: ' + result.stderr);
                 console.log("\n\n----------------------------------------------------------------------------");
-                const cmd2 = "sudo pm2 restart www --update-env";
+                const cmd2 = "sudo pm2 restart " + PM2_ID + " --update-env";
                 console.log("executando: " + cmd2 + "\n");
-                ssh.execCommand(cmd2, { cwd: '/var/www/lojaPopCorn/' }).then(function(result) {
+                ssh.execCommand(cmd2, { cwd: REMOTE_DIR }).then(function(result) {
                     console.log(cmd2 + ' STDOUT: \n' + result.stdout);
                     console.log(cmd2 + ' STDERR: \n' + result.stderr);
                     ssh.dispose();

@@ -11,6 +11,7 @@ ssh = new node_ssh()
 
 const HOST_URL = 'admin.academiabancaria.com.br';
 const REMOTE_DIR = '/var/www/admin-cl-beneficios/';
+const LOCAL_DIR = '../admin-server/spa/';
 
 
 ssh.connect({
@@ -29,7 +30,7 @@ ssh.connect({
             console.log(cmd1 + ' STDERR: \n' + result.stderr);
             console.log("\n\n****************************************************************************");
             console.log("executando: scp dir \n\n");
-            ssh.putDirectory('../server/spa/', REMOTE_DIR + 'spa/', {
+            ssh.putDirectory(LOCAL_DIR, REMOTE_DIR + 'spa/', {
                 recursive: true,
                 concurrency: 10,
                 validate: function(itemPath) {

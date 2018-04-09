@@ -9,6 +9,6 @@ describe('front App', () => {
 
   it('should display welcome message', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Welcome to lpc!');
+    expect(page.getParagraphText()).toEqual('Welcome to clb!');
   });
 });

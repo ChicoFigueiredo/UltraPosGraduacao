@@ -28,7 +28,8 @@
         "prepush": "npm run lint:ci",
         "release:changelog": "npm run conventional-changelog -- -p angular -i CHANGELOG.md -s",
         "deploy": "ng build -- --prod --aot && node ./deploy.js",
-        "deploy-dev": "ng build && node ./deploy.js"
+        "deploy-dev": "ng build && node ./deploy.js",
+        "up": "node ./deploy.js"
     },
     "dependencies": {
         "@agm/core": "1.0.0-beta.2",

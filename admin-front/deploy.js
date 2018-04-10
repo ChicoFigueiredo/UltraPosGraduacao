@@ -13,7 +13,6 @@ const HOST_URL = 'admin.academiabancaria.com.br';
 const REMOTE_DIR = '/var/www/admin-cl-beneficios/';
 const LOCAL_DIR = '../admin-server/spa/';
 
-
 ssh.connect({
         host: HOST_URL,
         username: 'ubuntu',
@@ -55,7 +54,4 @@ ssh.connect({
                 ssh.dispose();
             });
         })
-
-
-
     }).then(function() {});

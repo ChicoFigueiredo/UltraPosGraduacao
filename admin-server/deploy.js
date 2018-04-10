@@ -40,7 +40,7 @@ exec(zipCmd, (err, stdout, stderr) => {
             port: 22
         })
         .then(function() {
-            const cmdPm2Stop = "sudo pm2 stop " + PM2_ID + " --update-env";
+            const cmdPm2Stop = "sudo sudo pm2 stop " + PM2_ID + " --update-env";
             console.log("\n\n****************************************************************************");
             console.log("executando: " + cmdPm2Stop + "\n");
             ssh.execCommand(cmdPm2Stop, { cwd: REMOTE_DIR }).then(function(result) {
@@ -49,7 +49,7 @@ exec(zipCmd, (err, stdout, stderr) => {
                 console.log(cmdPm2Stop + ' STDERR: \n' + result.stderr);
 
                 console.log("\n\n****************************************************************************");
-                const cmdRmFiles = 'sudo rm -Rfv *';
+                const cmdRmFiles = 'sudo sudo sudo rm -Rfv *';
                 console.log("executando: " + cmdRmFiles + "\n");
                 ssh.execCommand(cmdRmFiles, { cwd: REMOTE_DIR }).then(function(result) {
                     console.log(cmdRmFiles + ' STDOUT: \n' + result.stdout);
@@ -61,7 +61,7 @@ exec(zipCmd, (err, stdout, stderr) => {
                     ssh.putFile(tmpZip, REMOTE_DIR + tmpZip).then(function() {
                         console.log(tmpZip + " > UP")
 
-                        const cmdUnzip = "unzip -o " + tmpZip
+                        const cmdUnzip = "sudo unzip -o " + tmpZip
                         console.log("\n\n****************************************************************************");
                         console.log("executando: " + cmdUnzip + "\n");
                         ssh.execCommand(cmdUnzip, { cwd: REMOTE_DIR }).then(function(result) {

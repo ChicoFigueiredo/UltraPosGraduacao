@@ -14,7 +14,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Tabela de Parametros',
     icon: 'nb-keypad',
-    link: '/pages/ui-features',
+    link: '/modulo',
     children: [
       {
         title: 'Usuários',

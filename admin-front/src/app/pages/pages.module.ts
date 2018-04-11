@@ -5,7 +5,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { PagesRoutingModule } from './pages-routing.module';
 import { ThemeModule } from '../@theme/theme.module';
 
-export const PAGES_COMPONENTS = [
+const PAGES_COMPONENTS = [
   PagesComponent,
 ];
 

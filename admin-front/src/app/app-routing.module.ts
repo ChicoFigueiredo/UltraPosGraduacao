@@ -11,6 +11,7 @@ import {
 
 const routes: Routes = [
   { path: 'pages', loadChildren: 'app/pages/pages.module#PagesModule' },
+  { path: 'modulo', loadChildren: 'app/modulos/modulos.module#ModulosModule' },
   {
     path: 'auth',
     component: NbAuthComponent,

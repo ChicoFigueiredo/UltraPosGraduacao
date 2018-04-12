@@ -12,6 +12,7 @@ ssh = new node_ssh()
 const HOST_URL = 'admin.academiabancaria.com.br';
 const REMOTE_DIR = '/var/www/admin-cl-beneficios/';
 const LOCAL_DIR = '../admin-server/inscricao/';
+const PASTA_DEPLOY = 'inscricao/';
 
 ssh.connect({
         host: HOST_URL,
@@ -21,9 +22,9 @@ ssh.connect({
     })
     .then(function() {
         console.log("\n\n****************************************************************************");
-        const cmd1 = 'rm -Rfv *';
+        const cmd1 = 'sudo sudo sudo rm -Rfv *';
         console.log("executando: " + cmd1 + "\n");
-        ssh.execCommand(cmd1, { cwd: REMOTE_DIR + 'spa/' }).then(function(result) {
+        ssh.execCommand(cmd1, { cwd: REMOTE_DIR + PASTA_DEPLOY }).then(function(result) {
             console.log(cmd1 + ' STDOUT: \n' + result.stdout);
             console.log('');
             console.log(cmd1 + ' STDERR: \n' + result.stderr);

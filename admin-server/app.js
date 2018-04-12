@@ -140,7 +140,8 @@ app.get('/teste', isAuthenticated, function(req, res) {
 
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'spa')));
+//app.use(express.static(path.join(__dirname, 'spa')));
+app.use(express.static(path.join(__dirname, 'inscricao')));
 
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);

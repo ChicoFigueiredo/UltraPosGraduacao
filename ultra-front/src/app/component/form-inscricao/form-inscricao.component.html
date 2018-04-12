@@ -1,0 +1,404 @@
+<div class="container-fluid">
+    <div class="row">
+
+        <form action="../submit" id="formentry" class="form-horizontal" role="form" data-parsley-validate novalidate>
+            <div class="container-fluid shadow">
+                <div class="row">
+                    <div id="valErr" class="row viewerror clearfix hidden">
+                        <div class="alert alert-danger">Oops! Seems there are some errors..</div>
+                    </div>
+                    <div id="valOk" class="row viewerror clearfix hidden">
+                        <div class="alert alert-success">Yay! ..</div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group brdbot">
+                                <h3>Fomulário de Matricula</h3>
+                                <div class="controls col-sm-9">
+
+                                    <p id="field1" data-default-label="Header" data-default-is-header="true" data-control-type="header"></p><span id="errId1" class="error"></span></div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div id="panel2" class="panel panel-default" data-role="panel">
+                                        <div class="panel-heading">Dados Complementares</div>
+                                        <div class="panel-body">
+
+                                            <div class="form-group">
+                                                <label class="control-label-left" for="cpf">CPF:<span class="req"> *</span></label>
+                                                <div class="controls">
+
+                                                    <input id="cpf" type="text" class="form-control k-textbox" data-role="mask" data-mask="999.999.999-99" placeholder="Digite seu CPF" maxlength="28" required="required" name="cpf" data-parsley-errors-container="#errId2">
+                                                    <span id="errId2" class="error"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label-left" for="nome">Nome:<span class="req"> *</span></label>
+                                                <div class="controls">
+
+                                                    <input id="nome" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite seu nome" required="required" name="nome" data-parsley-errors-container="#errId3"><span id="errId3" class="error"></span></div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label-left" for="email">e-mail:<span class="req"> *</span></label>
+                                                <div class="controls">
+
+                                                    <input id="email" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite seu e-mail" required="required" name="email" data-parsley-errors-container="#errId4"><span id="errId4"
+                                                        class="error"></span></div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label-left" for="whatsapp">WhatsApp:<span class="req"> *</span></label>
+                                                <div class="controls">
+
+                                                    <input id="whatsapp" type="text" class="form-control k-textbox" data-role="mask" placeholder="Digite seu celular com WhatsApp" data-mask="(99) 99999-9999" required="required" name="whatsapp" data-parsley-errors-container="#errId5">
+                                                    <span id="errId5" class="error"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label-left" for="celularAlternativo">Celular:</label>
+                                                <div class="controls">
+
+                                                    <input id="celularAlternativo" type="text" class="form-control k-textbox" data-role="mask" data-mask="(99) 99999-9999" placeholder="Digite o número do celular (alternativo)" name="celularAlternativo" data-parsley-errors-container="#errId6">
+                                                    <span id="errId6" class="error"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group" style="display: block;">
+                                                <label class="control-label-left sr-only"></label>
+                                                <div class="controls">
+
+                                                    <label class="checkbox" for="opcaoSMS"><input type="checkbox" value="Ao marcar esta opção, você receberá novidades e promoções do Portal por E-mail, SMS e Telefone." id="opcaoSMS" name="field11" data-parsley-errors-container="#errId7">Ao marcar esta opção, você receberá novidades e promoções do Portal por E-mail, SMS e Telefone.</label>
+                                                    <span id="errId7" class="error"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label-left" for="cep">CEP:<span class="req"> *</span></label>
+                                                <div class="controls">
+
+                                                    <input id="cep" type="text" class="form-control k-textbox" data-role="mask" data-mask="99999-999" required="required" placeholder="Digite seu CEP (o formulário se auto-completará" name="cep" data-parsley-errors-container="#errId8">
+                                                    <span id="errId8" class="error"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label-left" for="endereco">endereço:<span class="req"> *</span></label>
+                                                <div class="controls">
+
+                                                    <input id="endereco" type="text" class="form-control k-textbox" data-role="text" required="required" placeholder="Digite o endereço onde mora" name="endereco" data-parsley-errors-container="#errId9">
+                                                    <span id="errId9" class="error"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label-left" for="numero">número:<span class="req"> *</span></label>
+                                                <div class="controls">
+
+                                                    <input id="numero" type="text" class="form-control k-textbox" data-role="text" required="required" name="numero" placeholder="Digite o número de sua casa" data-parsley-errors-container="#errId10">
+                                                    <span id="errId10" class="error"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label-left" for="complemento">Complemento:</label>
+                                                <div class="controls">
+
+                                                    <input id="complemento" type="text" class="form-control k-textbox" data-role="text" name="complemento" placeholder="Digite a complementação do seu endereço" data-parsley-errors-container="#errId11">
+                                                    <span id="errId11" class="error"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label-left" for="bairro">Bairro:<span class="req"> *</span></label>
+                                                <div class="controls">
+
+                                                    <input id="bairro" type="text" class="form-control k-textbox" data-role="text" required="required" name="bairro" placeholder="Digite o bairro onde mora" data-parsley-errors-container="#errId12">
+                                                    <span id="errId12" class="error"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label-left" for="cidade">Cidade:<span class="req"> *</span></label>
+                                                <div class="controls">
+
+                                                    <input id="cidade" type="text" class="form-control k-textbox" data-role="text" required="required" name="cidade" placeholder="Digite a cidade onde mora" data-parsley-errors-container="#errId13">
+                                                    <span id="errId13" class="error"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label" for="uf">UF:<span class="req"> *</span></label>
+                                                <div class="controls">
+
+                                                    <select id="uf" class="form-control" data-role="select" required="required" name="uf" data-parsley-errors-container="#errId14">
+                                                      <option value=""></option>
+                                                      <option value="Option 1">Option 1</option>
+                                                      <option value="Option 2">Option 2</option>
+                                                      <option value="Option 3">Option 3</option>
+                                                      <option value="Option 4">Option 4</option>
+                                                    </select><span id="errId14" class="error"></span></div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label-left" for="ufNaturalidade">UF Naturalidade:<span class="req"> *</span></label>
+                                                <div class="controls">
+
+                                                    <select id="ufNaturalidade" class="form-control" data-role="select" required="required" name="ufNaturalidade" data-parsley-errors-container="#errId15">
+    <option value=""></option>
+    <option value="Option 1">Option 1</option>
+    <option value="Option 2">Option 2</option>
+    <option value="Option 3">Option 3</option>
+    <option value="Option 4">Option 4</option>
+  </select><span id="errId15" class="error"></span></div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label-left" for="cidadeNaturalidade">Cidade Naturalidade:<span class="req"> *</span></label>
+                                                <div class="controls">
+
+                                                    <select id="cidadeNaturalidade" class="form-control" data-role="select" required="required" name="cidadeNaturalidade" data-parsley-errors-container="#errId16">
+    <option value=""></option>
+    <option value="Option 1">Option 1</option>
+    <option value="Option 2">Option 2</option>
+    <option value="Option 3">Option 3</option>
+    <option value="Option 4">Option 4</option>
+  </select><span id="errId16" class="error"></span></div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label control-label-left col-sm-3">Sexo:</label>
+                                                <div class="controls col-sm-9">
+
+                                                    <label class="radio col-md-6" for="sexoFeminino"><input type="radio" value="Feminino" id="sexoFeminino" name="field70" data-parsley-errors-container="#errId17">Feminino</label><label class="radio col-md-6"
+                                                        for="sexoMasculino"><input type="radio" value="Masculino" id="sexoMasculino" name="field70" data-parsley-errors-container="#errId17">Masculino</label><span id="errId17" class="error"></span></div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label-left" for="dataNascimento">Data Nascimento:<span class="req"> *</span></label>
+                                                <div class="controls">
+
+                                                    <span class="k-widget k-datepicker k-header form-control" style=""><span class="k-picker-wrap k-state-default"><input id="dataNascimento" type="text" class="form-control k-input" data-role="date" role="textbox" aria-haspopup="true" aria-expanded="false" aria-owns="field95_dateview" aria-disabled="false" aria-readonly="false" aria-label="Current focused date is null" data-error-container="#errfield95" required="required" style="width: 100%;" name="dataNascimento" data-parsley-errors-container="#errId18"><span unselectable="on" class="k-select" role="button" aria-controls="field95_dateview"><span unselectable="on" class="k-icon k-i-calendar">select</span></span>
+                                                    </span>
+                                                    </span><span id="errId18" class="error"></span></div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label-left" for="estadoCivil">Estado Civil:<span class="req"> *</span></label>
+                                                <div class="controls">
+
+                                                    <select id="estadoCivil" class="form-control" data-role="select" selected="selected" name="estadoCivil" required="required" data-parsley-errors-container="#errId19">
+    
+    
+    
+    
+    
+  <option value="Selecione" selected="selected">Selecione</option><option value="Solteira(o)">Solteira(o)</option><option value="Casada(o)">Casada(o)</option><option value="União estável">União estável</option><option value="Divorciada(o)">Divorciada(o)</option><option value="Viúva(o)">Viúva(o)</option></select>
+                                                    <span id="errId19" class="error"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label-left" for="identidade">número da Identidade<span class="req"> *</span></label>
+                                                <div class="controls">
+
+                                                    <input id="identidade" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o número da identidade" name="identidade" required="required" data-parsley-errors-container="#errId20">
+                                                    <span id="errId20" class="error"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label-left" for="orgaoIdentidade">Orgão Expedidor<span class="req"> *</span></label>
+                                                <div class="controls">
+
+                                                    <input id="orgaoIdentidade" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o orgão expedidor da identidade" name="orgaoIdentidade" required="required" data-parsley-errors-container="#errId21">
+                                                    <span id="errId21" class="error"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group" style="display: block;">
+                                                <label class="control-label-left" for="mae">Nome da Mãe<span class="req"> *</span></label>
+                                                <div class="controls">
+
+                                                    <input id="mae" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o nome da mãe" name="mae" required="required" data-parsley-errors-container="#errId22"><span id="errId22"
+                                                        class="error"></span></div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label-left" for="pai">Nome do Pai:</label>
+                                                <div class="controls">
+
+                                                    <input id="pai" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o nome do pai" name="pai" data-parsley-errors-container="#errId23"><span id="errId23" class="error"></span></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="panel3" class="panel panel-default" data-role="panel">
+                                        <div class="panel-heading">Financeiro</div>
+                                        <div class="panel-body">
+
+                                            <div class="form-group">
+                                                <label class="control-label-left" for="cursoSelecionado">Curso Selecionado</label>
+                                                <div class="controls">
+
+                                                    <select id="cursoSelecionado" class="form-control" data-role="select" name="cursoSelecionado" data-parsley-errors-container="#errId24">
+    <option value="">Extrato de Tomate</option>
+    <option value="Option 1">Option 1</option>
+    <option value="Option 2">Option 2</option>
+    <option value="Option 3">Option 3</option>
+    <option value="Option 4">Option 4</option>
+  </select><span id="errId24" class="error"></span></div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label-left sr-only"></label>
+                                                <div class="controls">
+
+                                                    <label class="checkbox" for="marcaConcordo"><input type="checkbox" value="Li e estou de acordo com os Termos do Contrato" id="marcaConcordo" name="field181" data-parsley-errors-container="#errId25">Li e estou de acordo com os Termos do Contrato</label>
+                                                    <span id="errId25" class="error"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group" style="display: block;">
+                                                <label class="control-label-left" for="matricula">Taxa de Matricula<span class="req"> *</span></label>
+                                                <div class="controls">
+
+                                                    <select id="matricula" class="form-control" data-role="select" selected="selected" name="matricula" required="required" data-parsley-errors-container="#errId26">
+    
+    
+    
+    
+    
+  <option value="100" selected="selected">R$ 100,00</option></select><span id="errId26" class="error"></span></div>
+
+                                            </div>
+                                            <div class="form-group" style="display: block;">
+                                                <label class="control-label-left" for="mensalidade">Valor da Mensalidade<span class="req"> *</span></label>
+                                                <div class="controls">
+
+                                                    <select id="mensalidade" class="form-control" data-role="select" selected="selected" name="mensalidade" required="required" data-parsley-errors-container="#errId27">
+    
+    
+    
+    
+    
+  <option value="24x R$ 166,67" selected="selected">24x R$ 166,67</option><option value="20 x R$ 200,00">20 x R$ 200,00</option><option value="16 x R$ 250,00">16 x R$ 250,00</option><option value="10 x R$ 400,00">10 x R$ 400,00</option><option value="8 x R$ 500,00">8 x R$ 500,00</option><option value="5 x R$ 800,00">5 x R$ 800,00</option><option value="2 x R$ 2.000,00">2 x R$ 2.000,00</option><option value=""></option></select>
+                                                    <span id="errId27" class="error"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label-left" for="melhorDiaPrestacao">Melhor dia para pagamento da mensalidade:<span class="req"> *</span></label>
+                                                <div class="controls">
+
+                                                    <select id="melhorDiaPrestacao" class="form-control" data-role="select" required="required" name="melhorDiaPrestacao" data-parsley-errors-container="#errId28">
+    <option value="5">todo dia 05 do mês</option>
+    <option value="1">todo dia 10 do mês</option>
+    <option value="Option 2">todo dia 15 do mês</option>
+    <option value="Option 3">todo dia 20 do mês</option>
+    <option value="25">todo dia 25 do mês</option>
+  </select><span id="errId28" class="error"></span></div>
+
+                                            </div>
+                                            <div class="form-group" style="display: block;">
+                                                <label class="control-label-left" for="cupom">Aplicar o cupom</label>
+                                                <div class="controls">
+
+                                                    <input id="cupom" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o cupom e clique em aplicar" name="cupom" data-parsley-errors-container="#errId29"><span id="errId29"
+                                                        class="error"></span></div>
+
+                                            </div>
+                                            <div class="form-group btn-group group-inline" style="display: block;">
+
+
+
+                                                <button id="btnCupom" type="button" class="btn btn-primary" name="Aplicar Cupom!">Aplicar Cupom!</button></div>
+                                            <div class="row" id="tab188" data-role="tab" style="display: block;">
+                                                <ul class="nav nav-tabs">
+                                                    <li class=""><a href="#tabContent189" data-toggle="tab" id="tabLabel189">Boleto Bancário</a></li>
+                                                    <li class="active"><a data-toggle="tab" href="#tabContent190" id="tabLabel190">Cartão de Crédito</a></li>
+
+                                                </ul>
+                                                <div class="tab-content">
+                                                    <div class="tab-pane" id="tabContent189">
+                                                        <div class="">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Será gerado:</label>
+                                                                <div class="controls">
+
+                                                                    <label class="checkbox" for="primeiroBoleto"><input type="checkbox" value="266,67" id="primeiroBoleto" name="field228" checked="checked" data-parsley-errors-container="#errId30">primeiro boleto R$ 266,67</label>
+                                                                    <label class="checkbox" for="valorMensalidadeBoleto"><input type="checkbox" value="166,67" id="valorMensalidadeBoleto" name="field228" data-parsley-errors-container="#errId30">23 boletos de 166,67</label>
+                                                                    <span id="errId30" class="error"></span>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="tab-pane active" id="tabContent190">
+                                                        <div class="">
+                                                            <div class="form-group">
+                                                                <label class="control-label-left" for="numeroCartaoCredito">número do Cartão de Crédito</label>
+                                                                <div class="controls">
+
+                                                                    <input id="numeroCartaoCredito" type="text" class="form-control k-textbox" data-role="mask" data-mask="9999 9999 9999 9999" placeholder="Digite o número do Cartão de Crédito" name="numeroCartaoCredito" data-parsley-errors-container="#errId31">
+                                                                    <span id="errId31" class="error"></span>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label-left" for="nomeImpressoCartao">Nome impresso no Cartão</label>
+                                                                <div class="controls">
+
+                                                                    <input id="nomeImpressoCartao" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o nome que está no Cartão de Crédito" name="nomeImpressoCartao" data-parsley-errors-container="#errId32">
+                                                                    <span id="errId32" class="error"></span>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label-left" for="bandeiraCartaoCredito">Bandeira Cartão:</label>
+                                                                <div class="controls">
+
+                                                                    <select id="bandeiraCartaoCredito" class="form-control" data-role="select" name="bandeiraCartaoCredito" data-parsley-errors-container="#errId33">
+    <option value="Mastercard">Mastercard</option>
+    <option value="Visa">Visa</option>
+    <option value="Elo">Elo</option>
+    <option value="American Express">American Express</option>
+    <option value="Dinners">Dinners</option>
+  </select><span id="errId33" class="error"></span></div>
+
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label-left" for="cvvCartaoCredito">CVV</label>
+                                                                <div class="controls">
+
+                                                                    <input id="cvvCartaoCredito" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o código CVV atrás do Cartão" data-parsley-errors-container="#errId34">
+                                                                    <span id="errId34" class="error"></span>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { FormInscricaoComponent } from './component/form-inscricao/form-inscricao.component';
+import { ApiUltraService } from './services/api-ultra.service';
 
 
 @NgModule({
@@ -14,9 +15,12 @@ import { FormInscricaoComponent } from './component/form-inscricao/form-inscrica
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ApiUltraService
   ],
-  providers: [],
+  providers: [
+    ApiUltraService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

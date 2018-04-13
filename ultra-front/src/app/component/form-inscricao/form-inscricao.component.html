@@ -29,7 +29,7 @@
                                             <div class="form-group">
                                                 <label class="control-label-left" for="cpf">CPF:<span class="req"> *</span></label>
                                                 <div class="controls">
-                                                    <input id="cpf" type="text" class="form-control k-textbox" data-role="mask" data-mask="999.999.999-99" placeholder="Digite seu CPF" maxlength="28" required="required" name="cpf" data-parsley-errors-container="#errId2">
+                                                    <input id="cpf" type="text" class="form-control k-textbox" data-role="mask" data-mask="999.999.999-99" placeholder="Digite seu CPF" maxlength="28" required="required" name="cpf" data-parsley-errors-container="#errId2" (focus)='buscaCPF($event.target.value)'>
                                                     <span id="errId2" class="error"></span>
                                                 </div>
 

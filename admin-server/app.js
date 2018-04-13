@@ -12,10 +12,6 @@ var express = require('express'),
 
 var FileStore = require('session-file-store')(session);
 
-var indexRouter = require('./routes/index'),
-    usersRouter = require('./routes/users'),
-    User = require('./model/users');
-
 var app = express();
 
 // view engine setup
@@ -143,8 +139,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 //app.use(express.static(path.join(__dirname, 'spa')));
 app.use(express.static(path.join(__dirname, 'inscricao')));
 
+
+
+var indexRouter = require('./routes/index'),
+    usersRouter = require('./routes/users'),
+    alunosRouter = require('./routes/ultra-pos/alunos');
+
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/alunos', alunosRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

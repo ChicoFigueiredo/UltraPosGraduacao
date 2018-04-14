@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var cupom = require('../../model/ultra-pos/cupom');
+var dbCupom = require('../../model/ultra-pos/cupom');
 
 router.get("/list", function(req, res) {
-    cupom.find({}, {}, //, 'categories.name.pt': true
+    dbCupom.find({}, {}, //, 'categories.name.pt': true
         function(err, data) {
             if (err) {
                 res.send(err);
@@ -15,7 +15,7 @@ router.get("/list", function(req, res) {
 
 
 router.get("/find/:codigoCupom", function(req, res) {
-    cupom.find({ codigoCupom: req.params.codigoCupom }, {}, //, 'categories.name.pt': true
+    dbCupom.find({ codigoCupom: req.params.codigoCupom }, {}, //, 'categories.name.pt': true
         function(err, data) {
             if (err) {
                 res.send(err);
@@ -26,31 +26,38 @@ router.get("/find/:codigoCupom", function(req, res) {
 })
 
 
-router.get("/processa/:codigoCupom/:valor/:valorMatricula", function(req, res) {
-    cupom.find({ codigoCupom: req.params.codigoCupom }, {}, //, 'categories.name.pt': true
-        function(err, cupom) {
+router.get("/calcula/:codigoCupom/:valor/:valorMatricula", function(req, res) {
+    dbCupom.find({ codigoCupom: req.params.codigoCupom }, //, 'categories.name.pt': true
+        function(err, cupoms) {
             if (err) {
                 res.send(err);
             } else {
-                try {
-                    cupom = cupom.toObject();
-                    cupom.valorCalculado = 0;
-                    cupom.valorCavalorMatriculaCalculadolculado = 0;
+                if (cupoms.length > 0) {
+                    var cupom = cupoms[0];
+
                     if (cupom.tipoDesconto === 'valor') {
-                        cupom.valorCalculado = Math.round(((Number(req.params.valor) - Number(cupom.valorDesconto))) * 100) / 100;
-                        cupom.valorMatriculaCalculado = Math.round(((Number(req.params.valorMatricula) - Number(cupom.valorDescontoMatricula))) * 100) / 100;
+
+                        cupom.set('valorCalculado', Math.round(((Number(req.params.valor) - Number(cupom.valorDesconto))) * 100) / 100, { strict: false });
+                        cupom.set('valorMatriculaCalculado', Math.round(((Number(req.params.valorMatricula) - Number(cupom.valorDescontoMatricula))) * 100) / 100, { strict: false });
+
                     } else if (cupom.tipoDesconto === 'percentual') {
-                        cupom.valorCalculado = Math.round(((Number(req.params.valor) - Number(req.params.valor) * Number(cupom.valorDesconto))) * 100) / 100;
-                        cupom.valorMatriculaCalculado = Math.round(((Number(req.params.valorMatricula) - Number(req.params.valorMatricula) * Number(cupom.valorDescontoMatricula))) * 100) / 100;
+
+                        cupom.set('valorCalculado', Math.round(((Number(req.params.valor) - Number(req.params.valor) * Number(cupom.percentualDesconto))) * 100) / 100, { strict: false });
+                        cupom.set('valorMatriculaCalculado', Math.round(((Number(req.params.valorMatricula) - Number(req.params.valorMatricula) * Number(cupom.percentualDesconto))) * 100) / 100, { strict: false });
+
                     } else {
-                        cupom.valorCalculado = Math.round(((Number(req.params.valor) - Number(cupom.valorDesconto))) * 100) / 100;
-                        cupom.valorMatriculaCalculado = Math.round(((Number(req.params.valorMatricula) - Number(cupom.valorDescontoMatricula))) * 100) / 100;
+
+                        cupom.set('valorCalculado', Math.round(((Number(req.params.valor) - Number(cupom.valorDesconto))) * 100) / 100, { strict: false });
+                        cupom.set('valorMatriculaCalculado', Math.round(((Number(req.params.valorMatricula) - Number(cupom.valorDescontoMatricula))) * 100) / 100, { strict: false });
+
                     }
-                    console.log(JSON.stringify(cupom));
+
                     res.send(cupom);
-                } catch (e) {
-                    res.send(e);
+                } else {
+                    res.status(404);
+                    res.send({ error: true, msg: 'Cupom ' + req.params.codigoCupom + ' não encontrado na base de cupons, verifique a digitação ' })
                 }
+
 
             }
         });

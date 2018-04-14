@@ -6,22 +6,26 @@ var express = require('express'),
     logger = require('morgan'),
     sassMiddleware = require('node-sass-middleware'),
     session = require('express-session'),
-    passport = require('passport'),
+    passport = require('./config/passaport'),
     LocalStrategy = require('passport-local').Strategy,
     flash = require("connect-flash");
 
-var FileStore = require('session-file-store')(session);
 
 var app = express();
 
-// view engine setup
+
+/****************************************************************************************************
+ * View Engine
+ * 
+ */
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+
+/****************************************************************************************************
+ * SASS (SCSS)
+ * 
+ */
 app.use(sassMiddleware({
     src: path.join(__dirname, 'public'),
     dest: path.join(__dirname, 'public'),
@@ -29,41 +33,24 @@ app.use(sassMiddleware({
     sourceMap: true
 }));
 
+
+/****************************************************************************************************
+ * Cookies & log
+ * 
+ */
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+
 app.use(cookieParser("asdf33g4w4hghjkuil8saef345"))
 
-
-passport.use(new LocalStrategy({ passReqToCallback: true },
-    function(req, username, password, done) {
-        console.log(username + '/' + JSON.stringify(password));
-        User.findOne({ username: username }, function(err, user) {
-            if (err) { return done(err); }
-            if (!user) {
-                return done(null, false, { message: 'Incorrect username.' });
-            }
-            console.log(user.password);
-            console.log('passou');
-            if (user.password != password) {
-                return done(null, false, req.flash('message', 'Senha Inválida'));
-            }
-            console.log('passou');
-            return done(null, user);
-        });
-    }
-));
-
-passport.serializeUser(function(user, done) {
-    console.log("USER>" + JSON.stringify(user))
-    done(null, user.username);
-});
-
-passport.deserializeUser(function(id, done) {
-    User.findOne({ username: id }, function(err, user) {
-        done(err, user);
-    });
-});
-
-
+/****************************************************************************************************
+ * Session
+ * 
+ */
 app.enable('trust proxy'); // add this line
+var FileStore = require('session-file-store')(session);
 app.use(session({
     secret: 'asdf33g4w4hghjkuil8saef345',
     store: new FileStore(),
@@ -76,15 +63,60 @@ app.use(session({
         maxAge: 604800000 //7 days in miliseconds
     }
 }));
+
+
+/****************************************************************************************************
+ * PassPort
+ * 
+ */
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
+// Assim como qualquer middleware, é quintessencial chamarmos next()
+// Se o usuário estiver autenticado
+var isAuthenticated = function(req, res, next) {
+    console.log(JSON.stringify(req.isAuthenticated()));
+    if (req.isAuthenticated())
+        return next();
+    res.redirect('/caraaa');
+}
+
+/****************************************************************************************************
+ * CORS
+ * 
+ */
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 
+/****************************************************************************************************
+ * Roteamento
+ * 
+ */
+
+var indexRouter = require('./routes/index'),
+    usersRouter = require('./routes/users'),
+    alunosRouter = require('./routes/ultra-pos/alunos'),
+    cursosRouter = require('./routes/ultra-pos/cursos'),
+    categoriasRouter = require('./routes/ultra-pos/categorias'),
+    cupomRouter = require('./routes/ultra-pos/cupom');
+
+app.use('/', indexRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/alunos', alunosRouter);
+app.use('/api/cursos', cursosRouter);
+app.use('/api/categorias', categoriasRouter);
+app.use('/api/cupom', cupomRouter);
+
+// rotas internas
 app.get('/login', function(req, res, next) {
     res.render('login', { title: 'CL Benefí­cios de ' + req.hostname });
 });
+
 app.post('/login',
     function(request, response, next) {
         console.log(request.session)
@@ -114,15 +146,6 @@ app.get('/logout', function(req, res) {
     res.end();
 });
 
-// Assim como qualquer middleware, é quintessencial chamarmos next()
-// Se o usuário estiver autenticado
-var isAuthenticated = function(req, res, next) {
-    console.log(JSON.stringify(req.isAuthenticated()));
-    if (req.isAuthenticated())
-        return next();
-    res.redirect('/caraaa');
-}
-
 app.get('/teste', isAuthenticated, function(req, res) {
     console.log(JSON.stringify(req.isAuthenticated()));
     if (req.isAuthenticated()) {
@@ -135,20 +158,19 @@ app.get('/teste', isAuthenticated, function(req, res) {
 
 
 
+/****************************************************************************************************
+ * Pasta de arquivos estáticos
+ * 
+ */
 app.use(express.static(path.join(__dirname, 'public')));
 //app.use(express.static(path.join(__dirname, 'spa')));
 app.use(express.static(path.join(__dirname, 'inscricao')));
 
 
-
-var indexRouter = require('./routes/index'),
-    usersRouter = require('./routes/users'),
-    alunosRouter = require('./routes/ultra-pos/alunos');
-
-app.use('/', indexRouter);
-app.use('/api/users', usersRouter);
-app.use('/api/alunos', alunosRouter);
-
+/****************************************************************************************************
+ * Middleware de erros
+ * 
+ */
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     next(createError(404));
@@ -165,4 +187,8 @@ app.use(function(err, req, res, next) {
     res.render('error');
 });
 
+/****************************************************************************************************
+ * Export
+ * 
+ */
 module.exports = app;

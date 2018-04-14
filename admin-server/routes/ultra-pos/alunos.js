@@ -55,5 +55,18 @@ router.get("/find/:cpf", function(req, res) {
     });
 })
 
+router.post("/save", function(req, res) {
+    console.log("Salvar : " + req.body.cpf);
+    alunos.find({ cpf: req.body.cpf }, function(err, data) {
+        if (err) {
+            res.send(err);
+        } else {
+            res.send(data);
+        }
+    });
+})
+
+
+
 
 module.exports = router;

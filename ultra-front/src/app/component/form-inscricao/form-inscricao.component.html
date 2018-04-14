@@ -29,7 +29,7 @@
                                             <div class="form-group">
                                                 <label class="control-label-left" for="cpf">CPF:<span class="req"> *</span></label>
                                                 <div class="controls">
-                                                    <input id="cpf" type="text" class="form-control k-textbox" data-role="mask" data-mask="999.999.999-99" placeholder="Digite seu CPF" maxlength="28" required="required" name="cpf" data-parsley-errors-container="#errId2" (focus)='buscaCPF($event.target.value)'>
+                                                    <input id="cpf" [(ngModel)]='alunoAtual.cpf' type="text" class="form-control k-textbox" data-role="mask" data-mask="999.999.999-99" placeholder="Digite seu CPF" maxlength="28" required="required" name="cpf" data-parsley-errors-container="#errId2" (keyup)="onKey($event)">
                                                     <span id="errId2" class="error"></span>
                                                 </div>
 
@@ -38,22 +38,25 @@
                                                 <label class="control-label-left" for="nome">Nome:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input id="nome" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite seu nome" required="required" name="nome" data-parsley-errors-container="#errId3"><span id="errId3" class="error"></span></div>
+                                                    <input id="nome" [(ngModel)]='alunoAtual.nome' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite seu nome" required="required" name="nome" data-parsley-errors-container="#errId3">
+                                                    <span id="errId3" class="error"></span>
+                                                </div>
 
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label-left" for="email">e-mail:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input id="email" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite seu e-mail" required="required" name="email" data-parsley-errors-container="#errId4"><span id="errId4"
-                                                        class="error"></span></div>
+                                                    <input id="email" [(ngModel)]='alunoAtual.email' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite seu e-mail" required="required" name="email" data-parsley-errors-container="#errId4">
+                                                    <span id="errId4" class="error"></span>
+                                                </div>
 
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label-left" for="whatsapp">WhatsApp:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input id="whatsapp" type="text" class="form-control k-textbox" data-role="mask" placeholder="Digite seu celular com WhatsApp" data-mask="(99) 99999-9999" required="required" name="whatsapp" data-parsley-errors-container="#errId5">
+                                                    <input id="whatsapp" [(ngModel)]='alunoAtual.whatsapp' type="text" class="form-control k-textbox" data-role="mask" placeholder="Digite seu celular com WhatsApp" data-mask="(99) 99999-9999" required="required" name="whatsapp" data-parsley-errors-container="#errId5">
                                                     <span id="errId5" class="error"></span>
                                                 </div>
 
@@ -62,7 +65,7 @@
                                                 <label class="control-label-left" for="celularAlternativo">Celular:</label>
                                                 <div class="controls">
 
-                                                    <input id="celularAlternativo" type="text" class="form-control k-textbox" data-role="mask" data-mask="(99) 99999-9999" placeholder="Digite o número do celular (alternativo)" name="celularAlternativo" data-parsley-errors-container="#errId6">
+                                                    <input id="celularAlternativo" [(ngModel)]='alunoAtual.celular' type="text" class="form-control k-textbox" data-role="mask" data-mask="(99) 99999-9999" placeholder="Digite o número do celular (alternativo)" name="celularAlternativo" data-parsley-errors-container="#errId6">
                                                     <span id="errId6" class="error"></span>
                                                 </div>
 
@@ -71,7 +74,7 @@
                                                 <label class="control-label-left sr-only"></label>
                                                 <div class="controls">
 
-                                                    <label class="checkbox" for="opcaoSMS"><input type="checkbox" value="Ao marcar esta opção, você receberá novidades e promoções do Portal por E-mail, SMS e Telefone." id="opcaoSMS" name="field11" data-parsley-errors-container="#errId7">Ao marcar esta opção, você receberá novidades e promoções do Portal por E-mail, SMS e Telefone.</label>
+                                                    <label class="checkbox" for="opcaoSMS"><input type="checkbox" [(ngModel)]='alunoAtual.opcaoSMS'  value="Ao marcar esta opção, você receberá novidades e promoções do Portal por E-mail, SMS e Telefone." id="opcaoSMS" name="field11" data-parsley-errors-container="#errId7">Ao marcar esta opção, você receberá novidades e promoções do Portal por E-mail, SMS e Telefone.</label>
                                                     <span id="errId7" class="error"></span>
                                                 </div>
 
@@ -80,7 +83,7 @@
                                                 <label class="control-label-left" for="cep">CEP:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input id="cep" type="text" class="form-control k-textbox" data-role="mask" data-mask="99999-999" required="required" placeholder="Digite seu CEP (o formulário se auto-completará" name="cep" data-parsley-errors-container="#errId8">
+                                                    <input id="cep" type="text" [(ngModel)]='alunoAtual.cep' class="form-control k-textbox" data-role="mask" data-mask="99999-999" required="required" placeholder="Digite seu CEP (o formulário se auto-completará" name="cep" data-parsley-errors-container="#errId8">
                                                     <span id="errId8" class="error"></span>
                                                 </div>
 
@@ -89,7 +92,7 @@
                                                 <label class="control-label-left" for="endereco">endereço:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input id="endereco" type="text" class="form-control k-textbox" data-role="text" required="required" placeholder="Digite o endereço onde mora" name="endereco" data-parsley-errors-container="#errId9">
+                                                    <input id="endereco" [(ngModel)]='alunoAtual.endereco' type="text" class="form-control k-textbox" data-role="text" required="required" placeholder="Digite o endereço onde mora" name="endereco" data-parsley-errors-container="#errId9">
                                                     <span id="errId9" class="error"></span>
                                                 </div>
 
@@ -98,7 +101,7 @@
                                                 <label class="control-label-left" for="numero">número:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input id="numero" type="text" class="form-control k-textbox" data-role="text" required="required" name="numero" placeholder="Digite o número de sua casa" data-parsley-errors-container="#errId10">
+                                                    <input id="numero" [(ngModel)]='alunoAtual.numero' type="text" class="form-control k-textbox" data-role="text" required="required" name="numero" placeholder="Digite o número de sua casa" data-parsley-errors-container="#errId10">
                                                     <span id="errId10" class="error"></span>
                                                 </div>
 
@@ -107,7 +110,7 @@
                                                 <label class="control-label-left" for="complemento">Complemento:</label>
                                                 <div class="controls">
 
-                                                    <input id="complemento" type="text" class="form-control k-textbox" data-role="text" name="complemento" placeholder="Digite a complementação do seu endereço" data-parsley-errors-container="#errId11">
+                                                    <input id="complemento" [(ngModel)]='alunoAtual.complemento' type="text" class="form-control k-textbox" data-role="text" name="complemento" placeholder="Digite a complementação do seu endereço" data-parsley-errors-container="#errId11">
                                                     <span id="errId11" class="error"></span>
                                                 </div>
 
@@ -116,7 +119,7 @@
                                                 <label class="control-label-left" for="bairro">Bairro:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input id="bairro" type="text" class="form-control k-textbox" data-role="text" required="required" name="bairro" placeholder="Digite o bairro onde mora" data-parsley-errors-container="#errId12">
+                                                    <input id="bairro" [(ngModel)]='alunoAtual.bairro' type="text" class="form-control k-textbox" data-role="text" required="required" name="bairro" placeholder="Digite o bairro onde mora" data-parsley-errors-container="#errId12">
                                                     <span id="errId12" class="error"></span>
                                                 </div>
 
@@ -125,7 +128,7 @@
                                                 <label class="control-label-left" for="cidade">Cidade:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input id="cidade" type="text" class="form-control k-textbox" data-role="text" required="required" name="cidade" placeholder="Digite a cidade onde mora" data-parsley-errors-container="#errId13">
+                                                    <input id="cidade" [(ngModel)]='alunoAtual.cidade' type="text" class="form-control k-textbox" data-role="text" required="required" name="cidade" placeholder="Digite a cidade onde mora" data-parsley-errors-container="#errId13">
                                                     <span id="errId13" class="error"></span>
                                                 </div>
 
@@ -133,70 +136,64 @@
                                             <div class="form-group">
                                                 <label class="control-label" for="uf">UF:<span class="req"> *</span></label>
                                                 <div class="controls">
-
-                                                    <select id="uf" class="form-control" data-role="select" required="required" name="uf" data-parsley-errors-container="#errId14">
-                                                      <option value=""></option>
-                                                      <option value="Option 1">Option 1</option>
-                                                      <option value="Option 2">Option 2</option>
-                                                      <option value="Option 3">Option 3</option>
-                                                      <option value="Option 4">Option 4</option>
-                                                    </select><span id="errId14" class="error"></span></div>
+                                                    <select id="uf" [(ngModel)]="alunoAtual.uf" class="form-control" required="required" name="uf" data-parsley-errors-container="#errId14">
+                                                      <option *ngFor='let u of ufs' [value]="u.sigla" [selected]="alunoAtual.uf == u.sigla" >{{u.nome}}</option>
+                                                    </select><span id="errId14" class="error"></span>
+                                                </div>
 
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label-left" for="ufNaturalidade">UF Naturalidade:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <select id="ufNaturalidade" class="form-control" data-role="select" required="required" name="ufNaturalidade" data-parsley-errors-container="#errId15">
-    <option value=""></option>
-    <option value="Option 1">Option 1</option>
-    <option value="Option 2">Option 2</option>
-    <option value="Option 3">Option 3</option>
-    <option value="Option 4">Option 4</option>
-  </select><span id="errId15" class="error"></span></div>
+                                                    <select #ufNatural id="ufNaturalidade" [(ngModel)]="alunoAtual.ufNaturalidade" class="form-control" required="required" name="ufNaturalidade" data-parsley-errors-container="#errId15">
+                                                        <option *ngFor='let u of ufs' [value]="u.sigla" [selected]="alunoAtual.uf == u.sigla" >{{u.nome}}</option>
+                                                    </select><span id="errId15" class="error"></span>
+                                                </div>
 
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label-left" for="cidadeNaturalidade">Cidade Naturalidade:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <select id="cidadeNaturalidade" class="form-control" data-role="select" required="required" name="cidadeNaturalidade" data-parsley-errors-container="#errId16">
-    <option value=""></option>
-    <option value="Option 1">Option 1</option>
-    <option value="Option 2">Option 2</option>
-    <option value="Option 3">Option 3</option>
-    <option value="Option 4">Option 4</option>
-  </select><span id="errId16" class="error"></span></div>
+                                                    <select id="cidadeNaturalidade" [(ngModel)]="alunoAtual.cidadeNaturalidade" class="form-control" required="required" name="cidadeNaturalidade" data-parsley-errors-container="#errId16">
+                                                        <option *ngFor='let u of getMunicipiosDaUF(ufNatural.value)' [value]="u.nome" >{{u.nome}}</option>
+                                                    </select><span id="errId16" class="error"></span>
+                                                </div>
 
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label control-label-left col-sm-3">Sexo:</label>
                                                 <div class="controls col-sm-9">
 
-                                                    <label class="radio col-md-6" for="sexoFeminino"><input type="radio" value="Feminino" id="sexoFeminino" name="field70" data-parsley-errors-container="#errId17">Feminino</label><label class="radio col-md-6"
-                                                        for="sexoMasculino"><input type="radio" value="Masculino" id="sexoMasculino" name="field70" data-parsley-errors-container="#errId17">Masculino</label><span id="errId17" class="error"></span></div>
+                                                    <label class="radio col-md-6" for="sexoFeminino">
+                                                    <input type="radio"  [(ngModel)]="alunoAtual.sexo" [value]="F" id="sexoFeminino" name="sexo" data-parsley-errors-container="#errId17">Feminino</label>
+                                                    <label class="radio col-md-6" for="sexoMasculino">
+                                                    <input type="radio" [(ngModel)]="alunoAtual.sexo" value="M" id="sexoMasculino" name="sexo" data-parsley-errors-container="#errId17">Masculino</label>
+                                                    <span id="errId17" class="error"></span></div>
 
                                             </div>
+
                                             <div class="form-group">
                                                 <label class="control-label-left" for="dataNascimento">Data Nascimento:<span class="req"> *</span></label>
                                                 <div class="controls">
+                                                    <input id="dataNascimento" [(ngModel)]='alunoAtual.dataNascimento' type="date" class="form-control k-input" data-error-container="#errfield95" required="required" style="width: 100%;" name="dataNascimento" data-parsley-errors-container="#errId18">
 
-                                                    <span class="k-widget k-datepicker k-header form-control" style=""><span class="k-picker-wrap k-state-default"><input id="dataNascimento" type="text" class="form-control k-input" data-role="date" role="textbox" aria-haspopup="true" aria-expanded="false" aria-owns="field95_dateview" aria-disabled="false" aria-readonly="false" aria-label="Current focused date is null" data-error-container="#errfield95" required="required" style="width: 100%;" name="dataNascimento" data-parsley-errors-container="#errId18"><span unselectable="on" class="k-select" role="button" aria-controls="field95_dateview"><span unselectable="on" class="k-icon k-i-calendar">select</span></span>
-                                                    </span>
-                                                    </span><span id="errId18" class="error"></span></div>
+                                                    <span id="errId18" class="error"></span>
+                                                </div>
 
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label-left" for="estadoCivil">Estado Civil:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <select id="estadoCivil" class="form-control" data-role="select" selected="selected" name="estadoCivil" required="required" data-parsley-errors-container="#errId19">
-    
-    
-    
-    
-    
-  <option value="Selecione" selected="selected">Selecione</option><option value="Solteira(o)">Solteira(o)</option><option value="Casada(o)">Casada(o)</option><option value="União estável">União estável</option><option value="Divorciada(o)">Divorciada(o)</option><option value="Viúva(o)">Viúva(o)</option></select>
+                                                    <select id="estadoCivil" [(ngModel)]='alunoAtual.estadoCivil' class="form-control" selected="selected" name="estadoCivil" required="required" data-parsley-errors-container="#errId19">
+                                                        <option value="Selecione" selected="selected">Selecione</option>
+                                                        <option value="Solteira(o)">Solteira(o)</option>
+                                                        <option value="Casada(o)">Casada(o)</option>
+                                                        <option value="União estável">União estável</option>
+                                                        <option value="Divorciada(o)">Divorciada(o)</option>
+                                                        <option value="Viúva(o)">Viúva(o)</option></select>
                                                     <span id="errId19" class="error"></span>
                                                 </div>
 
@@ -205,7 +202,7 @@
                                                 <label class="control-label-left" for="identidade">número da Identidade<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input id="identidade" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o número da identidade" name="identidade" required="required" data-parsley-errors-container="#errId20">
+                                                    <input id="identidade" [(ngModel)]='alunoAtual.numeroIdentidade' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o número da identidade" name="identidade" required="required" data-parsley-errors-container="#errId20">
                                                     <span id="errId20" class="error"></span>
                                                 </div>
 
@@ -214,7 +211,7 @@
                                                 <label class="control-label-left" for="orgaoIdentidade">Orgão Expedidor<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input id="orgaoIdentidade" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o orgão expedidor da identidade" name="orgaoIdentidade" required="required" data-parsley-errors-container="#errId21">
+                                                    <input id="orgaoIdentidade" [(ngModel)]='alunoAtual.orgaoExpedidor' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o orgão expedidor da identidade" name="orgaoIdentidade" required="required" data-parsley-errors-container="#errId21">
                                                     <span id="errId21" class="error"></span>
                                                 </div>
 
@@ -223,15 +220,18 @@
                                                 <label class="control-label-left" for="mae">Nome da Mãe<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input id="mae" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o nome da mãe" name="mae" required="required" data-parsley-errors-container="#errId22"><span id="errId22"
-                                                        class="error"></span></div>
+                                                    <input id="mae" [(ngModel)]='alunoAtual.nomeMae' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o nome da mãe" name="mae" required="required" data-parsley-errors-container="#errId22">
+                                                    <span id="errId22" class="error"></span>
+                                                </div>
 
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label-left" for="pai">Nome do Pai:</label>
                                                 <div class="controls">
 
-                                                    <input id="pai" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o nome do pai" name="pai" data-parsley-errors-container="#errId23"><span id="errId23" class="error"></span></div>
+                                                    <input id="pai" [(ngModel)]='alunoAtual.nomePai' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o nome do pai" name="pai" data-parsley-errors-container="#errId23">
+                                                    <span id="errId23" class="error"></span>
+                                                </div>
 
                                             </div>
                                         </div>
@@ -243,17 +243,22 @@
                                         <div class="panel-body">
 
                                             <div class="form-group">
-                                                <label class="control-label-left" for="cursoSelecionado">Curso Selecionado</label>
+                                                <label class="control-label-left" for="categoriaSelecionado">Categoria:</label>
+                                                <div class="controls">
+                                                    <select [(ngModel)]='cursoEscolhido.codigoCategoria' #vCategoria id="categoriaSelecionado" class="form-control" name="categoriaSelecionado" data-parsley-errors-container="#errId24">
+                                                            <option *ngFor='let c of categorias' [value]="c.id" >{{c.name.pt}}</option>
+                                                    </select><span id="errId24" class="error"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label-left" for="cursoSelecionado">Curso Selecionado:</label>
                                                 <div class="controls">
 
-                                                    <select id="cursoSelecionado" class="form-control" data-role="select" name="cursoSelecionado" data-parsley-errors-container="#errId24">
-    <option value="">Extrato de Tomate</option>
-    <option value="Option 1">Option 1</option>
-    <option value="Option 2">Option 2</option>
-    <option value="Option 3">Option 3</option>
-    <option value="Option 4">Option 4</option>
-  </select><span id="errId24" class="error"></span></div>
-
+                                                    <select [(ngModel)]='cursoEscolhido.codigoCurso' id="cursoSelecionado" class="form-control" name="cursoSelecionado" data-parsley-errors-container="#errId24">
+                                                            <option *ngFor='let c of getCursosDaCategoria(vCategoria.value)' [value]="c.id" >{{c.name.pt}}</option>
+                                                    </select><span id="errId24" class="error"></span>
+                                                </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label-left sr-only"></label>
@@ -268,7 +273,7 @@
                                                 <label class="control-label-left" for="matricula">Taxa de Matricula<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <select id="matricula" class="form-control" data-role="select" selected="selected" name="matricula" required="required" data-parsley-errors-container="#errId26">
+                                                    <select id="matricula" class="form-control" selected="selected" name="matricula" required="required" data-parsley-errors-container="#errId26">
     
     
     
@@ -281,7 +286,7 @@
                                                 <label class="control-label-left" for="mensalidade">Valor da Mensalidade<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <select id="mensalidade" class="form-control" data-role="select" selected="selected" name="mensalidade" required="required" data-parsley-errors-container="#errId27">
+                                                    <select id="mensalidade" class="form-control" selected="selected" name="mensalidade" required="required" data-parsley-errors-container="#errId27">
     
     
     
@@ -296,7 +301,7 @@
                                                 <label class="control-label-left" for="melhorDiaPrestacao">Melhor dia para pagamento da mensalidade:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <select id="melhorDiaPrestacao" class="form-control" data-role="select" required="required" name="melhorDiaPrestacao" data-parsley-errors-container="#errId28">
+                                                    <select id="melhorDiaPrestacao" class="form-control" required="required" name="melhorDiaPrestacao" data-parsley-errors-container="#errId28">
     <option value="5">todo dia 05 do mês</option>
     <option value="1">todo dia 10 do mês</option>
     <option value="Option 2">todo dia 15 do mês</option>
@@ -314,10 +319,8 @@
 
                                             </div>
                                             <div class="form-group btn-group group-inline" style="display: block;">
-
-
-
-                                                <button id="btnCupom" type="button" class="btn btn-primary" name="Aplicar Cupom!">Aplicar Cupom!</button></div>
+                                                <button id="btnCupom" type="button" class="btn btn-primary" name="Aplicar Cupom!">Aplicar Cupom!</button>
+                                            </div>
                                             <div class="row" id="tab188" data-role="tab" style="display: block;">
                                                 <ul class="nav nav-tabs">
                                                     <li class=""><a href="#tabContent189" data-toggle="tab" id="tabLabel189">Boleto Bancário</a></li>
@@ -363,7 +366,7 @@
                                                                 <label class="control-label-left" for="bandeiraCartaoCredito">Bandeira Cartão:</label>
                                                                 <div class="controls">
 
-                                                                    <select id="bandeiraCartaoCredito" class="form-control" data-role="select" name="bandeiraCartaoCredito" data-parsley-errors-container="#errId33">
+                                                                    <select id="bandeiraCartaoCredito" class="form-control" name="bandeiraCartaoCredito" data-parsley-errors-container="#errId33">
     <option value="Mastercard">Mastercard</option>
     <option value="Visa">Visa</option>
     <option value="Elo">Elo</option>
@@ -386,6 +389,11 @@
 
                                                 </div>
                                             </div>
+
+                                            <div class="form-group btn-group group-inline" style="display: block;">
+                                                <button id="btnSalvarFormulario" type="button" class="btn btn-primary" name="Salva" (click)='salvarDados()'>Salvar Formulario</button>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>

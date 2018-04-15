@@ -1,5 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
+import localePTBR from '@angular/common/locales/pt';
+
+import { registerLocaleData } from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -8,6 +11,8 @@ import { FormInscricaoComponent } from './component/form-inscricao/form-inscrica
 import { ApiUltraService } from './services/api-ultra.service';
 import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+
+registerLocaleData(localePTBR);
 
 
 @NgModule({
@@ -24,6 +29,7 @@ import { FormsModule } from '@angular/forms';
   providers: [
     ApiUltraService,
     HttpClientModule,
+    { provide: LOCALE_ID, useValue: 'pt' },
   ],
   bootstrap: [
     AppComponent

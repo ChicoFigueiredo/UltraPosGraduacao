@@ -26,7 +26,7 @@ router.get("/find/:codigoCupom", function(req, res) {
 })
 
 
-router.get("/calcula/:codigoCupom/:valor/:valorMatricula", function(req, res) {
+router.post("/calcula/:codigoCupom/:valor/:valorMatricula", function(req, res) {
     dbCupom.find({ codigoCupom: req.params.codigoCupom }, //, 'categories.name.pt': true
         function(err, cupoms) {
             if (err) {
@@ -43,7 +43,7 @@ router.get("/calcula/:codigoCupom/:valor/:valorMatricula", function(req, res) {
                     } else if (cupom.tipoDesconto === 'percentual') {
 
                         cupom.set('valorCalculado', Math.round(((Number(req.params.valor) - Number(req.params.valor) * Number(cupom.percentualDesconto))) * 100) / 100, { strict: false });
-                        cupom.set('valorMatriculaCalculado', Math.round(((Number(req.params.valorMatricula) - Number(req.params.valorMatricula) * Number(cupom.percentualDesconto))) * 100) / 100, { strict: false });
+                        cupom.set('valorMatriculaCalculado', Math.round(((Number(req.params.valorMatricula) - Number(req.params.valorMatricula) * Number(cupom.percentualDescontoMatricula))) * 100) / 100, { strict: false });
 
                     } else {
 

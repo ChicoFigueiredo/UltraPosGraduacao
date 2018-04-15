@@ -15,6 +15,7 @@ export class FormInscricaoComponent implements OnInit {
   categorias: Array<any> = [];
   cursos: Array<any> = [];
   cursoEscolhido: Curso = new Curso();
+  valoresMensalidade: Array<ValoresMensalidade> = [];
 
   constructor(
     public alunoService: ApiUltraService,
@@ -32,13 +33,15 @@ export class FormInscricaoComponent implements OnInit {
       this.categorias = x;
     });
     this.alunoService.getCursos().subscribe((x: Array<any>) => {
-      x = x.sort((a, b) => a.name.pt > b.name.pt ? 1 : -1)
+      x = x.sort((a, b) => a.name.pt > b.name.pt ? 1 : -1);
            // .filter((c) => c.published );
       this.cursos = x;
     });
   }
 
   ngOnInit() {
+    this.cursoEscolhido.pagamento.melhorDia = 5;
+    this.cursoEscolhido.pagamento.parcelamento = 24;
   }
 
   onKey($event) {
@@ -64,7 +67,6 @@ export class FormInscricaoComponent implements OnInit {
   }
 
   getCursosDaCategoria(categoria) {
-    console.log(categoria);
     return this.cursos.filter((x) => {
       return x.categories.filter((c) => {
         if (c) {
@@ -76,6 +78,50 @@ export class FormInscricaoComponent implements OnInit {
     });
   }
 
+  selectCurso(e) {
+    const codigoCurso = Number(e.target.value);
+    const detalheCurso = this.cursos.filter((c) => c.id === codigoCurso)[0];
+    this.cursoEscolhido.pagamento.taxaMatricula = detalheCurso.variants[0].down_payment;
+    this.cursoEscolhido.pagamento.valorOriginal = detalheCurso.variants[0].price;
+    this.cursoEscolhido.pagamento.valorCobrado = detalheCurso.variants[0].price;
+    this.gerarArrayValores(this.cursoEscolhido.pagamento.valorCobrado, 24);
+    return;
+  }
+
+  aplicarCupom(txtCupom) {
+    txtCupom = txtCupom.toUpperCase();
+    this.cursoEscolhido.pagamento.cupom.codigoCupom = txtCupom.toUpperCase();
+    if (this.cursoEscolhido.pagamento.valorOriginal) {
+      this.alunoService.processarCupom(
+        txtCupom,
+        this.cursoEscolhido.pagamento.valorOriginal,
+        this.cursoEscolhido.pagamento.taxaMatricula
+      ).subscribe((cupomProcessado: any) => {
+        this.cursoEscolhido.pagamento.taxaMatricula = cupomProcessado.valorMatriculaCalculado;
+        this.cursoEscolhido.pagamento.valorCobrado = cupomProcessado.valorCalculado;
+        this.gerarArrayValores(this.cursoEscolhido.pagamento.valorCobrado, 24);
+
+        this.cursoEscolhido.pagamento.cupom.codigoCupom = cupomProcessado.codigoCupom;
+        this.cursoEscolhido.pagamento.cupom.origemCupom = cupomProcessado.origemCupom;
+        this.cursoEscolhido.pagamento.cupom.tipoDesconto = cupomProcessado.tipoDesconto;
+        this.cursoEscolhido.pagamento.cupom.valorDesconto = cupomProcessado.valorDesconto;
+        this.cursoEscolhido.pagamento.cupom.percentualDesconto = cupomProcessado.percentualDesconto;
+
+      });
+    }
+  }
+
+  gerarArrayValores(valor, meses = 24) {
+    this.valoresMensalidade = [];
+    for ( let i = 1; i <= meses; i += 1) {
+      this.valoresMensalidade.push({
+        prestacoes: i,
+        valor : Math.round(valor / i * 100) / 100,
+        display : i + 'X de R$ ' + Math.round(valor / i * 100) / 100
+      });
+    }
+  }
+
   salvarDados() {
     this.alunoService.salvarMatricula(this.alunoAtual)
         .subscribe((res) => {
@@ -83,6 +129,12 @@ export class FormInscricaoComponent implements OnInit {
         });
   }
 
+}
+
+export class ValoresMensalidade {
+  prestacoes: number;
+  valor: number;
+  display: string;
 }
 
 export class DadosCartao {
@@ -102,12 +154,19 @@ export class CursoPagamentoCupom {
 
 export class CursoPagamento {
   taxaMatricula: number;
+  valorOriginal: number;
+  valorCobrado: number;
   parcelamento: number;
   parcela: number;
   melhorDia: number;
   cupom: CursoPagamentoCupom;
   formaPagamento: string;
   dadosCartao: DadosCartao;
+
+  constructor() {
+    this.cupom = new CursoPagamentoCupom();
+    this.dadosCartao = new DadosCartao();
+  }
 }
 
 export class Curso {
@@ -116,4 +175,9 @@ export class Curso {
   nomeCurso: string;
   deAcordo: boolean;
   pagamento: CursoPagamento;
+
+  constructor() {
+    this.pagamento = new CursoPagamento();
+  }
 }
+

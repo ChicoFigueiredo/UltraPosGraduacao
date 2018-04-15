@@ -12,6 +12,7 @@ const API = {
   SAVE_USER : environment.rootApi + 'api/alunos/save',
   GET_CATEGORIAS: environment.rootApi + 'api/categorias/list',
   GET_CURSOS: environment.rootApi + 'api/cursos/list',
+  POST_PROCESS_CUPOM: environment.rootApi + 'api/cupom/calcula',
   UF: '//servicodados.ibge.gov.br/api/v1/localidades/estados',
   MUNICIPIOS: '//servicodados.ibge.gov.br/api/v1/localidades/municipios'
 };
@@ -58,6 +59,14 @@ export class ApiUltraService {
 
   getCategorias() {
     return this.http.get(API.GET_CATEGORIAS);
+  }
+
+  processarCupom(Cupom: string, valorCobrado: number, taxaMatricula: number) {
+    return this.http.post(API.POST_PROCESS_CUPOM
+      + '/' + Cupom
+      + '/' + valorCobrado.toString()
+      + '/' + taxaMatricula.toString(), {}
+        );
   }
 
   salvarMatricula(obj) {

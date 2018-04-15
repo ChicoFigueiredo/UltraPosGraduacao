@@ -1,10 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID } from '@angular/core';
-import localePTBR from '@angular/common/locales/pt';
 
+import localePTBR from '@angular/common/locales/pt';
 import { registerLocaleData } from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
+
+import { CreditCardDirectivesModule } from 'angular-cc-library';
 
 import { AppComponent } from './app.component';
 import { FormInscricaoComponent } from './component/form-inscricao/form-inscricao.component';
@@ -25,6 +27,7 @@ registerLocaleData(localePTBR);
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    CreditCardDirectivesModule,
   ],
   providers: [
     ApiUltraService,

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, DoCheck, ChangeDetectorRef } from '@angular/core';
 import { ApiUltraService } from './../../services/api-ultra.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { ApiUltraService } from './../../services/api-ultra.service';
   templateUrl: './form-inscricao.component.html',
   styleUrls: ['./form-inscricao.component.scss']
 })
-export class FormInscricaoComponent implements OnInit {
+export class FormInscricaoComponent implements OnInit, DoCheck {
   alunoAtual: any = {};
   cursosAtivos: Array<any> = [];
   private ultimaBuscaValida = '';
@@ -19,6 +19,7 @@ export class FormInscricaoComponent implements OnInit {
 
   constructor(
     public alunoService: ApiUltraService,
+    private cdr: ChangeDetectorRef,
   ) {
     this.alunoService.getUF().subscribe((x: Array<any>) => {
       x = x.sort((a, b) => a.nome > b.nome ? 1 : -1);
@@ -44,6 +45,10 @@ export class FormInscricaoComponent implements OnInit {
     this.cursoEscolhido.pagamento.parcelamento = 24;
   }
 
+  public ngDoCheck(): void {
+    this.cdr.detectChanges();
+  }
+
   onKey($event) {
     const testCPF: RegExp = /\d\d\d[.]\d\d\d[.]\d\d\d[-]\d\d/;
     const cpf: string = $event.target.value;
@@ -51,10 +56,10 @@ export class FormInscricaoComponent implements OnInit {
       if (cpf !== this.ultimaBuscaValida) {
         this.alunoService.findUser(cpf).subscribe((a: Array<any>) => {
           if (a.length > 0) {
-            this.alunoAtual = a[0];
-            this.cursosAtivos = this.alunoAtual.cursos.slice();
-            this.alunoAtual.cursos = [];
+            this.cursosAtivos = a[0].cursos.slice();
+            a[0].cursos = [];
             this.ultimaBuscaValida = cpf;
+            this.alunoAtual = a[0];
           }
          });
       }

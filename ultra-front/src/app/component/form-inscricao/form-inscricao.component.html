@@ -316,8 +316,12 @@
                                             </div>
                                             <div class="row" id="tab188" data-role="tab" style="display: block;">
                                                 <ul class="nav nav-tabs">
-                                                    <li class=""><a href="#tabContent189" data-toggle="tab" id="tabLabel189">Boleto Bancário</a></li>
-                                                    <li class="active"><a data-toggle="tab" href="#tabContent190" id="tabLabel190">Cartão de Crédito</a></li>
+                                                    <li class="">
+                                                        <a href="#tabContent189" data-toggle="tab" id="tabLabel189"><img class="icon" src="assets/images/icons/boleto.svg"> Boleto Bancário</a>
+                                                    </li>
+                                                    <li class="active">
+                                                        <a data-toggle="tab" href="#tabContent190" id="tabLabel190"><img class="icon" src="assets/images/icons/credit-card.svg"> Cartão de Crédito</a>
+                                                    </li>
 
                                                 </ul>
                                                 <div class="tab-content">
@@ -338,13 +342,16 @@
                                                     <div class="tab-pane active" id="tabContent190">
                                                         <div class="">
                                                             <div class="form-group">
-                                                                <label class="control-label-left" for="numeroCartaoCredito">número do Cartão de Crédito</label>
+                                                                <label class="control-label-left" for="numeroCartaoCredito">Número do Cartão de Crédito</label>
                                                                 <div class="controls">
-
-                                                                    <input id="numeroCartaoCredito" type="text" class="form-control k-textbox" data-role="mask" data-mask="9999 9999 9999 9999" placeholder="Digite o número do Cartão de Crédito" name="numeroCartaoCredito" data-parsley-errors-container="#errId31">
+                                                                    <!-- <input type="tel" autocomplete="cc-number" id="cc-number" ccNum> -->
+                                                                    <input #ccCarai='ngModel' [(ngModel)]='cursoEscolhido.pagamento.dadosCartao.numero' id="numeroCartaoCredito" type="tel" class="form-control k-textbox" data-role="mask" data-mask="9999 9999 9999 9999" placeholder="Digite o número do Cartão de Crédito"
+                                                                        name="numeroCartaoCredito" data-parsley-errors-container="#errId31" required minlength="4" ccNumber>
+                                                                    <!-- <input id="numeroCartaoCredito" type="text" class="form-control k-textbox" data-role="mask" data-mask="9999 9999 9999 9999" placeholder="Digite o número do Cartão de Crédito" name="numeroCartaoCredito" data-parsley-errors-container="#errId31"> -->
+                                                                    <!-- <input id="cc-number" type="tel" autocomplete="cc-number" ccNumber> -->
                                                                     <span id="errId31" class="error"></span>
                                                                 </div>
-
+                                                                <!-- Um: {{ccCarai.creditCard | json}} -->
                                                             </div>
                                                             <div class="form-group">
                                                                 <label class="control-label-left" for="nomeImpressoCartao">Nome impresso no Cartão</label>

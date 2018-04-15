@@ -127,12 +127,19 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
     }
   }
 
-  salvarDados() {
+  efeturarMatricula(tipoPagamento: string = 'cartao') {
     this.alunoService.salvarMatricula(this.alunoAtual)
         .subscribe((res) => {
           console.log(res);
         });
   }
+
+  // salvarDados() {
+  //   this.alunoService.salvarMatricula(this.alunoAtual)
+  //       .subscribe((res) => {
+  //         console.log(res);
+  //       });
+  // }
 
 }
 

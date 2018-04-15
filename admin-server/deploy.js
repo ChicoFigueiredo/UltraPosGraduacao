@@ -10,12 +10,12 @@ const { exec, execSync } = require('child_process');
 ssh = new node_ssh()
 
 
-const HOST_URL = 'admin.academiabancaria.com.br';
-const REMOTE_DIR = '/var/www/admin-cl-beneficios/';
-const PM2_ID = 'admin-cl-beneficios'
-
-
+const HOST_URL = 'ssh.ultraposgraduacao.com.br';
+const REMOTE_DIR = '/var/www/ultra-pos/';
 const LOCAL_DIR_CLEAR = './sessions';
+const PM2_ID = 'ultra-pos-graduacao';
+const USER = 'ubuntu';
+const FILE_KEY = './ti@ultraposgraduacao.com.br.pem';
 
 
 var tmp = require('tmp');
@@ -35,8 +35,8 @@ exec(zipCmd, (err, stdout, stderr) => {
 
     ssh.connect({
             host: HOST_URL,
-            username: 'ubuntu',
-            privateKey: 'chico.pem',
+            username: USER,
+            privateKey: FILE_KEY,
             port: 22
         })
         .then(function() {

@@ -167,9 +167,9 @@
                                                 <div class="controls col-sm-9">
 
                                                     <label class="radio col-md-6" for="sexoFeminino">
-                                                    <input type="radio"  [(ngModel)]="alunoAtual.sexo" [value]="F" id="sexoFeminino" name="sexo" data-parsley-errors-container="#errId17">Feminino</label>
+                                                    <input type="radio"  [(ngModel)]="alunoAtual.sexo" [value]="'F'" id="sexoFeminino" name="sexo" data-parsley-errors-container="#errId17">Feminino</label>
                                                     <label class="radio col-md-6" for="sexoMasculino">
-                                                    <input type="radio" [(ngModel)]="alunoAtual.sexo" value="M" id="sexoMasculino" name="sexo" data-parsley-errors-container="#errId17">Masculino</label>
+                                                    <input type="radio" [(ngModel)]="alunoAtual.sexo" [value]="'M'" id="sexoMasculino" name="sexo" data-parsley-errors-container="#errId17">Masculino</label>
                                                     <span id="errId17" class="error"></span></div>
 
                                             </div>
@@ -314,7 +314,10 @@
                                             <div class="form-group btn-group group-inline" style="display: block;">
                                                 <button id="btnCupom" type="button" class="btn btn-primary" name="Aplicar Cupom!" (click)='aplicarCupom(txtCupom.value)'>Aplicar Cupom!</button>
                                             </div>
-                                            <div class="row" id="tab188" data-role="tab" style="display: block;">
+                                            <div class="form-group" style="display: block;">
+                                                <label class="control-label-left" for="cupom">FORMA DE PAGAMENTO</label>
+                                            </div>
+                                            <div class="row" id="tab188" data-role="tab" style="display: block;" *ngIf="cursoEscolhido.pagamento.taxaMatricula || cursoEscolhido.pagamento.valorCobrado || false">
                                                 <ul class="nav nav-tabs">
                                                     <li class="">
                                                         <a href="#tabContent189" data-toggle="tab" id="tabLabel189"><img class="icon" src="assets/images/icons/boleto.svg"> Boleto Bancário</a>
@@ -331,12 +334,23 @@
                                                                 <label class="control-label">Será gerado:</label>
                                                                 <div class="controls">
 
-                                                                    <label class="checkbox" for="primeiroBoleto"><input type="checkbox" value="266,67" id="primeiroBoleto" name="field228" checked="checked" data-parsley-errors-container="#errId30">primeiro boleto R$ 266,67</label>
-                                                                    <label class="checkbox" for="valorMensalidadeBoleto"><input type="checkbox" value="166,67" id="valorMensalidadeBoleto" name="field228" data-parsley-errors-container="#errId30">23 boletos de 166,67</label>
+                                                                    <label class="checkbox" for="primeiroBoleto">
+                                                                        <input checked="checked" disabled type="checkbox" value="266,67" id="primeiroBoleto" name="field228" data-parsley-errors-container="#errId30">
+                                                                        Primeiro boleto {{cursoEscolhido.pagamento.taxaMatricula + (cursoEscolhido.pagamento.valorCobrado / cursoEscolhido.pagamento.parcelamento) | currency:'BRL':'symbol':'.2-2' }}
+                                                                    </label>
+                                                                    <label class="checkbox" for="valorMensalidadeBoleto">
+                                                                        <input checked="checked" disabled type="checkbox" value="166,67" id="valorMensalidadeBoleto" name="field228" data-parsley-errors-container="#errId30">
+                                                                        {{ cursoEscolhido.pagamento.parcelamento - 1 }} boletos de {{ cursoEscolhido.pagamento.valorCobrado / cursoEscolhido.pagamento.parcelamento | currency:'BRL':'symbol':'.2-2' }}
+                                                                    </label>
                                                                     <span id="errId30" class="error"></span>
                                                                 </div>
 
                                                             </div>
+
+                                                            <div class="form-group btn-group group-inline" style="display: block;">
+                                                                <button id="btnMatricularPorBoleto" type="button" class="btn btn-primary" name="Salva" (click)='efeturarMatricula("boleto")'>Efetuar Matrícula</button>
+                                                            </div>
+
                                                         </div>
                                                     </div>
                                                     <div class="tab-pane active" id="tabContent190">
@@ -367,12 +381,12 @@
                                                                 <div class="controls">
 
                                                                     <select id="bandeiraCartaoCredito" class="form-control" name="bandeiraCartaoCredito" data-parsley-errors-container="#errId33">
-    <option value="Mastercard">Mastercard</option>
-    <option value="Visa">Visa</option>
-    <option value="Elo">Elo</option>
-    <option value="American Express">American Express</option>
-    <option value="Dinners">Dinners</option>
-  </select><span id="errId33" class="error"></span></div>
+                                                                        <option value="Mastercard">Mastercard</option>
+                                                                        <option value="Visa">Visa</option>
+                                                                        <option value="Elo">Elo</option>
+                                                                        <option value="American Express">American Express</option>
+                                                                        <option value="Dinners">Dinners</option>
+                                                                    </select><span id="errId33" class="error"></span></div>
 
                                                             </div>
                                                             <div class="form-group">
@@ -384,16 +398,14 @@
                                                                 </div>
 
                                                             </div>
+                                                            <div class="form-group btn-group group-inline" style="display: block;">
+                                                                <button id="btnSalvarFormulario" type="button" class="btn btn-primary" name="Salva" (click)='efeturarMatricula("cartao")'>Efetuar Matrícula</button>
+                                                            </div>
                                                         </div>
                                                     </div>
 
                                                 </div>
                                             </div>
-
-                                            <div class="form-group btn-group group-inline" style="display: block;">
-                                                <button id="btnSalvarFormulario" type="button" class="btn btn-primary" name="Salva" (click)='salvarDados()'>Salvar Formulario</button>
-                                            </div>
-
                                         </div>
                                     </div>
                                 </div>

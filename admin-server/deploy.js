@@ -40,7 +40,7 @@ exec(zipCmd, (err, stdout, stderr) => {
             port: 22
         })
         .then(function() {
-            const cmdPm2Stop = "sudo sudo pm2 stop " + PM2_ID + " --update-env";
+            const cmdPm2Stop = "sudo sudo pm2 stop all --update-env"; //" + PM2_ID + "
             console.log("\n\n****************************************************************************");
             console.log("executando: " + cmdPm2Stop + "\n");
             ssh.execCommand(cmdPm2Stop, { cwd: REMOTE_DIR }).then(function(result) {
@@ -75,7 +75,7 @@ exec(zipCmd, (err, stdout, stderr) => {
                                 console.log(cmdNpm + ' STDOUT: \n' + result.stdout);
                                 console.log(cmdNpm + ' STDERR: \n' + result.stderr);
 
-                                const cmdPm2Restart = "sudo pm2 restart " + PM2_ID + " --update-env";
+                                const cmdPm2Restart = "sudo pm2 restart all --update-env"; // " + PM2_ID + "
                                 console.log("\n\n****************************************************************************");
                                 console.log("executando: " + cmdPm2Restart + "\n");
                                 ssh.execCommand(cmdPm2Restart, { cwd: REMOTE_DIR }).then(function(result) {

@@ -1,4 +1,4 @@
-import { Component, OnInit, DoCheck, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, DoCheck, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import { ApiUltraService } from './../../services/api-ultra.service';
 
 @Component({
@@ -7,9 +7,10 @@ import { ApiUltraService } from './../../services/api-ultra.service';
   styleUrls: ['./form-inscricao.component.scss']
 })
 export class FormInscricaoComponent implements OnInit, DoCheck {
-  alunoAtual: any = {};
+  alunoAtual: Aluno = new Aluno();
   cursosAtivos: Array<any> = [];
-  private ultimaBuscaValida = '';
+  private ultimaBuscaValidaCPF = '';
+  private ultimaBuscaValidaCEP = '';
   ufs: Array<any> = [];
   municipios: Array<any> = [];
   categorias: Array<any> = [];
@@ -49,19 +50,54 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
     this.cdr.detectChanges();
   }
 
-  onKey($event) {
+  // http://www.geradorcpf.com
+  @ViewChild('erroCPF') private erroCPF : ElementRef; 
+  onKeyCPF($event) {
     const testCPF: RegExp = /\d\d\d[.]\d\d\d[.]\d\d\d[-]\d\d/;
     const cpf: string = $event.target.value;
+    this.alunoAtual.cpf = cpf;
     if (testCPF.test(cpf)) {
-      if (cpf !== this.ultimaBuscaValida) {
-        this.alunoService.findUser(cpf).subscribe((a: Array<any>) => {
-          if (a.length > 0) {
-            this.cursosAtivos = a[0].cursos.slice();
-            a[0].cursos = [];
-            this.ultimaBuscaValida = cpf;
-            this.alunoAtual = a[0];
-          }
-         });
+      if(this.alunoService.validarCPF(cpf)){
+        if (cpf !== this.ultimaBuscaValidaCPF) {
+          // this.erroCPF.nativeElement.innerHTML = '';
+          this.alunoService.findUser(cpf).subscribe((a: Array<any>) => {
+            if (a.length > 0) {
+              this.cursosAtivos = a[0].cursos.slice();
+              a[0].cursos = [];
+              this.ultimaBuscaValidaCPF = cpf;
+              this.alunoAtual = a[0];
+            }
+           });
+        }
+      } else {
+        // this.erroCPF.nativeElement.innerHTML = 'CPF com erro de validação, verifique'
+      }
+      
+    }
+    return false;
+  }
+
+  onKeyWhatsapp($event){
+    this.alunoAtual.whatsapp = $event.target.value;
+  }
+
+  onKeyEmail($event){
+    this.alunoAtual.email = $event.target.value;
+  }
+
+  onKeyCEP($event) {
+    const testCEP: RegExp = /\d\d\d\d\d[-]\d\d\d/;
+    const cep: string = $event.target.value;
+    this.alunoAtual.cep = cep;
+    if (testCEP.test(cep)) {
+      if (cep !== this.ultimaBuscaValidaCEP) {
+        this.alunoService.getCEP(cep).subscribe((descCEP: any) => {
+          this.alunoAtual.endereco = descCEP.logradouro;
+          this.alunoAtual.bairro = descCEP.bairro;
+          this.alunoAtual.cidade = descCEP.cidade;
+          this.alunoAtual.uf = descCEP.estado;
+          this.ultimaBuscaValidaCEP = cep;
+        });
       }
     }
     return false;
@@ -90,9 +126,19 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
     this.cursoEscolhido.pagamento.valorOriginal = detalheCurso.variants[0].price;
     this.cursoEscolhido.pagamento.valorCobrado = detalheCurso.variants[0].price;
     this.gerarArrayValores(this.cursoEscolhido.pagamento.valorCobrado, 24);
+
+    this.selMatricula.nativeElement.classList.remove('promotion');
+    this.selMensalidade.nativeElement.classList.remove('promotion');   
+    this.txtCupom.nativeElement.value = '';
+    this.txtCupom.nativeElement.disabled = false;
+    this.btnCupom.nativeElement.disabled = false;
     return;
   }
 
+  @ViewChild('selMatricula') private selMatricula : ElementRef; 
+  @ViewChild('selMensalidade') private selMensalidade : ElementRef; 
+  @ViewChild('txtCupom') private txtCupom : ElementRef; 
+  @ViewChild('btnCupom') private btnCupom : ElementRef; 
   aplicarCupom(txtCupom) {
     txtCupom = txtCupom.toUpperCase();
     this.cursoEscolhido.pagamento.cupom.codigoCupom = txtCupom.toUpperCase();
@@ -111,14 +157,18 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
         this.cursoEscolhido.pagamento.cupom.tipoDesconto = cupomProcessado.tipoDesconto;
         this.cursoEscolhido.pagamento.cupom.valorDesconto = cupomProcessado.valorDesconto;
         this.cursoEscolhido.pagamento.cupom.percentualDesconto = cupomProcessado.percentualDesconto;
-
+        this.selMatricula.nativeElement.classList.add('promotion');
+        this.selMensalidade.nativeElement.classList.add('promotion');  
+        this.txtCupom.nativeElement.disabled = true;
+        this.btnCupom.nativeElement.disabled = true;
+        alert('Parabéns, CUPOM ' + txtCupom + ' válido! Os novos valores estão nos campos em azul!')
       });
     }
   }
 
   gerarArrayValores(valor, meses = 24) {
     this.valoresMensalidade = [];
-    for ( let i = 1; i <= meses; i += 1) {
+    for ( let i = 1; i <= meses; i += 1) { 
       this.valoresMensalidade.push({
         prestacoes: i,
         valor : Math.round(valor / i * 100) / 100,
@@ -127,11 +177,12 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
     }
   }
 
+  
   efeturarMatricula(tipoPagamento: string = 'cartao') {
     this.alunoService.salvarMatricula(this.alunoAtual)
         .subscribe((res) => {
           console.log(res);
-        });
+        }); 
   }
 
   // salvarDados() {
@@ -139,8 +190,34 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
   //       .subscribe((res) => {
   //         console.log(res);
   //       });
-  // }
+  // } 
 
+}
+
+export class Aluno {
+  cpf:string = '';
+  nome:string = '';
+  email:string = '';
+  whatsapp:string = '';
+  celular:string = '';
+  opcaoSMS:boolean=false;
+  cep:string = '';
+  endereco:string = '';
+  numero:string = '';
+  complemento:string = '';
+  bairro:string = '';
+  cidade:string = '';
+  uf:string = '';
+  ufNaturalidade:string = '';
+  cidadeNaturalidade:string = '';
+  sexoMasculino:string = '';
+  dataNascimento:string = '';
+  estadoCivil:string = '';
+  numeroIdentidade:string = '';
+  orgaoExpedidor:string = '';
+  sexo:string = 'F';
+  nomeMae:string = '';
+  nomePai:string = '';
 }
 
 export class ValoresMensalidade {

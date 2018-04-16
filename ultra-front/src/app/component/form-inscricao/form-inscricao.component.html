@@ -2,36 +2,37 @@
     <!-- Form Aluno: {{ formAluno.form.valid | json }} / CPF {{cpfInput.errors | json}} / CPF {{cpfInput.hasError('pattern') | json}} / CPF {{cpfInput.value | json}}<br>
     WhatsApp: {{whatsappInput.errors | json}} | CEP: {{cepInput.errors | json}}| e-mail: {{emailInput.errors | json}} -->
     <div class="row">
-            <div class="container-fluid shadow">
+        <div class="container-fluid shadow">
+            <div class="row">
+                <div id="valErr" class="row viewerror clearfix hidden">
+                    <div class="alert alert-danger">Oops! Seems there are some errors..</div>
+                </div>
+                <div id="valOk" class="row viewerror clearfix hidden">
+                    <div class="alert alert-success">Yay! ..</div>
+                </div>
+
+
                 <div class="row">
-                    <div id="valErr" class="row viewerror clearfix hidden">
-                        <div class="alert alert-danger">Oops! Seems there are some errors..</div>
-                    </div>
-                    <div id="valOk" class="row viewerror clearfix hidden">
-                        <div class="alert alert-success">Yay! ..</div>
-                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group brdbot">
+                            <h3>Fomulário de Matricula</h3>
+                            <div class="controls col-sm-9">
 
+                                <p id="field1" data-default-label="Header" data-default-is-header="true" data-control-type="header"></p><span id="errId1" class="error"></span></div>
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group brdbot">
-                                <h3>Fomulário de Matricula</h3>
-                                <div class="controls col-sm-9">
-
-                                    <p id="field1" data-default-label="Header" data-default-is-header="true" data-control-type="header"></p><span id="errId1" class="error"></span></div>
-
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div id="panel2" class="panelcepInput panel-default" data-role="panel">
-                                        <div class="panel-heading">Dados do aluno</div>
-                                        <div class="panel-body">
-                                            <form #formAluno="ngForm" action="../submit" id="formentry" class="form-horizontal" role="form" data-parsley-validate novalidate>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div id="panel2" class="panelcepInput panel-default" data-role="panel">
+                                    <div class="panel-heading">Dados do aluno</div>
+                                    <div class="panel-body">
+                                        <form #formAluno="ngForm" action="../submit" id="formentry" class="form-horizontal" role="form" data-parsley-validate novalidate>
 
                                             <div class="form-group">
                                                 <label class="control-label-left" for="cpf">CPF:<span class="req"> *</span></label>
                                                 <div class="controls">
-                                                    <input #cpfInput="ngModel"  id="cpf" [(ngModel)]='alunoAtual.cpf' type="text" class="form-control k-textbox" data-role="mask" data-mask="999.999.999-99" placeholder="Digite seu CPF" maxlength="28" required="required" name="cpf" data-parsley-errors-container="#errId2" (keyup)="onKeyCPF($event)" pattern="[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}">
+                                                    <input #cpfInput="ngModel" id="cpf" [(ngModel)]='alunoAtual.cpf' type="text" class="form-control k-textbox" data-role="mask" data-mask="999.999.999-99" placeholder="Digite seu CPF" maxlength="28" required="required" name="cpf" data-parsley-errors-container="#errId2"
+                                                        (keyup)="onKeyCPF($event)" pattern="[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}">
                                                     <span #erroCPF id="errId2" class="error" *ngIf="(cpfInput.invalid || !alunoService.validarCPF(cpfInput.value)) && (cpfInput.dirty || cpfInput.touched)">CPF inválido ou incompleto</span>
                                                 </div>
 
@@ -41,7 +42,7 @@
                                                 <div class="controls">
 
                                                     <input #nomeInput="ngModel" id="nome" [(ngModel)]='alunoAtual.nome' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite seu nome" required="required" name="nome" data-parsley-errors-container="#errId3">
-                                                    <span id="errId3" class="error" *ngIf="nomeInput.invalid && (nomeInput.dirty || nomeInput.touched)" >Nome deve ser preenchido</span>
+                                                    <span id="errId3" class="error" *ngIf="nomeInput.invalid && (nomeInput.dirty || nomeInput.touched)">Nome deve ser preenchido</span>
                                                 </div>
 
                                             </div>
@@ -49,8 +50,8 @@
                                                 <label class="control-label-left" for="email">e-mail:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input #emailInput="ngModel" id="email" [(ngModel)]='alunoAtual.email' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite seu e-mail" required="required" name="email" data-parsley-errors-container="#errId4" pattern='^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$' >
-                                                    <span id="errId4" class="error" *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)" >e-mail não validado</span>
+                                                    <input #emailInput="ngModel" id="email" [(ngModel)]='alunoAtual.email' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite seu e-mail" required="required" name="email" data-parsley-errors-container="#errId4" pattern='^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$'>
+                                                    <span id="errId4" class="error" *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)">e-mail não validado</span>
                                                 </div>
 
                                             </div>
@@ -58,8 +59,9 @@
                                                 <label class="control-label-left" for="whatsapp">WhatsApp:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input #whatsappInput="ngModel" id="whatsapp" [(ngModel)]='alunoAtual.whatsapp' type="text" class="form-control k-textbox" data-role="mask" placeholder="Digite seu celular com WhatsApp" data-mask="(99) 99999-9999" required="required" name="whatsapp" data-parsley-errors-container="#errId5" pattern="[(][0-9]{2}[)] [0-9]{5}[-][0-9]{3,4}[_]{0,1}"  (keyup)='onKeyWhatsapp($event)'>
-                                                    <span id="errId5" class="error" *ngIf="whatsappInput.invalid && (whatsappInput.dirty || whatsappInput.touched)" >Telefone invalido</span>
+                                                    <input #whatsappInput="ngModel" id="whatsapp" [(ngModel)]='alunoAtual.whatsapp' type="text" class="form-control k-textbox" data-role="mask" placeholder="Digite seu celular com WhatsApp" data-mask="(99) 99999-9999" required="required" name="whatsapp" data-parsley-errors-container="#errId5"
+                                                        pattern="[(][0-9]{2}[)] [0-9]{5}[-][0-9]{3,4}[_]{0,1}" (keyup)='onKeyWhatsapp($event)'>
+                                                    <span id="errId5" class="error" *ngIf="whatsappInput.invalid && (whatsappInput.dirty || whatsappInput.touched)">Telefone invalido</span>
                                                 </div>
 
                                             </div>
@@ -67,7 +69,8 @@
                                                 <label class="control-label-left" for="celularAlternativo">Celular:</label>
                                                 <div class="controls">
 
-                                                    <input #celularInput="ngModel" id="celularAlternativo" [(ngModel)]='alunoAtual.celular' type="text" class="form-control k-textbox" data-role="mask" data-mask="(99) 99999-9999" placeholder="Digite o número do celular (alternativo)" name="celularAlternativo" data-parsley-errors-container="#errId6" >
+                                                    <input #celularInput="ngModel" id="celularAlternativo" [(ngModel)]='alunoAtual.celular' type="text" class="form-control k-textbox" data-role="mask" data-mask="(99) 99999-9999" placeholder="Digite o número do celular (alternativo)" name="celularAlternativo"
+                                                        data-parsley-errors-container="#errId6">
                                                     <span id="errId6" class="error"></span>
                                                 </div>
 
@@ -85,7 +88,8 @@
                                                 <label class="control-label-left" for="cep">CEP:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input #cepInput="ngModel" id="cep" type="text" [(ngModel)]='alunoAtual.cep' class="form-control k-textbox" data-role="mask" data-mask="99999-999" required="required" placeholder="Digite seu CEP (o formulário se auto-completará" name="cep" data-parsley-errors-container="#errId8" pattern="\d{5}[-]\d{3}" (keyup)='onKeyCEP($event)' >
+                                                    <input #cepInput="ngModel" id="cep" type="text" [(ngModel)]='alunoAtual.cep' class="form-control k-textbox" data-role="mask" data-mask="99999-999" required="required" placeholder="Digite seu CEP (o formulário se auto-completará" name="cep" data-parsley-errors-container="#errId8"
+                                                        pattern="\d{5}[-]\d{3}" (keyup)='onKeyCEP($event)'>
                                                     <span id="errId8" class="error" *ngIf="cepInput.invalid && (cepInput.dirty || cepInput.touched)">CEP inválido</span>
                                                 </div>
 
@@ -112,7 +116,7 @@
                                                 <label class="control-label-left" for="complemento">Complemento:</label>
                                                 <div class="controls">
 
-                                                    <input  id="complemento" [(ngModel)]='alunoAtual.complemento' type="text" class="form-control k-textbox" data-role="text" name="complemento" placeholder="Digite a complementação do seu endereço" data-parsley-errors-container="#errId11">
+                                                    <input id="complemento" [(ngModel)]='alunoAtual.complemento' type="text" class="form-control k-textbox" data-role="text" name="complemento" placeholder="Digite a complementação do seu endereço" data-parsley-errors-container="#errId11">
                                                     <span id="errId11" class="error"></span>
                                                 </div>
 
@@ -213,7 +217,8 @@
                                                 <label class="control-label-left" for="orgaoIdentidade">Orgão Expedidor<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input #orgaoIdentidadeInput="ngModel" id="orgaoIdentidade" [(ngModel)]='alunoAtual.orgaoExpedidor' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o orgão expedidor da identidade" name="orgaoIdentidade" required="required" data-parsley-errors-container="#errId21">
+                                                    <input #orgaoIdentidadeInput="ngModel" id="orgaoIdentidade" [(ngModel)]='alunoAtual.orgaoExpedidor' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o orgão expedidor da identidade" name="orgaoIdentidade" required="required"
+                                                        data-parsley-errors-container="#errId21">
                                                     <span id="errId21" class="error"></span>
                                                 </div>
 
@@ -236,13 +241,14 @@
                                                 </div>
 
                                             </div>
-                                            </form>
-                                        </div>
+                                        </form>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div id="panel3" class="panel panel-default" data-role="panel">
-                                        <div class="panel-heading">Financeiro</div>
+                            </div>
+                            <div class="col-md-6">
+                                <div id="panel3" class="panel panel-default" data-role="panel">
+                                    <div class="panel-heading">Financeiro</div>
+                                    <form #formFinanceiro="ngForm" action="../submit" id="formentry" class="form-horizontal" role="form" data-parsley-validate novalidate>
                                         <div class="panel-body">
 
                                             <div class="form-group">
@@ -364,10 +370,11 @@
                                                             <div class="form-group">
                                                                 <label class="control-label-left" for="numeroCartaoCredito">Número do Cartão de Crédito</label>
                                                                 <div class="controls">
+
                                                                     <!-- <input type="tel" autocomplete="cc-number" id="cc-number" ccNum> -->
-                                                                    <input #ccCarai='ngModel' [(ngModel)]='cursoEscolhido.pagamento.dadosCartao.numero' id="numeroCartaoCredito" type="tel" class="form-control k-textbox" data-role="mask" data-mask="9999 9999 9999 9999" placeholder="Digite o número do Cartão de Crédito"
-                                                                        name="numeroCartaoCredito" data-parsley-errors-container="#errId31" required minlength="4" ccNumber>
-                                                                    <!-- <input id="numeroCartaoCredito" type="text" class="form-control k-textbox" data-role="mask" data-mask="9999 9999 9999 9999" placeholder="Digite o número do Cartão de Crédito" name="numeroCartaoCredito" data-parsley-errors-container="#errId31"> -->
+                                                                    <!-- <input #ccCarai='ngModel' [(ngModel)]='cursoEscolhido.pagamento.dadosCartao.numero' id="numeroCartaoCredito" type="text" class="form-control k-textbox" data-role="mask" data-mask="9999 9999 9999 9999" placeholder="Digite o número do Cartão de Crédito"
+                                                                    name="numeroCartaoCredito" data-parsley-errors-container="#errId31" required> -->
+                                                                    <input id="numeroCartaoCredito" type="text" class="form-control k-textbox" data-role="mask" data-mask="9999 9999 9999 9999" placeholder="Digite o número do Cartão de Crédito" name="numeroCartaoCredito" data-parsley-errors-container="#errId31">
                                                                     <!-- <input id="cc-number" type="tel" autocomplete="cc-number" ccNumber> -->
                                                                     <span id="errId31" class="error"></span>
                                                                 </div>
@@ -413,16 +420,17 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
-
                 </div>
+
+
+
             </div>
-        
+        </div>
+
     </div>
 </div>

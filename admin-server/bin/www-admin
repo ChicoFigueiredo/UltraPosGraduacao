@@ -4,9 +4,11 @@
  * Module dependencies.
  */
 
-var app = require('../app');
+var app = require('../app.3001');
 var debug = require('debug')('server:server');
 var http = require('http');
+// var path = require('path');
+// var express = require('express')
 
 /**
  * Get port from environment and store in Express.
@@ -14,10 +16,6 @@ var http = require('http');
 
 var port = normalizePort(process.env.PORT || '3001');
 app.set('port', port);
-
-// CONFIGURAÇÃO PARA admin.ultraposgraduacao.com.br
-//app.use(app.static_config_ultra_spa);
-
 
 /**
  * Create HTTP server.

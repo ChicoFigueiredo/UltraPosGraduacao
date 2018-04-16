@@ -162,9 +162,9 @@ app.get('/teste', isAuthenticated, function(req, res) {
  * Pasta de arquivos estáticos
  * Nota: comentado foi migrado para os arquivos de start bin/www-admin e bin/www-inscricao
  */
-// app.use(express.static(path.join(__dirname, 'spa')));
-app.use(express.static(path.join(__dirname, 'inscricao')));
-//app.express_static_fn = express.static; //(path.join(__dirname, 'spa'));
+app.use(express.static(path.join(__dirname, 'spa')));
+// app.use(express.static(path.join(__dirname, 'inscricao')));
+// app.express_static_fn = express.static; //(path.join(__dirname, 'spa'));
 // app.static_config_ultra_inscricao = express.static(path.join(__dirname, 'inscricao'));
 // app.use(express.static(path.join(__dirname, 'public')));
 

@@ -372,10 +372,11 @@
                                                                 <div class="controls">
 
                                                                     <!-- <input type="tel" autocomplete="cc-number" id="cc-number" ccNum> -->
-                                                                    <!-- <input #ccCarai='ngModel' [(ngModel)]='cursoEscolhido.pagamento.dadosCartao.numero' id="numeroCartaoCredito" type="text" class="form-control k-textbox" data-role="mask" data-mask="9999 9999 9999 9999" placeholder="Digite o número do Cartão de Crédito"
-                                                                    name="numeroCartaoCredito" data-parsley-errors-container="#errId31" required> -->
-                                                                    <input id="numeroCartaoCredito" type="text" class="form-control k-textbox" data-role="mask" data-mask="9999 9999 9999 9999" placeholder="Digite o número do Cartão de Crédito" name="numeroCartaoCredito" data-parsley-errors-container="#errId31">
+                                                                    <input #ccCarai='ngModel' [(ngModel)]='cursoEscolhido.pagamento.dadosCartao.numero' id="numeroCartaoCredito" type="text" class="form-control k-textbox" data-role="mask" data-mask="9999 9999 9999 9999" placeholder="Digite o número do Cartão de Crédito"
+                                                                        name="numeroCartaoCredito" data-parsley-errors-container="#errId31" required>
+                                                                    <!-- <input id="numeroCartaoCredito" type="text" class="form-control k-textbox" data-role="mask" data-mask="9999 9999 9999 9999" placeholder="Digite o número do Cartão de Crédito" name="numeroCartaoCredito" data-parsley-errors-container="#errId31"> -->
                                                                     <!-- <input id="cc-number" type="tel" autocomplete="cc-number" ccNumber> -->
+
                                                                     <span id="errId31" class="error"></span>
                                                                 </div>
                                                                 <!-- Um: {{ccCarai.creditCard | json}} -->
@@ -434,3 +435,7 @@
 
     </div>
 </div>
+{{ ccCarai2.errors | json }}
+
+<input #ccCarai2='ngModel' [(ngModel)]='cursoEscolhido.pagamento.dadosCartao.numero' id="numeroCartaoCredito" type="tel" class="form-control k-textbox" placeholder="Digite o número do Cartão de Crédito" name="numeroCartaoCredito" data-parsley-errors-container="#errId31"
+    required ccNum>

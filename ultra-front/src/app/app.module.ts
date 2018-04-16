@@ -6,7 +6,7 @@ import { registerLocaleData } from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
 
-import { CreditCardDirectivesModule } from 'angular-cc-library';
+import { NgXCreditCardsModule } from 'ngx-credit-cards';
 
 import { AppComponent } from './app.component';
 import { FormInscricaoComponent } from './component/form-inscricao/form-inscricao.component';
@@ -27,7 +27,7 @@ registerLocaleData(localePTBR);
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    CreditCardDirectivesModule,
+    NgXCreditCardsModule,
   ],
   providers: [
     ApiUltraService,

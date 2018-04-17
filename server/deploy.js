@@ -15,7 +15,7 @@ const REMOTE_DIR = '/var/www/ultra-pos/';
 const LOCAL_DIR_CLEAR = './sessions';
 const PM2_ID = 'ultra-pos-graduacao';
 const USER = 'ubuntu';
-const FILE_KEY = './ti@ultraposgraduacao.com.br.pem';
+const FILE_KEY = '../config/ti.pem';
 
 
 var tmp = require('tmp');

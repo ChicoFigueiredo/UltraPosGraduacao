@@ -5,7 +5,7 @@
     },
     "apps": [{
         "root": "src",
-        "outDir": "../admin-server/inscricao",
+        "outDir": "../server/inscricao",
         "assets": [
             "assets",
             "favicon.ico"

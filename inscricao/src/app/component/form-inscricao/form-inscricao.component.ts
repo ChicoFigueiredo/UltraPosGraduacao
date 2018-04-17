@@ -227,18 +227,19 @@ export class ValoresMensalidade {
 }
 
 export class DadosCartao {
-  numero: string;
-  nome: string;
-  bandeira: string;
-  CVV: string;
+  numero: string = '';
+  nome: string = '';
+  bandeira: string = '';
+  CVV: string = '';
+  vencimento: string = '';
 }
 
 export class CursoPagamentoCupom {
-    codigoCupom: string;
-    origemCupom: string;
-    tipoDesconto: string;
-    valorDesconto: number;
-    percentualDesconto: number;
+    codigoCupom: string = '';
+    origemCupom: string = '';
+    tipoDesconto: string = '';
+    valorDesconto: number = 0;
+    percentualDesconto: number = 0;
 }
 
 export class CursoPagamento {

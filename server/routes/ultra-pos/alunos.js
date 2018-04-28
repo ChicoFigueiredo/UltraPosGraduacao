@@ -1,6 +1,16 @@
 var express = require('express');
 var router = express.Router();
 var alunos = require('../../model/ultra-pos/alunos');
+var WooCommerceAPI = require('woocommerce-api');
+
+var WooCommerce = new WooCommerceAPI({
+    url: 'https://ultraposgraduacao.com.br',
+    consumerKey: 'ck_3ee8797c7d408b82cc22aff931b887b0f1d995fe',
+    consumerSecret: 'cs_18b708e8cfc45ed6f0390697c4d4220f4bea0169',
+    wpAPI: true,
+    version: 'wc/v2',
+    queryStringAuth: true, // Force Basic Authentication as query string true and using under HTTPS
+});
 
 router
     .get("/summary", function(req, res) {
@@ -45,12 +55,35 @@ router.get("/list", function(req, res) {
 })
 
 
-router.get("/find/:cpf", function(req, res) {
+router.get("/find/:cpf", function(req, response) {
     alunos.find({ cpf: req.params.cpf }, function(err, data) {
         if (err) {
-            res.send(err);
+            response.send(err);
         } else {
-            res.send(data);
+            if (data.length > 0) {
+                response.send(data);
+            } else {
+                WooCommerce.get('customers?search=' + req.params.cpf, function(err, data, res) {
+                    if (err) {
+                        response.send(err);
+                    } else {
+                        var cli = transform(data.body);
+                        response.send(cli);
+                    }
+                });
+            }
+        }
+    });
+})
+
+
+router.get("/get/:cpf", function(req, response) {
+    WooCommerce.get('customers?search=' + req.params.cpf, function(err, data, res) {
+        if (err) {
+            response.send(err);
+        } else {
+            var cli = transform(data.body);
+            response.send(cli);
         }
     });
 })
@@ -66,6 +99,44 @@ router.post("/save", function(req, res) {
     });
 })
 
+
+function transform(bo) {
+    var c = JSON.parse(bo);
+    if (c) {
+        if (c.length > 0) {
+            c = c[0];
+            var res = [{
+                "cpf": c.username,
+                "bairro": c.billing.neighborhood,
+                "celular": c.billing.cellphone,
+                "cep": c.billing.postcode,
+                "cidade": c.billing.city,
+                "cidadeNaturalidade": '',
+                "complemento": c.billing.address_2,
+                "dataNascimento": c.billing.birthdate,
+                "eAtivo": true,
+                "email": c.email,
+                "endereco": c.billing.address_1,
+                "estadoCivil": c.billing.ie,
+                "nome": c.first_name,
+                "nomeMae": "",
+                "nomePai": "",
+                "numero": c.billing.number,
+                "numeroIdentidade": c.billing.rg.replace(/\D/gi, ''),
+                "opcaoSMS": true,
+                "orgaoExpedidor": c.billing.rg.replace(/\d/gi, ''),
+                "sexo": c.billing.sex,
+                "uf": c.billing.state,
+                "ufNaturalidade": "",
+                "whatsapp": c.billing.phone
+            }];
+            return res;
+        } else {
+            var res = [];
+            return res;
+        }
+    }
+}
 
 
 

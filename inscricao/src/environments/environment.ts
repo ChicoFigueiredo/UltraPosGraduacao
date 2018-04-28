@@ -5,5 +5,6 @@
 
 export const environment = {
   production: false,
-  rootApi : 'http://inscricao.ultraposgraduacao.com.br/'
+  // rootApi : 'https://inscricao.ultraposgraduacao.com.br/'
+  rootApi : 'http://localhost:3002/'
 };

@@ -14,7 +14,8 @@ const HOST_URL = 'ssh.ultraposgraduacao.com.br';
 const REMOTE_DIR = '/var/www/ultra-pos/';
 const LOCAL_DIR_CLEAR = './sessions';
 const PM2_ID = 'ultra-pos-graduacao';
-const USER = 'ubuntu';
+const USER = 'root';
+const PSW = 'h5Y*Wff*dpDbmtUx';
 const FILE_KEY = '../config/ti.pem';
 
 
@@ -36,7 +37,8 @@ exec(zipCmd, (err, stdout, stderr) => {
     ssh.connect({
             host: HOST_URL,
             username: USER,
-            privateKey: FILE_KEY,
+            //privateKey: FILE_KEY,
+            password: PSW,
             port: 22
         })
         .then(function() {

@@ -12,11 +12,20 @@ var WooCommerce = new WooCommerceAPI({
 });
 
 
-criarCliente()
-    // mostraClientes()
-    // mostraCupons();
-    // carregarCategoria();
-    //carregarCursos();
+//criarCliente()
+// mostraClientes()
+// mostraCupons();
+// carregarCategoria();
+// carregarCursos();
+
+mostraProdutos();
+
+function mostraProdutos() {
+    WooCommerce.get('products?per_page=1000', function(err, data, res) {
+        console.log(JSON.stringify(JSON.parse(res), null, 2));
+        console.log('>> ' + JSON.parse(res).length)
+    });
+}
 
 function criarCliente() {
     var data = exChico();

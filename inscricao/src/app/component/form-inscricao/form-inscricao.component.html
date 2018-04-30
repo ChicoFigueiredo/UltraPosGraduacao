@@ -254,7 +254,7 @@
                                             <label class="control-label-left" for="categoriaSelecionado">Categoria de cursos:</label>
                                             <div class="controls">
                                                 <select [(ngModel)]='cursoEscolhido.codigoCategoria' #vCategoria id="categoriaSelecionado" class="form-control" name="categoriaSelecionado" data-parsley-errors-container="#errId24">
-                                                            <option *ngFor='let c of categorias' [value]="c.id" >{{c.name.pt}}</option>
+                                                            <option *ngFor='let c of categorias' [value]="c.id" >{{c.name}}</option>
                                                     </select><span id="errId24" class="error"></span>
                                             </div>
                                         </div>

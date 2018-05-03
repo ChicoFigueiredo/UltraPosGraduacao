@@ -33,7 +33,7 @@ var CategoriesSchema = mongo.Schema({
 
 
 var VariantSchema = mongo.Schema({
-    id: { type: Number, required: true, trim: true, index: true, unique: true },
+    id: { type: Number, required: true, trim: true, index: true }, //, unique: true 
     image_id: { type: Number, required: false, trim: true },
     product_id: { type: Number, required: true, trim: true },
     position: { type: Number, required: true, trim: true },

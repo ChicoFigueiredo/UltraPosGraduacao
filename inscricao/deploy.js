@@ -9,15 +9,19 @@ node_ssh = require('node-ssh')
 ssh = new node_ssh()
 
 
-const HOST_URL = 'admin.academiabancaria.com.br';
-const REMOTE_DIR = '/var/www/admin-cl-beneficios/';
+const HOST_URL = 'ssh.ultraposgraduacao.com.br';
+const REMOTE_DIR = '/var/www/ultra-pos/';
+const USER = 'root';
+const PSW = 'h5Y*Wff*dpDbmtUx';
+const FILE_KEY = '';
 const LOCAL_DIR = '../admin-server/inscricao/';
 const PASTA_DEPLOY = 'inscricao/';
 
 ssh.connect({
         host: HOST_URL,
-        username: 'ubuntu',
-        privateKey: 'chico.pem',
+        username: USER,
+        //privateKey: FILE_KEY,
+        password: PSW,
         port: 22
     })
     .then(function() {

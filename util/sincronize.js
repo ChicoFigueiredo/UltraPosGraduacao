@@ -32,7 +32,8 @@ function processaPaginaCategoria(page = 1) {
                     },
                     "seo_description": {
                         "pt": null
-                    }
+                    },
+                    published: true
                 }
 
                 categorias.findOneAndUpdate({ id: ct.id }, // find a document with that filter
@@ -92,7 +93,23 @@ function processaPaginaProduto(page = 1) {
                     "brand": null,
                     "tags": "",
                     "categories": getCategoriasCursos(cu.categories),
-                    "variants": []
+                    "variants": [{
+                        "id": cu.id * 10000 + 1,
+                        "image_id": null,
+                        "product_id": cu.id,
+                        "position": 1,
+                        "price": cu.price,
+                        "promotional_price": null,
+                        "stock_management": false,
+                        "stock": null,
+                        "weight": "0.000",
+                        "width": "0.00",
+                        "height": "0.00",
+                        "depth": "0.00",
+                        "sku": null,
+                        "values": [],
+                        "barcode": null
+                    }]
                 }
 
                 cursos.findOneAndUpdate({ id: nc.id }, // find a document with that filter
@@ -115,6 +132,10 @@ function processaPaginaProduto(page = 1) {
 }
 
 
-//processaPaginaCategoria(1);
+processaPaginaCategoria(1);
 
 processaPaginaProduto(1);
+
+setTimeout(() => {
+    process.exit(0);
+}, 60000 * 3);

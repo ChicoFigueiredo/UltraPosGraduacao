@@ -1,5 +1,7 @@
 import { Component, OnInit, DoCheck, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import { ApiUltraService } from './../../services/api-ultra.service';
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-form-inscricao',
@@ -16,12 +18,15 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
   categorias: Array<any> = [];
   cursos: Array<any> = [];
   cursoEscolhido: Curso = new Curso();
+  idCursoSelecionado = '';
   valoresMensalidade: Array<ValoresMensalidade> = [];
 
   constructor(
     public alunoService: ApiUltraService,
     private cdr: ChangeDetectorRef,
+    private route: ActivatedRoute,
   ) {
+
     this.alunoService.getUF().subscribe((x: Array<any>) => {
       x = x.sort((a, b) => a.nome > b.nome ? 1 : -1);
       this.ufs = x;
@@ -38,12 +43,21 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
       x = x.sort((a, b) => a.name.pt > b.name.pt ? 1 : -1);
            // .filter((c) => c.published );
       this.cursos = x;
+      this.cursoEscolhido.codigoCategoria = Number( this.getCategoriaDoCurso(this.idCursoSelecionado).id );
+      this.cursoEscolhido.codigoCurso = Number(this.idCursoSelecionado);
+      this.selectCurso({ target : { value : this.idCursoSelecionado }});
     });
   }
 
   ngOnInit() {
     this.cursoEscolhido.pagamento.melhorDia = 5;
     this.cursoEscolhido.pagamento.parcelamento = 24;
+    this.route.params.subscribe(params => {
+      this.idCursoSelecionado = params['id']; 
+      this.cursoEscolhido.codigoCategoria = Number( this.getCategoriaDoCurso(this.idCursoSelecionado).id );
+      this.cursoEscolhido.codigoCurso = Number(this.idCursoSelecionado);
+      this.selectCurso({ target : { value : this.idCursoSelecionado }});
+    });
   }
 
   public ngDoCheck(): void {
@@ -117,6 +131,16 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
         }
       }).length > 0;
     });
+  }
+
+  getCategoriaDoCurso(curso){
+    let cu: any = this.cursos.filter((c) => c.id === Number(curso));
+    if (cu){
+      if(cu.length>0){
+        return cu[0].categories[0];
+      }
+    }
+    return null;
   }
 
   selectCurso(e) {

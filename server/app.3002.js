@@ -174,9 +174,15 @@ app.use(express.static(path.join(__dirname, 'inscricao')));
  * 
  */
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    next(createError(404));
+// app.use(function(req, res, next) {
+//     next(createError(404));
+// });
+app.all('*', (req, res) => {
+    console.log(`[TRACE] Server 404 request: ${req.originalUrl}`);
+    res.status(200).sendFile(path.join(__dirname, 'inscricao/index.html'));
 });
+var fallback = require('express-history-api-fallback')
+app.use(fallback(path.join(__dirname, 'inscricao/index.html')))
 
 // error handler
 app.use(function(err, req, res, next) {

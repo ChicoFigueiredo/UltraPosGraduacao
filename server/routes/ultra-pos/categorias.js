@@ -15,7 +15,7 @@ router.get("/list2", function(req, res) {
 
 router.get("/list", function(req, res) {
     console.log('hein');
-    categorias.find({}, { "_id": 0, id: 1, "name": 1 }, // { _id: 1, id: 1, name: 1 },
+    categorias.find({}, { "_id": 0, "id": 1, "name": 1 }, // { _id: 1, id: 1, name: 1 },
         function(err, data) {
             if (err) {
                 res.send(err);

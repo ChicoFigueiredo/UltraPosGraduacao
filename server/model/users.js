@@ -1,4 +1,4 @@
-var mongo = require('./db');
+var mongo = require('./ultra-pos/_db');
 
 // var Schema = mongo.Schema;
 

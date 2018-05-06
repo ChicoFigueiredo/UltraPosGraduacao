@@ -259,6 +259,7 @@ var FormInscricaoComponent = /** @class */ (function () {
     FormInscricaoComponent.prototype.ngDoCheck = function () {
         this.cdr.detectChanges();
     };
+    // http://www.geradorcpf.com
     FormInscricaoComponent.prototype.onKeyCPF = function ($event) {
         var _this = this;
         var testCPF = /\d\d\d[.]\d\d\d[.]\d\d\d[-]\d\d/;
@@ -270,8 +271,8 @@ var FormInscricaoComponent = /** @class */ (function () {
                     // this.erroCPF.nativeElement.innerHTML = '';
                     this.alunoService.findUser(cpf).subscribe(function (a) {
                         if (a.length > 0) {
-                            _this.cursosAtivos = a[0].cursos.slice();
-                            a[0].cursos = [];
+                            // this.cursosAtivos = a[0].cursos.slice();
+                            // a[0].cursos = [];
                             _this.ultimaBuscaValidaCPF = cpf;
                             _this.alunoAtual = a[0];
                         }
@@ -381,7 +382,12 @@ var FormInscricaoComponent = /** @class */ (function () {
     };
     FormInscricaoComponent.prototype.efeturarMatricula = function (tipoPagamento) {
         if (tipoPagamento === void 0) { tipoPagamento = 'cartao'; }
-        this.alunoService.salvarMatricula(this.alunoAtual)
+        var saveObj = {
+            aluno: this.alunoAtual,
+            curso: this.cursoEscolhido,
+        };
+        saveObj.curso.pagamento.formaPagamento = tipoPagamento;
+        this.alunoService.salvarMatricula(saveObj)
             .subscribe(function (res) {
             console.log(res);
         });
@@ -450,6 +456,7 @@ var Aluno = /** @class */ (function () {
 
 var ValoresMensalidade = /** @class */ (function () {
     function ValoresMensalidade() {
+        this.display = '';
     }
     return ValoresMensalidade;
 }());
@@ -478,6 +485,7 @@ var CursoPagamentoCupom = /** @class */ (function () {
 
 var CursoPagamento = /** @class */ (function () {
     function CursoPagamento() {
+        this.formaPagamento = '';
         this.cupom = new CursoPagamentoCupom();
         this.dadosCartao = new DadosCartao();
     }
@@ -522,7 +530,7 @@ var httpOptions = {
 };
 var API = {
     FIND_USER: __WEBPACK_IMPORTED_MODULE_2__environments_environment__["a" /* environment */].rootApi + 'api/alunos/find/',
-    SAVE_USER: __WEBPACK_IMPORTED_MODULE_2__environments_environment__["a" /* environment */].rootApi + 'api/alunos/save',
+    SAVE_USER: __WEBPACK_IMPORTED_MODULE_2__environments_environment__["a" /* environment */].rootApi + 'api/matricula/inscrever',
     GET_CATEGORIAS: __WEBPACK_IMPORTED_MODULE_2__environments_environment__["a" /* environment */].rootApi + 'api/categorias/list',
     GET_CURSOS: __WEBPACK_IMPORTED_MODULE_2__environments_environment__["a" /* environment */].rootApi + 'api/cursos/list',
     POST_PROCESS_CUPOM: __WEBPACK_IMPORTED_MODULE_2__environments_environment__["a" /* environment */].rootApi + 'api/cupom/calcula',
@@ -581,39 +589,47 @@ var ApiUltraService = /** @class */ (function () {
     };
     ApiUltraService.prototype.validarCPF = function (cpf) {
         cpf = cpf.replace(/[^\d]+/g, '');
-        if (cpf == '')
+        if (cpf === '') {
             return false;
-        // Elimina CPFs invalidos conhecidos    
-        if (cpf.length != 11 ||
-            cpf == "00000000000" ||
-            cpf == "11111111111" ||
-            cpf == "22222222222" ||
-            cpf == "33333333333" ||
-            cpf == "44444444444" ||
-            cpf == "55555555555" ||
-            cpf == "66666666666" ||
-            cpf == "77777777777" ||
-            cpf == "88888888888" ||
-            cpf == "99999999999")
+        }
+        // Elimina CPFs invalidos conhecidos
+        if (cpf.length !== 11 ||
+            cpf === '00000000000' ||
+            cpf === '11111111111' ||
+            cpf === '22222222222' ||
+            cpf === '33333333333' ||
+            cpf === '44444444444' ||
+            cpf === '55555555555' ||
+            cpf === '66666666666' ||
+            cpf === '77777777777' ||
+            cpf === '88888888888' ||
+            cpf === '99999999999') {
             return false;
-        // Valida 1o digito 
+        }
+        // Valida 1o digito
         var add = 0;
-        for (var i = 0; i < 9; i++)
-            add += parseInt(cpf.charAt(i)) * (10 - i);
+        for (var i = 0; i < 9; i++) {
+            add += parseInt(cpf.charAt(i), 10) * (10 - i);
+        }
         var rev = 11 - (add % 11);
-        if (rev == 10 || rev == 11)
+        if (rev === 10 || rev === 11) {
             rev = 0;
-        if (rev != parseInt(cpf.charAt(9)))
+        }
+        if (rev !== parseInt(cpf.charAt(9), 10)) {
             return false;
-        // Valida 2o digito 
+        }
+        // Valida 2o digito
         add = 0;
-        for (var i = 0; i < 10; i++)
-            add += parseInt(cpf.charAt(i)) * (11 - i);
+        for (var i = 0; i < 10; i++) {
+            add += parseInt(cpf.charAt(i), 10) * (11 - i);
+        }
         rev = 11 - (add % 11);
-        if (rev == 10 || rev == 11)
+        if (rev === 10 || rev === 11) {
             rev = 0;
-        if (rev != parseInt(cpf.charAt(10)))
+        }
+        if (rev !== parseInt(cpf.charAt(10), 10)) {
             return false;
+        }
         return true;
     };
     ApiUltraService = __decorate([
@@ -639,7 +655,7 @@ var ApiUltraService = /** @class */ (function () {
 var environment = {
     production: false,
     // rootApi : 'https://inscricao.ultraposgraduacao.com.br/'
-    rootApi: ''
+    rootApi: 'http://localhost:3002/'
 };
 
 

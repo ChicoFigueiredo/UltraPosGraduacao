@@ -10,9 +10,9 @@
         "test": "ng test",
         "lint": "ng lint",
         "e2e": "ng e2e",
-        "deploy": "ng build -- --prod --aot && node ../server/deploy.js",
-        "deploy-dev": "ng build && node ../server/deploy.js",
-        "deploy:dev": "ng build && node ../server/deploy.js",
+        "deploy": "ng build -- --prod --aot && cd ../server/ && node deploy.js && cd ../inscricao/",
+        "deploy-dev": "ng build && cd ../server/ && node deploy.js && cd ../inscricao/",
+        "deploy:dev": "ng build && cd ../server/ && node deploy.js && cd ../inscricao/",
         "up": "node ./deploy.js"
     },
     "private": true,

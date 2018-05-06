@@ -137,5 +137,26 @@ processaPaginaCategoria(1);
 processaPaginaProduto(1);
 
 setTimeout(() => {
-    process.exit(0);
-}, 60000 * 3);
+    console.log('Iniciando Matricula')
+    cursos.find({}, {},
+        function(err, acu) {
+            if (err) {
+                res.send(err);
+            } else {
+                acu.forEach(function(e) {
+                    var t = e.variants;
+                    t.forEach(function(e) {
+                        e.down_payment = 100
+                    });
+                    cursos.findOneAndUpdate({ _id: e._id }, { $set: { variants: t } });
+                    console.log('atualizando ' + e.id)
+                });
+            }
+        }
+    )
+
+    setTimeout(() => {
+        process.exit(0);
+    }, 60000 * 1)
+
+}, 60000 * 1);

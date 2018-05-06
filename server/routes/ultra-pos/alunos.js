@@ -49,7 +49,7 @@ router.get("/list", function(req, res) {
 
 
 router.get("/find/:cpf", function(req, response) {
-    alunos.find({ cpf: req.params.cpf }, function(err, data) {
+    alunos.find({ cpf: req.params.cpf }, { cursos: 0 }, function(err, data) {
         if (err) {
             response.send(err);
         } else {

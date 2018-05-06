@@ -20,6 +20,11 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
   cursoEscolhido: Curso = new Curso();
   idCursoSelecionado = '';
   valoresMensalidade: Array<ValoresMensalidade> = [];
+  @ViewChild('erroCPF') private erroCPF: ElementRef;
+  @ViewChild('selMatricula') private selMatricula: ElementRef;
+  @ViewChild('selMensalidade') private selMensalidade: ElementRef;
+  @ViewChild('txtCupom') private txtCupom: ElementRef;
+  @ViewChild('btnCupom') private btnCupom: ElementRef;
 
   constructor(
     public alunoService: ApiUltraService,
@@ -53,7 +58,7 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
     this.cursoEscolhido.pagamento.melhorDia = 5;
     this.cursoEscolhido.pagamento.parcelamento = 24;
     this.route.params.subscribe(params => {
-      this.idCursoSelecionado = params['id']; 
+      this.idCursoSelecionado = params['id'];
       this.cursoEscolhido.codigoCategoria = Number( this.getCategoriaDoCurso(this.idCursoSelecionado).id );
       this.cursoEscolhido.codigoCurso = Number(this.idCursoSelecionado);
       this.selectCurso({ target : { value : this.idCursoSelecionado }});
@@ -65,19 +70,18 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
   }
 
   // http://www.geradorcpf.com
-  @ViewChild('erroCPF') private erroCPF : ElementRef; 
   onKeyCPF($event) {
     const testCPF: RegExp = /\d\d\d[.]\d\d\d[.]\d\d\d[-]\d\d/;
     const cpf: string = $event.target.value;
     this.alunoAtual.cpf = cpf;
     if (testCPF.test(cpf)) {
-      if(this.alunoService.validarCPF(cpf)){
+      if (this.alunoService.validarCPF(cpf)) {
         if (cpf !== this.ultimaBuscaValidaCPF) {
           // this.erroCPF.nativeElement.innerHTML = '';
           this.alunoService.findUser(cpf).subscribe((a: Array<any>) => {
             if (a.length > 0) {
-              this.cursosAtivos = a[0].cursos.slice();
-              a[0].cursos = [];
+              // this.cursosAtivos = a[0].cursos.slice();
+              // a[0].cursos = [];
               this.ultimaBuscaValidaCPF = cpf;
               this.alunoAtual = a[0];
             }
@@ -86,16 +90,15 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
       } else {
         // this.erroCPF.nativeElement.innerHTML = 'CPF com erro de validação, verifique'
       }
-      
     }
     return false;
   }
 
-  onKeyWhatsapp($event){
+  onKeyWhatsapp($event) {
     this.alunoAtual.whatsapp = $event.target.value;
   }
 
-  onKeyEmail($event){
+  onKeyEmail($event) {
     this.alunoAtual.email = $event.target.value;
   }
 
@@ -133,10 +136,10 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
     });
   }
 
-  getCategoriaDoCurso(curso){
-    let cu: any = this.cursos.filter((c) => c.id === Number(curso));
-    if (cu){
-      if(cu.length>0){
+  getCategoriaDoCurso(curso) {
+    const cu: any = this.cursos.filter((c) => c.id === Number(curso));
+    if (cu) {
+      if (cu.length > 0) {
         return cu[0].categories[0];
       }
     }
@@ -152,17 +155,13 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
     this.gerarArrayValores(this.cursoEscolhido.pagamento.valorCobrado, 24);
 
     this.selMatricula.nativeElement.classList.remove('promotion');
-    this.selMensalidade.nativeElement.classList.remove('promotion');   
+    this.selMensalidade.nativeElement.classList.remove('promotion');
     this.txtCupom.nativeElement.value = '';
     this.txtCupom.nativeElement.disabled = false;
     this.btnCupom.nativeElement.disabled = false;
     return;
   }
 
-  @ViewChild('selMatricula') private selMatricula : ElementRef; 
-  @ViewChild('selMensalidade') private selMensalidade : ElementRef; 
-  @ViewChild('txtCupom') private txtCupom : ElementRef; 
-  @ViewChild('btnCupom') private btnCupom : ElementRef; 
   aplicarCupom(txtCupom) {
     txtCupom = txtCupom.toUpperCase();
     this.cursoEscolhido.pagamento.cupom.codigoCupom = txtCupom.toUpperCase();
@@ -182,17 +181,17 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
         this.cursoEscolhido.pagamento.cupom.valorDesconto = cupomProcessado.valorDesconto;
         this.cursoEscolhido.pagamento.cupom.percentualDesconto = cupomProcessado.percentualDesconto;
         this.selMatricula.nativeElement.classList.add('promotion');
-        this.selMensalidade.nativeElement.classList.add('promotion');  
+        this.selMensalidade.nativeElement.classList.add('promotion');
         this.txtCupom.nativeElement.disabled = true;
         this.btnCupom.nativeElement.disabled = true;
-        alert('Parabéns, CUPOM ' + txtCupom + ' válido! Os novos valores estão nos campos em azul!')
+        alert('Parabéns, CUPOM ' + txtCupom + ' válido! Os novos valores estão nos campos em azul!');
       });
     }
   }
 
   gerarArrayValores(valor, meses = 24) {
     this.valoresMensalidade = [];
-    for ( let i = 1; i <= meses; i += 1) { 
+    for ( let i = 1; i <= meses; i += 1) {
       this.valoresMensalidade.push({
         prestacoes: i,
         valor : Math.round(valor / i * 100) / 100,
@@ -201,12 +200,17 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
     }
   }
 
-  
+
   efeturarMatricula(tipoPagamento: string = 'cartao') {
-    this.alunoService.salvarMatricula(this.alunoAtual)
+    const saveObj = {
+      aluno: this.alunoAtual,
+      curso: this.cursoEscolhido,
+    };
+    saveObj.curso.pagamento.formaPagamento = tipoPagamento;
+    this.alunoService.salvarMatricula(saveObj)
         .subscribe((res) => {
           console.log(res);
-        }); 
+        });
   }
 
   // salvarDados() {
@@ -214,56 +218,56 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
   //       .subscribe((res) => {
   //         console.log(res);
   //       });
-  // } 
+  // }
 
 }
 
 export class Aluno {
-  cpf:string = '';
-  nome:string = '';
-  email:string = '';
-  whatsapp:string = '';
-  celular:string = '';
-  opcaoSMS:boolean=false;
-  cep:string = '';
-  endereco:string = '';
-  numero:string = '';
-  complemento:string = '';
-  bairro:string = '';
-  cidade:string = '';
-  uf:string = '';
-  ufNaturalidade:string = '';
-  cidadeNaturalidade:string = '';
-  sexoMasculino:string = '';
-  dataNascimento:string = '';
-  estadoCivil:string = '';
-  numeroIdentidade:string = '';
-  orgaoExpedidor:string = '';
-  sexo:string = 'F';
-  nomeMae:string = '';
-  nomePai:string = '';
+  cpf = '';
+  nome = '';
+  email = '';
+  whatsapp = '';
+  celular = '';
+  opcaoSMS = false;
+  cep = '';
+  endereco = '';
+  numero = '';
+  complemento = '';
+  bairro = '';
+  cidade = '';
+  uf = '';
+  ufNaturalidade = '';
+  cidadeNaturalidade = '';
+  sexoMasculino = '';
+  dataNascimento = '';
+  estadoCivil = '';
+  numeroIdentidade = '';
+  orgaoExpedidor = '';
+  sexo = 'F';
+  nomeMae = '';
+  nomePai = '';
 }
 
 export class ValoresMensalidade {
   prestacoes: number;
   valor: number;
-  display: string;
+  display = '';
 }
 
 export class DadosCartao {
-  numero: string = '';
-  nome: string = '';
-  bandeira: string = '';
-  CVV: string = '';
-  vencimento: string = '';
+  numero = '';
+  nome = '';
+  bandeira = '';
+  CVV = '';
+  vencimento = '';
 }
 
 export class CursoPagamentoCupom {
-    codigoCupom: string = '';
-    origemCupom: string = '';
-    tipoDesconto: string = '';
-    valorDesconto: number = 0;
-    percentualDesconto: number = 0;
+    codigoCupom = '';
+    origemCupom = '';
+    tipoDesconto = '';
+    valorDesconto = 0;
+    percentualDesconto = 0;
 }
 
 export class CursoPagamento {
@@ -274,7 +278,7 @@ export class CursoPagamento {
   parcela: number;
   melhorDia: number;
   cupom: CursoPagamentoCupom;
-  formaPagamento: string;
+  formaPagamento = '';
   dadosCartao: DadosCartao;
 
   constructor() {
@@ -286,7 +290,7 @@ export class CursoPagamento {
 export class Curso {
   codigoCurso: number;
   codigoCategoria: number;
-  nomeCurso: string;
+  nomeCurso;
   deAcordo: boolean;
   pagamento: CursoPagamento;
 

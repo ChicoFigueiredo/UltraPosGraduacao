@@ -10,7 +10,7 @@
         "test": "ng test",
         "lint": "ng lint",
         "e2e": "ng e2e",
-        "deploy": "ng build -- --prod --aot && cd ../server/ && node deploy.js && cd ../inscricao/",
+        "deploy": "ng build -- --prod --aot  --env=prod && cd ../server/ && node deploy.js && cd ../inscricao/",
         "deploy-dev": "ng build && cd ../server/ && node deploy.js && cd ../inscricao/",
         "deploy:dev": "ng build && cd ../server/ && node deploy.js && cd ../inscricao/",
         "up": "node ./deploy.js"
@@ -29,6 +29,7 @@
         "angular-cc-library": "^1.2.3",
         "angular-locale-pt-br": "^1.3.16",
         "core-js": "^2.4.1",
+        "creditcards": "^3.0.1",
         "i": "^0.3.6",
         "ngx-mask": "^2.4.4",
         "npm": "^5.8.0",

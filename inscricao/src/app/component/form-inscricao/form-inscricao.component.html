@@ -370,7 +370,7 @@
                                                             <label class="control-label-left" for="numeroCartaoCredito">Número do Cartão de Crédito</label>
                                                             <div class="controls">
                                                                 <input #ccInput='ngModel' [(ngModel)]='cursoEscolhido.pagamento.dadosCartao.numero' id="numeroCartaoCredito" type='text' class="form-control k-textbox" placeholder="Digite o número do Cartão de Crédito" name="numeroCartaoCredito" dropSpecialCharacters="true "
-                                                                    mask="0000 0000 0000 0000">
+                                                                    mask="0000 0000 0000 0000" (keyup)='onKeyCC($event)'>
                                                                 <!-- <input type="tel" autocomplete="cc-number" id="cc-number" ccNum> -->
                                                                 <!-- <input #ccCarai='ngModel' [(ngModel)]='cursoEscolhido.pagamento.dadosCartao.numero' id="numeroCartaoCredito" type="tel" class="form-control k-textbox" data-role="mask" data-mask="9999 9999 9999 9999" placeholder="Digite o número do Cartão de Crédito"
                                                                     name="numeroCartaoCredito" data-parsley-errors-container="#errId31" required minlength="4" ccNumber> -->
@@ -393,7 +393,7 @@
                                                             <label class="control-label-left" for="nomeImpressoCartao">Nome impresso no Cartão</label>
                                                             <div class="controls">
 
-                                                                <input id="nomeImpressoCartao" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o nome que está no Cartão de Crédito" name="nomeImpressoCartao" data-parsley-errors-container="#errId32">
+                                                                <input [(ngModel)]='cursoEscolhido.pagamento.dadosCartao.nome' id="nomeImpressoCartao" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o nome que está no Cartão de Crédito" name="nomeImpressoCartao" data-parsley-errors-container="#errId32">
                                                                 <span id="errId32" class="error"></span>
                                                             </div>
 
@@ -402,12 +402,13 @@
                                                             <label class="control-label-left" for="bandeiraCartaoCredito">Bandeira Cartão:</label>
                                                             <div class="controls">
 
-                                                                <select id="bandeiraCartaoCredito" class="form-control" name="bandeiraCartaoCredito" data-parsley-errors-container="#errId33">
+                                                                <select [(ngModel)]='cursoEscolhido.pagamento.dadosCartao.bandeira' id="bandeiraCartaoCredito" class="form-control" name="bandeiraCartaoCredito" data-parsley-errors-container="#errId33">
                                                                         <option value="Mastercard">Mastercard</option>
                                                                         <option value="Visa">Visa</option>
                                                                         <option value="Elo">Elo</option>
                                                                         <option value="American Express">American Express</option>
-                                                                        <option value="Dinners">Dinners</option>
+                                                                        <option value="Diners Club">Diners Club</option>
+                                                                        <option value="Maestro">Maestro</option>
                                                                     </select><span id="errId33" class="error"></span></div>
 
                                                         </div>
@@ -415,7 +416,7 @@
                                                             <label class="control-label-left" for="cvvCartaoCredito">CVV</label>
                                                             <div class="controls">
 
-                                                                <input id="cvvCartaoCredito" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o código CVV atrás do Cartão" data-parsley-errors-container="#errId34">
+                                                                <input [(ngModel)]='cursoEscolhido.pagamento.dadosCartao.CVV' id="cvvCartaoCredito" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o código CVV atrás do Cartão" data-parsley-errors-container="#errId34">
                                                                 <span id="errId34" class="error"></span>
                                                             </div>
 

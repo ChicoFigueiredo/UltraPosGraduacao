@@ -33,6 +33,7 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
   @ViewChild('selMensalidade') private selMensalidade: ElementRef;
   @ViewChild('txtCupom') private txtCupom: ElementRef;
   @ViewChild('btnCupom') private btnCupom: ElementRef;
+  @ViewChild('formAluno') private formAluno;
 
   constructor(
     public alunoService: ApiUltraService,
@@ -238,12 +239,30 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
               console.log(res);
             });
       }
+    } else {
+      // alert('Existem erros no formulário, verifique!');
     }
   }
 
   validarFormulario(): boolean {
     const al = this.alunoAtual;
-    if ( al.email !== al.email2 ) { return false; }
+    if ( ! this.formAluno.form.valid ) {
+      alert('Alguns campos obrigatórios do aluno ainda não preenchidos, verifique os campos com asteristico vermelho.');
+      return false;
+    }
+    if ( al.email !== al.email_validado || al.email === '' || al.email === null ) {
+      alert('e-mail e vericação de e-mail divergentes, verifique.');
+      return false;
+    }
+    if ( this.cursoEscolhido.codigoCurso === null ) {
+      alert('Escolha o curso desejado.');
+      return false;
+    }
+    if (! al.leuAcordo) {
+      alert('Para prosseguir é necessário aceitar os Termos do Contrato.');
+      return false;
+    }
+    return true;
   }
 
   // salvarDados() {
@@ -259,7 +278,7 @@ export class Aluno {
   cpf = '';
   nome = '';
   email = '';
-  email2 = '';
+  email_validado = '';
   whatsapp = '';
   celular = '';
   opcaoSMS = false;
@@ -280,6 +299,7 @@ export class Aluno {
   sexo = 'F';
   nomeMae = '';
   nomePai = '';
+  leuAcordo = false;
 }
 
 export class ValoresMensalidade {

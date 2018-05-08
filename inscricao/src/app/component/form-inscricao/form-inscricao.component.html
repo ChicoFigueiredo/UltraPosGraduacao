@@ -58,7 +58,8 @@
                                                 <label class="control-label-left" for="email">digite novamente o e-mail:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input #emailInput2="ngModel" [(ngModel)]='alunoAtual.email_validado' id="email2" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite seu e-mail" required="required" name="email" data-parsley-errors-container="#errId4" pattern='^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$'>
+                                                    <input #emailInput2="ngModel" [(ngModel)]='alunoAtual.email_validado' id="email2" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite seu e-mail" required="required" name="email_validado" data-parsley-errors-container="#errId4"
+                                                        pattern='^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$'>
                                                     <span id="errId4" class="error" *ngIf="emailInput2.invalid && (emailInput2.dirty || emailInput2.touched)">e-mail não validado</span>
                                                     <span id="errId4" class="error" *ngIf="emailInput2.value != emailInput.value">E-Mail não bate</span>
                                                 </div>
@@ -280,7 +281,8 @@
                                             <label class="control-label-left sr-only"></label>
                                             <div class="controls">
 
-                                                <label class="checkbox" for="marcaConcordo"><input type="checkbox" value="Li e estou de acordo com os Termos do Contrato" id="marcaConcordo" name="field181" data-parsley-errors-container="#errId25">Li e estou de acordo com os Termos do Contrato</label>
+                                                <label class="checkbox" for="marcaConcordo">
+                                                    <input [(ngModel)]='alunoAtual.leuAcordo' type="checkbox" value="Li e estou de acordo com os Termos do Contrato" id="marcaConcordo" name="field181" data-parsley-errors-container="#errId25">Li e estou de acordo com os Termos do Contrato</label>
                                                 <span id="errId25" class="error"></span>
                                             </div>
 

@@ -38,7 +38,7 @@ function processaPaginaCategoria(page = 1) {
 
                 categorias.findOneAndUpdate({ id: ct.id }, // find a document with that filter
                     nc, // document to insert when nothing was found
-                    { upsert: true, new: false, runValidators: true, strict: true }, // options
+                    { upsert: true, new: true, runValidators: true, strict: true }, // options
                     function(err, cat) { // callback
                         if (err) {
                             console.log('fudeu ' + JSON.stringify(err));

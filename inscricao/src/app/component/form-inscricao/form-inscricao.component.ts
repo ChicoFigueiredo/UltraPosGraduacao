@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import * as card from 'creditcards/card';
 import * as cvv from 'creditcards/cvc';
 import * as cardTypes from 'creditcards-types';
-import * as expiration from 'creditcards/expiration'
+import * as expiration from 'creditcards/expiration';
 
 const __cc = card(cardTypes);
 const __cvv = cvv(cardTypes);
@@ -208,7 +208,7 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
     }
   }
 
-  onKeyCC($event){
+  onKeyCC($event) {
     this.cursoEscolhido.pagamento.dadosCartao.bandeira = __cc.type($event.target.value.replace(/\D/gmi, ''));
     // const __f = __cc.format(this.cursoEscolhido.pagamento.dadosCartao.numero.replace(/\D/gmi, '')).replace(/\d/gmi, '0');
     // $event.target.setAttribute('mask',__f);
@@ -216,27 +216,34 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
   }
 
   efeturarMatricula(tipoPagamento: string = 'cartao') {
-    if (tipoPagamento === 'cartao') {
-      const ccValid = __cc.isValid(this.cursoEscolhido.pagamento.dadosCartao.numero.replace(/\D/gmi, ''));
-      const ccType = __cc.type(this.cursoEscolhido.pagamento.dadosCartao.numero.replace(/\D/gmi, ''));
-      const cvvValid = __cvv.isValid(this.cursoEscolhido.pagamento.dadosCartao.CVV.replace(/\D/gmi, ''), ccType);
-      const expValir =
-          __exp.month.isValid(Number(this.cursoEscolhido.pagamento.dadosCartao.vencimento.substr(0, 2))) &&
-          __exp.year.isValid(Number(this.cursoEscolhido.pagamento.dadosCartao.vencimento.substr(2, 4))) &&
-          !__exp.isPast(Number(this.cursoEscolhido.pagamento.dadosCartao.vencimento.substr(0, 2)),
-                        Number(this.cursoEscolhido.pagamento.dadosCartao.vencimento.substr(2, 4)) );
-      alert (ccValid + '/' + ccType + '/' + cvvValid + '/' + expValir);
-    } else {
-      const saveObj = {
-        aluno: this.alunoAtual,
-        curso: this.cursoEscolhido,
-      };
-      saveObj.curso.pagamento.formaPagamento = tipoPagamento;
-      this.alunoService.salvarMatricula(saveObj)
-          .subscribe((res) => {
-            console.log(res);
-          });
+    if (this.validarFormulario()) {
+      if (tipoPagamento === 'cartao') {
+        const ccValid = __cc.isValid(this.cursoEscolhido.pagamento.dadosCartao.numero.replace(/\D/gmi, ''));
+        const ccType = __cc.type(this.cursoEscolhido.pagamento.dadosCartao.numero.replace(/\D/gmi, ''));
+        const cvvValid = __cvv.isValid(this.cursoEscolhido.pagamento.dadosCartao.CVV.replace(/\D/gmi, ''), ccType);
+        const expValir =
+            __exp.month.isValid(Number(this.cursoEscolhido.pagamento.dadosCartao.vencimento.substr(0, 2))) &&
+            __exp.year.isValid(Number(this.cursoEscolhido.pagamento.dadosCartao.vencimento.substr(2, 4))) &&
+            !__exp.isPast(Number(this.cursoEscolhido.pagamento.dadosCartao.vencimento.substr(0, 2)),
+                          Number(this.cursoEscolhido.pagamento.dadosCartao.vencimento.substr(2, 4)) );
+        alert (ccValid + '/' + ccType + '/' + cvvValid + '/' + expValir);
+      } else {
+        const saveObj = {
+          aluno: this.alunoAtual,
+          curso: this.cursoEscolhido,
+        };
+        saveObj.curso.pagamento.formaPagamento = tipoPagamento;
+        this.alunoService.salvarMatricula(saveObj)
+            .subscribe((res) => {
+              console.log(res);
+            });
+      }
     }
+  }
+
+  validarFormulario(): boolean {
+    const al = this.alunoAtual;
+    if ( al.email !== al.email2 ) { return false; }
   }
 
   // salvarDados() {
@@ -252,6 +259,7 @@ export class Aluno {
   cpf = '';
   nome = '';
   email = '';
+  email2 = '';
   whatsapp = '';
   celular = '';
   opcaoSMS = false;

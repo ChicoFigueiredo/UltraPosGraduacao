@@ -53,7 +53,15 @@
                                                     <input #emailInput="ngModel" id="email" [(ngModel)]='alunoAtual.email' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite seu e-mail" required="required" name="email" data-parsley-errors-container="#errId4" pattern='^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$'>
                                                     <span id="errId4" class="error" *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)">e-mail não validado</span>
                                                 </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label-left" for="email">digite novamente o e-mail:<span class="req"> *</span></label>
+                                                <div class="controls">
 
+                                                    <input #emailInput2="ngModel" [(ngModel)]='alunoAtual.email_validado' id="email2" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite seu e-mail" required="required" name="email" data-parsley-errors-container="#errId4" pattern='^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$'>
+                                                    <span id="errId4" class="error" *ngIf="emailInput2.invalid && (emailInput2.dirty || emailInput2.touched)">e-mail não validado</span>
+                                                    <span id="errId4" class="error" *ngIf="emailInput2.value != emailInput.value">E-Mail não bate</span>
+                                                </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label-left" for="whatsapp">WhatsApp:<span class="req"> *</span></label>

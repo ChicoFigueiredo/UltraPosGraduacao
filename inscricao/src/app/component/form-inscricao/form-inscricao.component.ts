@@ -34,6 +34,9 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
   @ViewChild('txtCupom') private txtCupom: ElementRef;
   @ViewChild('btnCupom') private btnCupom: ElementRef;
   @ViewChild('formAluno') private formAluno;
+  @ViewChild('TituloModal') private TituloModal: ElementRef;
+  @ViewChild('msgRetorno') private msgRetorno: ElementRef;
+  @ViewChild('ifrmMensagem') private ifrmMensagem: ElementRef;
 
   constructor(
     public alunoService: ApiUltraService,
@@ -212,28 +215,15 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
 
   onKeyCC($event) {
     this.cursoEscolhido.pagamento.dadosCartao.bandeira = __cc.type($event.target.value.replace(/\D/gmi, ''));
-    // const __f = __cc.format(this.cursoEscolhido.pagamento.dadosCartao.numero.replace(/\D/gmi, '')).replace(/\d/gmi, '0');
-    // $event.target.setAttribute('mask',__f);
-    // $event.target.setAttribute('ng-reflect-mask-expression',__f);
   }
 
   efeturarMatricula(tipoPagamento: string = 'cartao') {
     if (this.validarFormulario()) {
       if (tipoPagamento === 'cartao') {
-        const ccValid = __cc.isValid(this.cursoEscolhido.pagamento.dadosCartao.numero.replace(/\D/gmi, ''));
-        const ccType = __cc.type(this.cursoEscolhido.pagamento.dadosCartao.numero.replace(/\D/gmi, ''));
-        const cvvValid = __cvv.isValid(this.cursoEscolhido.pagamento.dadosCartao.CVV.replace(/\D/gmi, ''), ccType);
-        const ccMes = Number(this.cursoEscolhido.pagamento.dadosCartao.vencimento.substr(0, 2));
-        let ccAno = Number(this.cursoEscolhido.pagamento.dadosCartao.vencimento.substr(2, 4));
-        ccAno = ccAno < 1000 ? 2000 + ccAno : ccAno;
-        const expValir =
-            __exp.month.isValid(ccMes) &&
-            __exp.year.isValid(ccAno) &&
-            !__exp.isPast(ccMes, ccAno);
-        alert (ccValid + '/' + ccType + '/' + cvvValid + '/' + expValir);
-        if ( ccValid && cvvValid && expValir ) {
-          this.cursoEscolhido.pagamento.dadosCartao.vencimento_formatado = ccMes + '/' + ccAno;
+        if ( this.validarCartao() ) {
           this.saveMatricula(tipoPagamento);
+        } else {
+          // nada
         }
       } else {
         this.saveMatricula(tipoPagamento);
@@ -250,9 +240,65 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
     };
     saveObj.curso.pagamento.formaPagamento = tipoPagamento;
     this.alunoService.salvarMatricula(saveObj)
-        .subscribe((res) => {
-          console.log(res);
+        .subscribe((retorno: any) => {
+          console.log(retorno);
+          if (tipoPagamento === 'boleto') {
+            // this.ifrmMensagem.nativeElement.src = retorno.fat.bill.url;
+            this.TituloModal.nativeElement.innerHTML = 'Matricula realizada com sucesso!';
+            this.msgRetorno.nativeElement.innerHTML =
+              'Sua matricula foi registrada com sucesso<br>';
+            this.msgRetorno.nativeElement.innerHTML +=
+              'Seu boleto pode ser visualizado em ';
+            this.msgRetorno.nativeElement.innerHTML +=
+              '<a target="_blank" href="' + retorno.fat.bill.url + '">' + retorno.fat.bill.url + '</a>';
+            $('#exampleModal').modal();
+          } else if (tipoPagamento === 'cartao') {
+            if ( retorno.fat.bill.charges[0].last_transaction.status === 'rejected' ) {
+              // this.ifrmMensagem.nativeElement.src = retorno.fat.bill.url;
+              this.TituloModal.nativeElement.innerHTML = 'Matricula realizada com sucesso!';
+              this.msgRetorno.nativeElement.innerHTML =
+                'Sua matricula foi registrada com sucesso<br>';
+              this.msgRetorno.nativeElement.innerHTML +=
+                'Entretanto houveram problemas com seu cartão, acesse o endereço ';
+              this.msgRetorno.nativeElement.innerHTML +=
+                '<a target="_blank" href="' + retorno.fat.bill.url + '">' + retorno.fat.bill.url + '</a> ';
+              this.msgRetorno.nativeElement.innerHTML +=
+                'e verifique ou troque o cartão utilizado';
+              $('#exampleModal').modal();
+            } else {
+              // this.ifrmMensagem.nativeElement.src = retorno.fat.bill.url;
+              this.TituloModal.nativeElement.innerHTML = 'Matricula realizada com sucesso!';
+              this.msgRetorno.nativeElement.innerHTML =
+                'Sua matricula foi registrada com sucesso<br>';
+              this.msgRetorno.nativeElement.innerHTML +=
+                'Seu pagamento foi registrado e sua fatura pode ser visualizado em ';
+              this.msgRetorno.nativeElement.innerHTML +=
+                '<a target="_blank" href="' + retorno.fat.bill.url + '">' + retorno.fat.bill.url + '</a>';
+              $('#exampleModal').modal();
+            }
+          }
         });
+  }
+
+  validarCartao() {
+    const ccValid = __cc.isValid(this.cursoEscolhido.pagamento.dadosCartao.numero.replace(/\D/gmi, ''));
+    const ccType = __cc.type(this.cursoEscolhido.pagamento.dadosCartao.numero.replace(/\D/gmi, ''));
+    const cvvValid = __cvv.isValid(this.cursoEscolhido.pagamento.dadosCartao.CVV.replace(/\D/gmi, ''), ccType);
+    const ccMes = Number(this.cursoEscolhido.pagamento.dadosCartao.vencimento.substr(0, 2));
+    let ccAno = Number(this.cursoEscolhido.pagamento.dadosCartao.vencimento.substr(2, 4));
+    ccAno = ccAno < 1000 ? 2000 + ccAno : ccAno;
+    const expValir =
+        __exp.month.isValid(ccMes) &&
+        __exp.year.isValid(ccAno) &&
+        !__exp.isPast(ccMes, ccAno);
+
+    if (!(ccValid && cvvValid && expValir)) {
+      alert('Dados de cartão inconsistentes, verifique');
+      return false;
+    } else {
+      this.cursoEscolhido.pagamento.dadosCartao.vencimento_formatado = ccMes + '/' + ccAno;
+    }
+    return true;
   }
 
   validarFormulario(): boolean {
@@ -325,7 +371,7 @@ export class DadosCartao {
   bandeira = '';
   CVV = '';
   vencimento = '';
-  vencimento_formatado = ''
+  vencimento_formatado = '';
 }
 
 export class CursoPagamentoCupom {

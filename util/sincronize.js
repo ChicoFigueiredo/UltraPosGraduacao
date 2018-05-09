@@ -108,7 +108,8 @@ function processaPaginaProduto(page = 1) {
                         "depth": "0.00",
                         "sku": null,
                         "values": [],
-                        "barcode": null
+                        "barcode": null,
+                        "down_payment": cu.dimensions.length === null || cu.dimensions.length === 0 ? 0 : cu.dimensions.length, // matricula
                     }],
                     codigo_vindi: cu.weight
                 }

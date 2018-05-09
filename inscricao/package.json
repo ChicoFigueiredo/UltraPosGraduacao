@@ -10,7 +10,7 @@
         "test": "ng test",
         "lint": "ng lint",
         "e2e": "ng e2e",
-        "deploy": "ng build -- --prod --aot  --env=prod && cd ../server/ && node deploy.js && cd ../inscricao/",
+        "deploy": "ng build --prod --environment prod  --aot --build-optimizer && cd ../server/ && node deploy.js && cd ../inscricao/",
         "deploy-dev": "ng build && cd ../server/ && node deploy.js && cd ../inscricao/",
         "deploy:dev": "ng build && cd ../server/ && node deploy.js && cd ../inscricao/",
         "up": "node ./deploy.js"

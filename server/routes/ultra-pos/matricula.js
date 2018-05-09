@@ -137,8 +137,9 @@ router.post("/inscrever", function(req, res) {
     }
 
     function geraFaturamentoImediatoEAssinatura(idCli, idCartao) {
-        let cobrarEm = new Date((new Date()).setHours(23, 59, 59, 999));
-        cobrarEm = (new Date(cobrarEm.setDate(cobrarEm.getDate() + 7))); // formato final deve ser "2018-05-10T23:59:59.000-03:00"
+        const dias = cu.pagamento.formaPagamento === 'cartao' ? 0 : 7;
+        let cobrarEm = new Date(cu.pagamento.formaPagamento === 'cartao' ? (new Date()) : (new Date()).setHours(23, 59, 59, 999));
+        cobrarEm = (new Date(cobrarEm.setDate(cobrarEm.getDate() + dias))); // formato final deve ser "2018-05-10T23:59:59.000-03:00"
         let fatura = {
             "customer_id": idCli,
             "payment_method_code": cu.pagamento.formaPagamento === 'boleto' ? 'bank_slip' : 'credit_card',

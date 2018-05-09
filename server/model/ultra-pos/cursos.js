@@ -71,7 +71,8 @@ var CursosSchema = mongo.Schema({
     variants: [VariantSchema],
     tags: { type: String, required: false, trim: true },
     images: [ImagesSchema],
-    categories: [CategoriesSchema]
+    categories: [CategoriesSchema],
+    codigo_vindi: { type: Number, required: true, trim: true, index: true },
 }, { versionKey: false, _id: true });
 
 

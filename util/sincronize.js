@@ -109,7 +109,8 @@ function processaPaginaProduto(page = 1) {
                         "sku": null,
                         "values": [],
                         "barcode": null
-                    }]
+                    }],
+                    codigo_vindi: cu.weight
                 }
 
                 cursos.findOneAndUpdate({ id: nc.id }, // find a document with that filter

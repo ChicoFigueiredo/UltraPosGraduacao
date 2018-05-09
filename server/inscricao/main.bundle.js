@@ -355,6 +355,7 @@ var FormInscricaoComponent = /** @class */ (function () {
         this.cursoEscolhido.pagamento.taxaMatricula = detalheCurso.variants[0].down_payment;
         this.cursoEscolhido.pagamento.valorOriginal = detalheCurso.variants[0].price;
         this.cursoEscolhido.pagamento.valorCobrado = detalheCurso.variants[0].price;
+        this.cursoEscolhido.codigo_vindi = detalheCurso.codigo_vindi;
         this.gerarArrayValores(this.cursoEscolhido.pagamento.valorCobrado, 24);
         this.selMatricula.nativeElement.classList.remove('promotion');
         this.selMensalidade.nativeElement.classList.remove('promotion');
@@ -409,26 +410,36 @@ var FormInscricaoComponent = /** @class */ (function () {
                 var ccValid = __cc.isValid(this.cursoEscolhido.pagamento.dadosCartao.numero.replace(/\D/gmi, ''));
                 var ccType = __cc.type(this.cursoEscolhido.pagamento.dadosCartao.numero.replace(/\D/gmi, ''));
                 var cvvValid = __cvv.isValid(this.cursoEscolhido.pagamento.dadosCartao.CVV.replace(/\D/gmi, ''), ccType);
-                var expValir = __exp.month.isValid(Number(this.cursoEscolhido.pagamento.dadosCartao.vencimento.substr(0, 2))) &&
-                    __exp.year.isValid(Number(this.cursoEscolhido.pagamento.dadosCartao.vencimento.substr(2, 4))) &&
-                    !__exp.isPast(Number(this.cursoEscolhido.pagamento.dadosCartao.vencimento.substr(0, 2)), Number(this.cursoEscolhido.pagamento.dadosCartao.vencimento.substr(2, 4)));
+                var ccMes = Number(this.cursoEscolhido.pagamento.dadosCartao.vencimento.substr(0, 2));
+                var ccAno = Number(this.cursoEscolhido.pagamento.dadosCartao.vencimento.substr(2, 4));
+                ccAno = ccAno < 1000 ? 2000 + ccAno : ccAno;
+                var expValir = __exp.month.isValid(ccMes) &&
+                    __exp.year.isValid(ccAno) &&
+                    !__exp.isPast(ccMes, ccAno);
                 alert(ccValid + '/' + ccType + '/' + cvvValid + '/' + expValir);
+                if (ccValid && cvvValid && expValir) {
+                    this.cursoEscolhido.pagamento.dadosCartao.vencimento_formatado = ccMes + '/' + ccAno;
+                    this.saveMatricula(tipoPagamento);
+                }
             }
             else {
-                var saveObj = {
-                    aluno: this.alunoAtual,
-                    curso: this.cursoEscolhido,
-                };
-                saveObj.curso.pagamento.formaPagamento = tipoPagamento;
-                this.alunoService.salvarMatricula(saveObj)
-                    .subscribe(function (res) {
-                    console.log(res);
-                });
+                this.saveMatricula(tipoPagamento);
             }
         }
         else {
             // alert('Existem erros no formulário, verifique!');
         }
+    };
+    FormInscricaoComponent.prototype.saveMatricula = function (tipoPagamento) {
+        var saveObj = {
+            aluno: this.alunoAtual,
+            curso: this.cursoEscolhido,
+        };
+        saveObj.curso.pagamento.formaPagamento = tipoPagamento;
+        this.alunoService.salvarMatricula(saveObj)
+            .subscribe(function (res) {
+            console.log(res);
+        });
     };
     FormInscricaoComponent.prototype.validarFormulario = function () {
         var al = this.alunoAtual;
@@ -532,6 +543,7 @@ var DadosCartao = /** @class */ (function () {
         this.bandeira = '';
         this.CVV = '';
         this.vencimento = '';
+        this.vencimento_formatado = '';
     }
     return DadosCartao;
 }());

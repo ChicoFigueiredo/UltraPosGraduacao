@@ -5,6 +5,9 @@ const Vindi = require('vindi-js');
 
 const cVindi = new Vindi('QzaLFAj4fOwgEjgNeDzOZzKtk40ygxxjhZ0xvMj0yU8');
 
+const PRODUCT_ID_PADRAO = 215139
+const PRODUCT_ID_PADRAO_MATRICULA = 196780;
+
 
 router.post("/inscrever", function(req, res) {
     const al = req.body.aluno;
@@ -61,7 +64,8 @@ router.post("/inscrever", function(req, res) {
                             console.log('clis2: ', clis2);
                             const cli2 = clis2.customer;
                             ret.cli2 = cli2;
-                            geraFaturamentoImediatoEAssinatura(cli2.id);
+                            gravarDadosCartao(cli2.id, geraFaturamentoImediatoEAssinatura)
+                                //geraFaturamentoImediatoEAssinatura(cli2.id);
                         }).catch((err) => {
                             console.error('error', err);
                             res.send(err);
@@ -71,7 +75,8 @@ router.post("/inscrever", function(req, res) {
                             const cli2 = clis2.customer;
                             console.log('cli2: ', cli2);
                             ret.cli2 = cli2;
-                            geraFaturamentoImediatoEAssinatura(cli2.id);
+                            gravarDadosCartao(cli2.id, geraFaturamentoImediatoEAssinatura)
+                                //geraFaturamentoImediatoEAssinatura(cli2.id);
                         }).catch((err) => {
                             console.error('error', err);
                             res.send(err);
@@ -84,22 +89,73 @@ router.post("/inscrever", function(req, res) {
             }
         });
 
-    function geraFaturamentoImediatoEAssinatura(idCli) {
+    function gravarDadosCartao(idCli, faturar) {
+        if (cu.pagamento.formaPagamento === 'cartao') {
+            // /api/v1/payment_profiles?page=1&query=customer_id%3A6200271%20card_number_first_six%3A515894%20card_number_last_four%3A5269&sort_by=id&sort_order=asc
+            // 'customer_id:' + idCli + ' card_number_first_six:' + first_six + ' card_number_last_four:' + last_four
+            const first_six = cu.pagamento.dadosCartao.numero.replace(/\D/gmi, '').substr(0, 6);
+            const last_four = cu.pagamento.dadosCartao.numero.replace(/\D/gmi, '').substr(cu.pagamento.dadosCartao.numero.length - 4);
+            console.log('customer_id=' + idCli + ' and card_number_first_six=' + first_six)
+            cVindi.get({
+                uri: '/api/v1/payment_profiles',
+                debug: false
+            }, 'customer_id=' + idCli + ' and card_number_first_six=' + first_six + ' and card_number_last_four=' + last_four).then((aPaym) => { //, 'customer_id:' + idCli + '+card_number_first_six:' + first_six
+                const paym = aPaym.payment_profiles;
+                console.log('paym: ', paym);
+                if (paym.length == 0) {
+                    const cartao_credito = {
+                        "holder_name": cu.pagamento.dadosCartao.nome,
+                        "card_expiration": cu.pagamento.dadosCartao.vencimento_formatado,
+                        "card_number": cu.pagamento.dadosCartao.numero.replace(/\D/gmi, ''),
+                        "card_cvv": cu.pagamento.dadosCartao.CVV,
+                        "payment_method_code": "credit_card",
+                        "payment_company_code": cu.pagamento.dadosCartao.bandeira.toLowerCase().replace(' ', '_'),
+                        "customer_id": idCli
+                    }
+                    cVindi.post({ uri: '/api/v1/payment_profiles', debug: false }, cartao_credito).then((cart) => {
+                        console.log('cart: ', cart);
+                        ret.paym = cart;
+                        idCartao = cart.payment_profile.id;
+                        faturar(idCli, idCartao)
+                    }).catch((err) => {
+                        console.error('error', err);
+                        res.send(err);
+                    });
+                } else {
+                    ret.paym = paym;
+                    idCartao = paym[0].payment_profile.id;
+                    faturar(idCli, idCartao)
+                }
+                return;
+            }).catch((err) => {
+                console.error('error', err);
+                res.send(err);
+            });
+        } else {
+            faturar(idCli);
+        }
+    }
+
+    function geraFaturamentoImediatoEAssinatura(idCli, idCartao) {
         let cobrarEm = new Date((new Date()).setHours(23, 59, 59, 999));
         cobrarEm = (new Date(cobrarEm.setDate(cobrarEm.getDate() + 7))); // formato final deve ser "2018-05-10T23:59:59.000-03:00"
         let fatura = {
             "customer_id": idCli,
-            "payment_method_code": cu.pagamento.formaPagamento === 'boleto' ? 'bank_slip' : '',
+            "payment_method_code": cu.pagamento.formaPagamento === 'boleto' ? 'bank_slip' : 'credit_card',
             "due_at": cobrarEm.toISOString().replace('Z', '-03:00'),
             "bill_items": [{
-                "product_id": 215139, // TIRAR HARD CODE
+                "product_id": cu.codigo_vindi === null || cu.codigo_vindi <= 0 ? PRODUCT_ID_PADRAO : cu.codigo_vindi, // TIRAR HARD CODE
                 "amount": cu.pagamento.valorCobrado / cu.pagamento.parcelamento
             }]
         };
 
+        if (cu.pagamento.formaPagamento === 'cartao') {
+            fatura.payment_profile = { id: idCartao };
+        }
+
         if (cu.pagamento.taxaMatricula > 0) {
             fatura.bill_items.push({
-                "product_id": 196780,
+                "product_id": PRODUCT_ID_PADRAO_MATRICULA,
                 "amount": cu.pagamento.taxaMatricula
             })
         }
@@ -112,12 +168,12 @@ router.post("/inscrever", function(req, res) {
                     "plan_id": 61639, // HARD CODE
                     "start_at": cobrarEm,
                     "customer_id": idCli,
-                    "payment_method_code": "bank_slip",
+                    "payment_method_code": cu.pagamento.formaPagamento === 'boleto' ? 'bank_slip' : 'credit_card',
                     "billing_trigger_type": "day_of_month",
                     "billing_trigger_day": cu.pagamento.melhorDia,
                     "billing_cycles": (cu.pagamento.parcelamento - 1),
                     "product_items": [{
-                        "product_id": 215139,
+                        "product_id": cu.codigo_vindi === null || cu.codigo_vindi <= 0 ? PRODUCT_ID_PADRAO : cu.codigo_vindi,
                         "cycles": (cu.pagamento.parcelamento - 1),
                         "pricing_schema": {
                             "price": cu.pagamento.valorCobrado / cu.pagamento.parcelamento,
@@ -126,6 +182,9 @@ router.post("/inscrever", function(req, res) {
 
                     }]
                 };
+                if (cu.pagamento.formaPagamento === 'cartao') {
+                    assinatura.payment_profile = { id: idCartao };
+                }
                 cVindi.post({ uri: '/api/v1//subscriptions', debug: false }, assinatura).then((sub) => {
                     ret.sub = sub;
                     res.send(ret);

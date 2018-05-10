@@ -31,7 +31,7 @@
                                             <div class="form-group">
                                                 <label class="control-label-left" for="cpf">CPF:<span class="req"> *</span></label>
                                                 <div class="controls">
-                                                    <input #cpfInput="ngModel" id="cpf" [(ngModel)]='alunoAtual.cpf' type="text" class="form-control k-textbox" data-role="mask" data-mask="999.999.999-99" placeholder="Digite seu CPF" maxlength="28" required="required" name="cpf" data-parsley-errors-container="#errId2"
+                                                    <input autocomplete="off" #cpfInput="ngModel" id="cpf" [(ngModel)]='alunoAtual.cpf' type="text" class="form-control k-textbox" data-role="mask" data-mask="999.999.999-99" placeholder="Digite seu CPF" maxlength="28" required="required" name="cpf" data-parsley-errors-container="#errId2"
                                                         (keyup)="onKeyCPF($event)" pattern="[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}">
                                                     <span #erroCPF id="errId2" class="error" *ngIf="(cpfInput.invalid || !alunoService.validarCPF(cpfInput.value)) && (cpfInput.dirty || cpfInput.touched)">CPF inválido ou incompleto</span>
                                                 </div>
@@ -41,7 +41,7 @@
                                                 <label class="control-label-left" for="nome">Nome:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input #nomeInput="ngModel" id="nome" [(ngModel)]='alunoAtual.nome' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite seu nome" required="required" name="nome" data-parsley-errors-container="#errId3">
+                                                    <input autocomplete="off" #nomeInput="ngModel" id="nome" [(ngModel)]='alunoAtual.nome' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite seu nome" required="required" name="nome" data-parsley-errors-container="#errId3" oninput="this.value = this.value.toUpperCase()">
                                                     <span id="errId3" class="error" *ngIf="nomeInput.invalid && (nomeInput.dirty || nomeInput.touched)">Nome deve ser preenchido</span>
                                                 </div>
 
@@ -50,7 +50,8 @@
                                                 <label class="control-label-left" for="email">e-mail:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input #emailInput="ngModel" id="email" [(ngModel)]='alunoAtual.email' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite seu e-mail" required="required" name="email" data-parsley-errors-container="#errId4" pattern='^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$'>
+                                                    <input autocomplete="off" #emailInput="ngModel" id="email" [(ngModel)]='alunoAtual.email' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite seu e-mail" required="required" name="email" data-parsley-errors-container="#errId4"
+                                                        pattern='^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$'>
                                                     <span id="errId4" class="error" *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)">e-mail não validado</span>
                                                 </div>
                                             </div>
@@ -58,37 +59,35 @@
                                                 <label class="control-label-left" for="email">digite novamente o e-mail:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input #emailInput2="ngModel" [(ngModel)]='alunoAtual.email_validado' id="email2" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite seu e-mail" required="required" name="email_validado" data-parsley-errors-container="#errId4"
+                                                    <input autocomplete="off" #emailInput2="ngModel" [(ngModel)]='alunoAtual.email_validado' id="email2" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite seu e-mail" required="required" name="email_validado" data-parsley-errors-container="#errId4"
                                                         pattern='^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$'>
                                                     <span id="errId4" class="error" *ngIf="emailInput2.invalid && (emailInput2.dirty || emailInput2.touched)">e-mail não validado</span>
                                                     <span id="errId4" class="error" *ngIf="emailInput2.value != emailInput.value">E-Mail não bate</span>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label-left" for="whatsapp">WhatsApp:<span class="req"> *</span></label>
+                                                <label class="control-label-left" for="whatsapp">WhatsApp / Celular:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input #whatsappInput="ngModel" id="whatsapp" [(ngModel)]='alunoAtual.whatsapp' type="text" class="form-control k-textbox" data-role="mask" placeholder="Digite seu celular com WhatsApp" data-mask="(99) 99999-9999" required="required" name="whatsapp" data-parsley-errors-container="#errId5"
-                                                        pattern="[(][0-9]{2}[)] [0-9]{5}[-][0-9]{3,4}[_]{0,1}" (keyup)='onKeyWhatsapp($event)'>
+                                                    <input autocomplete="off" #whatsappInput="ngModel" id="whatsapp" [(ngModel)]='alunoAtual.whatsapp' type="text" class="form-control k-textbox" data-role="mask" placeholder="Digite seu celular com WhatsApp" data-mask="(99) 99999-9999" required="required"
+                                                        name="whatsapp" data-parsley-errors-container="#errId5" pattern="[(][0-9]{2}[)] [0-9]{5}[-][0-9]{3,4}[_]{0,1}" (keyup)='onKeyWhatsapp($event)'>
                                                     <span id="errId5" class="error" *ngIf="whatsappInput.invalid && (whatsappInput.dirty || whatsappInput.touched)">Telefone invalido</span>
                                                 </div>
 
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label-left" for="celularAlternativo">Celular:</label>
+
+                                                <label class="control-label-left" for="celularAlternativo">Celular / Telefone Alternativo:</label>
                                                 <div class="controls">
-
-                                                    <input #celularInput="ngModel" id="celularAlternativo" [(ngModel)]='alunoAtual.celular' type="text" class="form-control k-textbox" data-role="mask" data-mask="(99) 99999-9999" placeholder="Digite o número do celular (alternativo)" name="celularAlternativo"
-                                                        data-parsley-errors-container="#errId6">
-                                                    <span id="errId6" class="error"></span>
+                                                    <input autocomplete="off" #celularInput="ngModel" id="celularAlternativo" [(ngModel)]='alunoAtual.celular' type="text" class="form-control k-textbox" data-role="mask" placeholder="Digite seu celular com WhatsApp" data-mask="(99) 99999-9999" required="required"
+                                                        name="celular" data-parsley-errors-container="#errId6" pattern="[(][0-9]{2}[)] [0-9]{5}[-][0-9]{3,4}[_]{0,1}" (keyup)='onKeyCelular($event)'>
                                                 </div>
-
                                             </div>
                                             <div class="form-group" style="display: block;">
                                                 <label class="control-label-left sr-only"></label>
                                                 <div class="controls">
 
-                                                    <label class="checkbox" for="opcaoSMS"><input type="checkbox" [(ngModel)]='alunoAtual.opcaoSMS'  value="Ao marcar esta opção, você receberá novidades e promoções do Portal por E-mail, SMS e Telefone." id="opcaoSMS" name="field11" data-parsley-errors-container="#errId7">Ao marcar esta opção, você receberá novidades e promoções do Portal por E-mail, SMS e Telefone.</label>
+                                                    <label class="checkbox" for="opcaoSMS"><input  autocomplete="off" type="checkbox" [(ngModel)]='alunoAtual.opcaoSMS'  value="Ao marcar esta opção, você receberá novidades e promoções do Portal por E-mail, SMS e Telefone." id="opcaoSMS" name="field11" data-parsley-errors-container="#errId7">Ao marcar esta opção, você receberá novidades e promoções do Portal por E-mail, SMS e Telefone.</label>
                                                     <span id="errId7" class="error"></span>
                                                 </div>
 
@@ -97,8 +96,8 @@
                                                 <label class="control-label-left" for="cep">CEP:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input #cepInput="ngModel" id="cep" type="text" [(ngModel)]='alunoAtual.cep' class="form-control k-textbox" data-role="mask" data-mask="99999-999" required="required" placeholder="Digite seu CEP (o formulário se auto-completará" name="cep" data-parsley-errors-container="#errId8"
-                                                        pattern="\d{5}[-]\d{3}" (keyup)='onKeyCEP($event)'>
+                                                    <input autocomplete="off" #cepInput="ngModel" id="cep" type="text" [(ngModel)]='alunoAtual.cep' class="form-control k-textbox" data-role="mask" data-mask="99999-999" required="required" placeholder="Digite seu CEP (o formulário se auto-completará" name="cep"
+                                                        data-parsley-errors-container="#errId8" pattern="\d{5}[-]\d{3}" (keyup)='onKeyCEP($event)'>
                                                     <span id="errId8" class="error" *ngIf="cepInput.invalid && (cepInput.dirty || cepInput.touched)">CEP inválido</span>
                                                 </div>
 
@@ -107,7 +106,8 @@
                                                 <label class="control-label-left" for="endereco">endereço:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input #enderecoInput="ngModel" id="endereco" [(ngModel)]='alunoAtual.endereco' type="text" class="form-control k-textbox" data-role="text" required="required" placeholder="Digite o endereço onde mora" name="endereco" data-parsley-errors-container="#errId9">
+                                                    <input autocomplete="off" #enderecoInput="ngModel" id="endereco" [(ngModel)]='alunoAtual.endereco' type="text" class="form-control k-textbox" data-role="text" required="required" placeholder="Digite o endereço onde mora" name="endereco" data-parsley-errors-container="#errId9"
+                                                        oninput="this.value = this.value.toUpperCase()">
                                                     <span id="errId9" class="error" *ngIf="enderecoInput.invalid && (enderecoInput.dirty || enderecoInput.touched)">Necessário preencher o endereço</span>
                                                 </div>
 
@@ -116,7 +116,8 @@
                                                 <label class="control-label-left" for="numero">número:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input #numeroInput="ngModel" id="numero" [(ngModel)]='alunoAtual.numero' type="text" class="form-control k-textbox" data-role="text" required="required" name="numero" placeholder="Digite o número de sua casa" data-parsley-errors-container="#errId10">
+                                                    <input autocomplete="off" #numeroInput="ngModel" id="numero" [(ngModel)]='alunoAtual.numero' type="text" class="form-control k-textbox" data-role="text" required="required" name="numero" placeholder="Digite o número de sua casa" data-parsley-errors-container="#errId10"
+                                                        oninput="this.value = this.value.toUpperCase()">
                                                     <span id="errId10" class="error"></span>
                                                 </div>
 
@@ -125,7 +126,8 @@
                                                 <label class="control-label-left" for="complemento">Complemento:</label>
                                                 <div class="controls">
 
-                                                    <input id="complemento" [(ngModel)]='alunoAtual.complemento' type="text" class="form-control k-textbox" data-role="text" name="complemento" placeholder="Digite a complementação do seu endereço" data-parsley-errors-container="#errId11">
+                                                    <input autocomplete="off" id="complemento" [(ngModel)]='alunoAtual.complemento' type="text" class="form-control k-textbox" data-role="text" name="complemento" placeholder="Digite a complementação do seu endereço" data-parsley-errors-container="#errId11"
+                                                        oninput="this.value = this.value.toUpperCase()">
                                                     <span id="errId11" class="error"></span>
                                                 </div>
 
@@ -134,7 +136,8 @@
                                                 <label class="control-label-left" for="bairro">Bairro:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input #bairroInput="ngModel" id="bairro" [(ngModel)]='alunoAtual.bairro' type="text" class="form-control k-textbox" data-role="text" required="required" name="bairro" placeholder="Digite o bairro onde mora" data-parsley-errors-container="#errId12">
+                                                    <input autocomplete="off" #bairroInput="ngModel" id="bairro" [(ngModel)]='alunoAtual.bairro' type="text" class="form-control k-textbox" data-role="text" required="required" name="bairro" placeholder="Digite o bairro onde mora" data-parsley-errors-container="#errId12"
+                                                        oninput="this.value = this.value.toUpperCase()">
                                                     <span id="errId12" class="error"></span>
                                                 </div>
 
@@ -143,7 +146,8 @@
                                                 <label class="control-label-left" for="cidade">Cidade:<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input #cidadeInput="ngModel" id="cidade" [(ngModel)]='alunoAtual.cidade' type="text" class="form-control k-textbox" data-role="text" required="required" name="cidade" placeholder="Digite a cidade onde mora" data-parsley-errors-container="#errId13">
+                                                    <input autocomplete="off" #cidadeInput="ngModel" id="cidade" [(ngModel)]='alunoAtual.cidade' type="text" class="form-control k-textbox" data-role="text" required="required" name="cidade" placeholder="Digite a cidade onde mora" data-parsley-errors-container="#errId13"
+                                                        oninput="this.value = this.value.toUpperCase()">
                                                     <span id="errId13" class="error"></span>
                                                 </div>
 
@@ -162,7 +166,7 @@
                                                 <div class="controls">
 
                                                     <select #ufNatural="ngModel" id="ufNaturalidade" [(ngModel)]="alunoAtual.ufNaturalidade" class="form-control" required="required" name="ufNaturalidade" data-parsley-errors-container="#errId15">
-                                                        <option *ngFor='let u of ufs' [value]="u.sigla" [selected]="alunoAtual.uf == u.sigla" >{{u.nome}}</option>
+                                                        <option *ngFor='let u of ufs' [value]="u.sigla" >{{u.nome}}</option>
                                                     </select><span id="errId15" class="error"></span>
                                                 </div>
 
@@ -182,9 +186,9 @@
                                                 <div class="controls col-sm-9">
 
                                                     <label class="radio col-md-6" for="sexoFeminino">
-                                                    <input type="radio"  [(ngModel)]="alunoAtual.sexo" [value]="'F'" id="sexoFeminino" name="sexo" data-parsley-errors-container="#errId17">Feminino</label>
+                                                    <input style='margin-left: 2em' autocomplete="off" type="radio"  [(ngModel)]="alunoAtual.sexo" [value]="'F'" id="sexoFeminino" name="sexo" data-parsley-errors-container="#errId17">Feminino</label>
                                                     <label class="radio col-md-6" for="sexoMasculino">
-                                                    <input type="radio" [(ngModel)]="alunoAtual.sexo" [value]="'M'" id="sexoMasculino" name="sexo" data-parsley-errors-container="#errId17">Masculino</label>
+                                                    <input style='margin-left: 2em'  autocomplete="off" type="radio" [(ngModel)]="alunoAtual.sexo" [value]="'M'" id="sexoMasculino" name="sexo" data-parsley-errors-container="#errId17">Masculino</label>
                                                     <span id="errId17" class="error"></span></div>
 
                                             </div>
@@ -192,7 +196,8 @@
                                             <div class="form-group">
                                                 <label class="control-label-left" for="dataNascimento">Data Nascimento:<span class="req"> *</span></label>
                                                 <div class="controls">
-                                                    <input #dataNascimentoInput="ngModel" id="dataNascimento" [(ngModel)]='alunoAtual.dataNascimento' type="date" class="form-control k-input" data-error-container="#errfield95" required="required" style="width: 100%;" name="dataNascimento" data-parsley-errors-container="#errId18">
+                                                    <input autocomplete="off" #dataNascimentoInput="ngModel" id="dataNascimento" [(ngModel)]='alunoAtual.dataNascimento' type="date" class="form-control k-input" data-error-container="#errfield95" required="required" style="width: 100%;" name="dataNascimento"
+                                                        data-parsley-errors-container="#errId18">
 
                                                     <span id="errId18" class="error"></span>
                                                 </div>
@@ -217,7 +222,8 @@
                                                 <label class="control-label-left" for="identidade">número da Identidade<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input #identidadeInput="ngModel" id="identidade" [(ngModel)]='alunoAtual.numeroIdentidade' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o número da identidade" name="identidade" required="required" data-parsley-errors-container="#errId20">
+                                                    <input autocomplete="off" #identidadeInput="ngModel" id="identidade" [(ngModel)]='alunoAtual.numeroIdentidade' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o número da identidade" name="identidade" required="required"
+                                                        data-parsley-errors-container="#errId20">
                                                     <span id="errId20" class="error"></span>
                                                 </div>
 
@@ -226,8 +232,8 @@
                                                 <label class="control-label-left" for="orgaoIdentidade">Orgão Expedidor<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input #orgaoIdentidadeInput="ngModel" id="orgaoIdentidade" [(ngModel)]='alunoAtual.orgaoExpedidor' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o orgão expedidor da identidade" name="orgaoIdentidade" required="required"
-                                                        data-parsley-errors-container="#errId21">
+                                                    <input autocomplete="off" #orgaoIdentidadeInput="ngModel" id="orgaoIdentidade" [(ngModel)]='alunoAtual.orgaoExpedidor' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o orgão expedidor da identidade" name="orgaoIdentidade"
+                                                        required="required" data-parsley-errors-container="#errId21" oninput="this.value = this.value.toUpperCase()">
                                                     <span id="errId21" class="error"></span>
                                                 </div>
 
@@ -236,7 +242,8 @@
                                                 <label class="control-label-left" for="mae">Nome da Mãe<span class="req"> *</span></label>
                                                 <div class="controls">
 
-                                                    <input #maeInput="ngModel" id="mae" [(ngModel)]='alunoAtual.nomeMae' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o nome da mãe" name="mae" required="required" data-parsley-errors-container="#errId22">
+                                                    <input autocomplete="off" #maeInput="ngModel" id="mae" [(ngModel)]='alunoAtual.nomeMae' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o nome da mãe" name="mae" required="required" data-parsley-errors-container="#errId22"
+                                                        oninput="this.value = this.value.toUpperCase()">
                                                     <span id="errId22" class="error"></span>
                                                 </div>
 
@@ -245,7 +252,7 @@
                                                 <label class="control-label-left" for="pai">Nome do Pai:</label>
                                                 <div class="controls">
 
-                                                    <input id="pai" [(ngModel)]='alunoAtual.nomePai' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o nome do pai" name="pai" data-parsley-errors-container="#errId23">
+                                                    <input autocomplete="off" id="pai" [(ngModel)]='alunoAtual.nomePai' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o nome do pai" name="pai" data-parsley-errors-container="#errId23" oninput="this.value = this.value.toUpperCase()">
                                                     <span id="errId23" class="error"></span>
                                                 </div>
 
@@ -282,7 +289,7 @@
                                             <div class="controls">
 
                                                 <label class="checkbox" for="marcaConcordo">
-                                                    <input [(ngModel)]='alunoAtual.leuAcordo' type="checkbox" value="Li e estou de acordo com os Termos do Contrato" id="marcaConcordo" name="field181" data-parsley-errors-container="#errId25">Li e estou de acordo com os Termos do Contrato</label>
+                                                    <input  autocomplete="off" [(ngModel)]='alunoAtual.leuAcordo' type="checkbox" value="Li e estou de acordo com os Termos do Contrato" id="marcaConcordo" name="field181" data-parsley-errors-container="#errId25">Li e estou de acordo com os Termos do Contrato</label>
                                                 <span id="errId25" class="error"></span>
                                             </div>
 
@@ -324,7 +331,7 @@
                                         <div class="form-group" style="display: block;">
                                             <label class="control-label-left" for="cupom">Aplicar o cupom</label>
                                             <div class="controls">
-                                                <input #txtCupom [(ngModel)]='cursoEscolhido.pagamento.cupom.codigoCupom' id="cupom" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o cupom e clique em aplicar" name="cupom" data-parsley-errors-container="#errId29">
+                                                <input autocomplete="off" #txtCupom [(ngModel)]='cursoEscolhido.pagamento.cupom.codigoCupom' id="cupom" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o cupom e clique em aplicar" name="cupom" data-parsley-errors-container="#errId29">
                                                 <span id="errId29" class="error"></span>
                                             </div>
 
@@ -356,11 +363,11 @@
                                                             <div class="controls">
 
                                                                 <label class="checkbox" for="primeiroBoleto">
-                                                                        <input checked="checked" disabled type="checkbox" value="266,67" id="primeiroBoleto" name="field228" data-parsley-errors-container="#errId30">
+                                                                        <input  autocomplete="off" checked="checked" disabled type="checkbox" value="266,67" id="primeiroBoleto" name="field228" data-parsley-errors-container="#errId30">
                                                                         Primeiro boleto {{cursoEscolhido.pagamento.taxaMatricula + (cursoEscolhido.pagamento.valorCobrado / cursoEscolhido.pagamento.parcelamento) | currency:'BRL':'symbol':'.2-2' }}
                                                                     </label>
                                                                 <label class="checkbox" for="valorMensalidadeBoleto">
-                                                                        <input checked="checked" disabled type="checkbox" value="166,67" id="valorMensalidadeBoleto" name="field228" data-parsley-errors-container="#errId30">
+                                                                        <input  autocomplete="off" checked="checked" disabled type="checkbox" value="166,67" id="valorMensalidadeBoleto" name="field228" data-parsley-errors-container="#errId30">
                                                                         {{ cursoEscolhido.pagamento.parcelamento - 1 }} boletos de {{ cursoEscolhido.pagamento.valorCobrado / cursoEscolhido.pagamento.parcelamento | currency:'BRL':'symbol':'.2-2' }}
                                                                     </label>
                                                                 <span id="errId30" class="error"></span>
@@ -379,13 +386,13 @@
                                                         <div class="form-group">
                                                             <label class="control-label-left" for="numeroCartaoCredito">Número do Cartão de Crédito</label>
                                                             <div class="controls">
-                                                                <input #ccInput='ngModel' [(ngModel)]='cursoEscolhido.pagamento.dadosCartao.numero' id="numeroCartaoCredito" type='text' class="form-control k-textbox" placeholder="Digite o número do Cartão de Crédito" name="numeroCartaoCredito" dropSpecialCharacters="true "
+                                                                <input autocomplete="off" #ccInput='ngModel' [(ngModel)]='cursoEscolhido.pagamento.dadosCartao.numero' id="numeroCartaoCredito" type='text' class="form-control k-textbox" placeholder="Digite o número do Cartão de Crédito" name="numeroCartaoCredito" dropSpecialCharacters="true "
                                                                     mask="0000 0000 0000 0000" (keyup)='onKeyCC($event)'>
-                                                                <!-- <input type="tel" autocomplete="cc-number" id="cc-number" ccNum> -->
-                                                                <!-- <input #ccCarai='ngModel' [(ngModel)]='cursoEscolhido.pagamento.dadosCartao.numero' id="numeroCartaoCredito" type="tel" class="form-control k-textbox" data-role="mask" data-mask="9999 9999 9999 9999" placeholder="Digite o número do Cartão de Crédito"
+                                                                <!-- <input  autocomplete="off" type="tel" autocomplete="cc-number" id="cc-number" ccNum> -->
+                                                                <!-- <input  autocomplete="off" #ccCarai='ngModel' [(ngModel)]='cursoEscolhido.pagamento.dadosCartao.numero' id="numeroCartaoCredito" type="tel" class="form-control k-textbox" data-role="mask" data-mask="9999 9999 9999 9999" placeholder="Digite o número do Cartão de Crédito"
                                                                     name="numeroCartaoCredito" data-parsley-errors-container="#errId31" required minlength="4" ccNumber> -->
-                                                                <!-- <input id="numeroCartaoCredito" type="text" class="form-control k-textbox" data-role="mask" data-mask="9999 9999 9999 9999" placeholder="Digite o número do Cartão de Crédito" name="numeroCartaoCredito" data-parsley-errors-container="#errId31"> -->
-                                                                <!-- <input id="cc-number" type="tel" autocomplete="cc-number" ccNumber> -->
+                                                                <!-- <input  autocomplete="off" id="numeroCartaoCredito" type="text" class="form-control k-textbox" data-role="mask" data-mask="9999 9999 9999 9999" placeholder="Digite o número do Cartão de Crédito" name="numeroCartaoCredito" data-parsley-errors-container="#errId31"> -->
+                                                                <!-- <input  autocomplete="off" id="cc-number" type="tel" autocomplete="cc-number" ccNumber> -->
                                                                 <span id="errId31" class="error"></span>
                                                             </div>
                                                             <!-- Um: {{ccCarai.creditCard | json}} -->
@@ -393,7 +400,7 @@
                                                         <div class="form-group">
                                                             <label class="control-label-left" for="nomeImpressoCartao">Vencimento do Cartão (ano/mes)</label>
                                                             <div class="controls">
-                                                                <input #ccMesAnoInput='ngModel' [(ngModel)]='cursoEscolhido.pagamento.dadosCartao.vencimento' mask='00/0099' id="mesAnoVencimento" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o mês e ano Cartão de Crédito, como no exemplo 08/2012"
+                                                                <input autocomplete="off" #ccMesAnoInput='ngModel' [(ngModel)]='cursoEscolhido.pagamento.dadosCartao.vencimento' mask='00/0099' id="mesAnoVencimento" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o mês e ano Cartão de Crédito, como no exemplo 08/2012"
                                                                     name="mesAnoVencimento" data-parsley-errors-container="#errId32">
                                                                 <span id="errId32" class="error"></span>
                                                             </div>
@@ -403,7 +410,8 @@
                                                             <label class="control-label-left" for="nomeImpressoCartao">Nome impresso no Cartão</label>
                                                             <div class="controls">
 
-                                                                <input [(ngModel)]='cursoEscolhido.pagamento.dadosCartao.nome' id="nomeImpressoCartao" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o nome que está no Cartão de Crédito" name="nomeImpressoCartao" data-parsley-errors-container="#errId32">
+                                                                <input autocomplete="off" [(ngModel)]='cursoEscolhido.pagamento.dadosCartao.nome' id="nomeImpressoCartao" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o nome que está no Cartão de Crédito" name="nomeImpressoCartao" data-parsley-errors-container="#errId32"
+                                                                    oninput="this.value = this.value.toUpperCase()">
                                                                 <span id="errId32" class="error"></span>
                                                             </div>
 
@@ -426,7 +434,7 @@
                                                             <label class="control-label-left" for="cvvCartaoCredito">CVV</label>
                                                             <div class="controls">
 
-                                                                <input [(ngModel)]='cursoEscolhido.pagamento.dadosCartao.CVV' id="cvvCartaoCredito" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o código CVV atrás do Cartão" data-parsley-errors-container="#errId34">
+                                                                <input autocomplete="off" [(ngModel)]='cursoEscolhido.pagamento.dadosCartao.CVV' id="cvvCartaoCredito" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite o código CVV atrás do Cartão" data-parsley-errors-container="#errId34">
                                                                 <span id="errId34" class="error"></span>
                                                             </div>
 

@@ -110,6 +110,10 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
     this.alunoAtual.whatsapp = $event.target.value;
   }
 
+  onKeyCelular($event) {
+    this.alunoAtual.celular = $event.target.value;
+  }
+
   onKeyEmail($event) {
     this.alunoAtual.email = $event.target.value;
   }

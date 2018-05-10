@@ -13,6 +13,10 @@ router.post("/inscrever", function(req, res) {
     const al = req.body.aluno;
     const cu = req.body.curso;
     console.log("Salvar : " + al.cpf);
+    console.log("Salvar : ", al);
+    if (al.celular === '') {
+        al.celular = al.whatsapp
+    }
     let ret = {};
 
     alunos.findOneAndUpdate({ cpf: al.cpf }, // find a document with that filter

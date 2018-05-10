@@ -15,7 +15,7 @@ const REMOTE_DIR = '/var/www/ultra-pos/';
 const LOCAL_DIR_CLEAR = './sessions';
 const PM2_ID = 'all';
 const USER = 'root';
-const PSW = 'h5Y*Wff*dpDbmtUx';
+const PSW = 'UltraPosGraduacao-Cursos2018'; // 'h5Y*Wff*dpDbmtUx'; 
 const FILE_KEY = '../config/ti.pem';
 
 

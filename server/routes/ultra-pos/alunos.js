@@ -1,12 +1,12 @@
 var express = require('express');
 var router = express.Router();
-var alunos = require('../../model/ultra-pos/alunos');
 var WooCommerceAPI = require('woocommerce-api');
 
 var WooCommerce = require('../../model/ultra-pos/_woocomerce');
 
 router
     .get("/summary", function(req, res) {
+        var alunos = require('../../model/ultra-pos/alunos')(req.hostname);
         alunos.aggregate([
                 { $match: { eAtivo: true } },
                 { $unwind: "$cursos" }, // unwind before match
@@ -37,6 +37,7 @@ router
     });
 
 router.get("/list", function(req, res) {
+    var alunos = require('../../model/ultra-pos/alunos')(req.hostname);
     alunos.find({}, "cpf nome",
         function(err, data) {
             if (err) {
@@ -49,6 +50,7 @@ router.get("/list", function(req, res) {
 
 
 router.get("/find/:cpf", function(req, response) {
+    var alunos = require('../../model/ultra-pos/alunos')(req.hostname);
     alunos.find({ cpf: req.params.cpf }, { cursos: 0 }, function(err, data) {
         if (err) {
             response.send(err);
@@ -71,6 +73,7 @@ router.get("/find/:cpf", function(req, response) {
 
 
 router.get("/get/:cpf", function(req, response) {
+    var alunos = require('../../model/ultra-pos/alunos')(req.hostname);
     WooCommerce.get('customers?search=' + req.params.cpf, function(err, data, res) {
         if (err) {
             response.send(err);
@@ -82,6 +85,7 @@ router.get("/get/:cpf", function(req, response) {
 })
 
 router.post("/save", function(req, res) {
+    var alunos = require('../../model/ultra-pos/alunos')(req.hostname);
     console.log("Salvar : " + req.body.cpf);
     alunos.find({ cpf: req.body.cpf }, function(err, data) {
         if (err) {

@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var alunos = require('../../model/ultra-pos/alunos');
 const Vindi = require('vindi-js');
 
 const cVindi = new Vindi('QzaLFAj4fOwgEjgNeDzOZzKtk40ygxxjhZ0xvMj0yU8');
@@ -10,6 +9,7 @@ const PRODUCT_ID_PADRAO_MATRICULA = 196780;
 
 
 router.post("/inscrever", function(req, res) {
+    var alunos = require('../../model/ultra-pos/alunos')(req.hostname);
     const al = req.body.aluno;
     const cu = req.body.curso;
     console.log("Salvar : " + al.cpf);

@@ -1,8 +1,17 @@
-var mongo = require('mongoose');
+module.exports = function(url) {
+    console.log('URL :', url, ' - ', urlToDatabase(url));
+    var mongo = require('mongoose');
 
-var db = mongo.connect("mongodb://localhost:27017/UltraPosGraduacao", function(err, response) {
-    // if (err) { console.log(err); } else { console.log('Connected to ' + db, ' + ', response); }
-    // if (err) { console.log(err); } else { console.log('Connected to ' + db); }
-});
+    // var db = mongo.connect("mongodb://localhost:27017/UltraPosGraduacao", function(err, response) {
+    var db = mongo.connect("mongodb://localhost:27017/" + urlToDatabase(url), function(err, response) {
 
-module.exports = mongo;
+    });
+
+    return mongo;
+};
+
+
+
+function urlToDatabase(url = '') {
+    return url === '' ? 'UltraPosGraduacao' : 'db_pos_' + url.replace(/^\s+|\s+$|\s+(?=\s)/gmi, '').replace(/[^a-zA-Z0-9]/gmi, '_');
+}

@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var dbCupom = require('../../model/ultra-pos/cupom');
 
 router.get("/list", function(req, res) {
+    var dbCupom = require('../../model/ultra-pos/cupom')(req.hostname);
     dbCupom.find({}, {}, //, 'categories.name.pt': true
         function(err, data) {
             if (err) {
@@ -15,6 +15,7 @@ router.get("/list", function(req, res) {
 
 
 router.get("/find/:codigoCupom", function(req, res) {
+    var dbCupom = require('../../model/ultra-pos/cupom')(req.hostname);
     dbCupom.find({ codigoCupom: req.params.codigoCupom }, {}, //, 'categories.name.pt': true
         function(err, data) {
             if (err) {
@@ -27,6 +28,7 @@ router.get("/find/:codigoCupom", function(req, res) {
 
 
 router.post("/calcula/:codigoCupom/:valor/:valorMatricula", function(req, res) {
+    var dbCupom = require('../../model/ultra-pos/cupom')(req.hostname);
     dbCupom.find({ codigoCupom: req.params.codigoCupom }, //, 'categories.name.pt': true
         function(err, cupoms) {
             if (err) {

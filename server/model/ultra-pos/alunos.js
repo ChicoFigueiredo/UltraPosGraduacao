@@ -1,5 +1,8 @@
+var mongo;
+var model;
+
 module.exports = function(url = '', initialize = false) {
-    var mongo = require('./_db')(url);
+    mongo = mongo || require('./_db')(url);
 
     // var Schema = mongo.Schema;
     var AlunoCursoCupomSchema = mongo.Schema({
@@ -60,7 +63,7 @@ module.exports = function(url = '', initialize = false) {
         eAtivo: { type: Boolean, index: true, required: false },
     }, { versionKey: false, _id: false }); // _id=false impede criar objectid em memoria antes de salvar
 
-    var model = mongo.model('alunos', AlunosSchema, 'alunos');
+    model = model || mongo.model('alunos', AlunosSchema, 'alunos');
 
     if (initialize) initializeAlunos(model);
 

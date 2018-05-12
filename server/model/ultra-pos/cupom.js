@@ -1,5 +1,8 @@
+var mongo;
+var model;
+
 module.exports = function(url = '', initialize = false) {
-    var mongo = require('./_db')(url);
+    mongo = mongo || require('./_db')(url);
 
     var CupomSchema = mongo.Schema({
         codigoCupom: { type: String, required: true, trim: true, index: true, unique: true },
@@ -13,7 +16,7 @@ module.exports = function(url = '', initialize = false) {
         eValido: { type: Boolean, required: true, index: true, default: true }
     }, { versionKey: false, _id: false }); // _id=false impede criar objectid em memoria antes de salvar
 
-    var model = mongo.model('cupom', CupomSchema, 'cupom');
+    model = model || mongo.model('cupom', CupomSchema, 'cupom');
 
     if (initialize) initializeCupons(model)
 

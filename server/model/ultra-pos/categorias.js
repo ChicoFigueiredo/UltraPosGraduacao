@@ -1,5 +1,8 @@
+var mongo;
+var model;
+
 module.exports = function(url = '', initialize = false) {
-    var mongo = require('./_db')(url);
+    mongo = mongo || require('./_db')(url);
 
     var LinguagemSchema = mongo.Schema({
         pt: { type: String, required: false, trim: true },
@@ -20,7 +23,7 @@ module.exports = function(url = '', initialize = false) {
         updated_at: { type: String, required: true, trim: true },
     }, { versionKey: false, _id: true });
 
-    var model = mongo.model('categorias', CategoriesSchema, 'categorias');
+    model = model || mongo.model('categorias', CategoriesSchema, 'categorias');
 
     if (initialize) initializeCategorias(model);
 

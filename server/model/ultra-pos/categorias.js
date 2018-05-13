@@ -19,8 +19,9 @@ module.exports = function(url = '', initialize = false) {
         subcategories: [],
         seo_title: LinguagemSchema,
         seo_description: LinguagemSchema,
-        created_at: { type: String, required: true, trim: true },
-        updated_at: { type: String, required: true, trim: true },
+        created_at: { type: String, trim: true },
+        updated_at: { type: String, trim: true },
+        published: { type: Boolean, required: true, trim: true, index: true, default: true },
     }, { versionKey: false, _id: true });
 
     model = model || mongo.model('categorias', CategoriesSchema, 'categorias');

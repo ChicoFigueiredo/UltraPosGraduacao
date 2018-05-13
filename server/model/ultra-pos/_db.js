@@ -3,9 +3,10 @@ module.exports = function(url) {
     var mongo = require('mongoose');
 
     // var db = mongo.connect("mongodb://localhost:27017/UltraPosGraduacao", function(err, response) {
-    var db = mongo.connect("mongodb://localhost:27017/" + urlToDatabase(url), function(err, response) {
+    var db = mongo.connect("mongodb://localhost:27017/" + urlToDatabase(url), { socketOptions: { socketTimeoutMS: 0, connectionTimeout: 0 } },
+        function(err, response) {
 
-    });
+        });
 
     return mongo;
 };
@@ -13,5 +14,9 @@ module.exports = function(url) {
 
 
 function urlToDatabase(url = '') {
-    return url === '' ? 'UltraPosGraduacao' : 'db_pos_' + url.replace(/^\s+|\s+$|\s+(?=\s)/gmi, '').replace(/[^a-zA-Z0-9]/gmi, '_');
+    return url === '' ? 'UltraPosGraduacao' :
+        'db_pos_' + url.replace(/^\s+|\s+$|\s+(?=\s)/gmi, '')
+        .replace(/[^a-zA-Z0-9]/gmi, '_')
+        .replace(/inscricao[_]/gmi, '')
+        .replace(/api[_]/gmi, '');
 }

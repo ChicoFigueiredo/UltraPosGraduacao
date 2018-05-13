@@ -18,8 +18,8 @@ module.exports = function(url = '', initialize = false) {
         position: { type: String, required: true, trim: true },
         en: { type: String, required: true, trim: true },
         alt: [LinguagemSchema],
-        created_at: { type: String, required: true, trim: true },
-        updated_at: { type: String, required: true, trim: true },
+        created_at: { type: String, trim: true },
+        updated_at: { type: String, trim: true },
     }, { versionKey: false, _id: true });
 
     var CategoriesSchema = mongo.Schema({
@@ -31,8 +31,8 @@ module.exports = function(url = '', initialize = false) {
         subcategories: [],
         seo_title: LinguagemSchema,
         seo_description: LinguagemSchema,
-        created_at: { type: String, required: true, trim: true },
-        updated_at: { type: String, required: true, trim: true },
+        created_at: { type: String, trim: true },
+        updated_at: { type: String, trim: true },
     }, { versionKey: false, _id: true });
 
 
@@ -42,19 +42,19 @@ module.exports = function(url = '', initialize = false) {
         product_id: { type: Number, required: true, trim: true },
         position: { type: Number, required: true, trim: true },
         price: { type: Number, required: true, trim: true },
-        down_payment: { type: Number, required: true, trim: true, default: 0 },
-        promotional_price: { type: Number, required: true, trim: true },
+        down_payment: { type: Number, required: false, trim: true, default: 0 },
+        promotional_price: { type: Number, required: false, trim: true },
         stock_management: { type: Boolean, required: true, trim: true },
         stock: { type: Number, required: false, trim: true },
         weight: { type: Number, required: true, trim: true },
-        width: { type: Number, required: true, trim: true },
-        height: { type: Number, required: true, trim: true },
-        depth: { type: Number, required: true, trim: true },
+        width: { type: Number, required: false, trim: true },
+        height: { type: Number, required: false, trim: true },
+        depth: { type: Number, required: false, trim: true },
         sku: { type: String, required: false, trim: true },
         values: [LinguagemSchema],
         barcode: { type: String, required: false, trim: true },
-        created_at: { type: String, required: true, trim: true },
-        updated_at: { type: String, required: true, trim: true },
+        created_at: { type: String, trim: true },
+        updated_at: { type: String, trim: true },
     }, { versionKey: false, _id: true });
 
 
@@ -65,18 +65,18 @@ module.exports = function(url = '', initialize = false) {
         handle: LinguagemSchema,
         attributes: [LinguagemSchema],
         published: { type: Boolean, required: true, trim: true, index: true },
-        free_shipping: { type: Number, required: true, trim: true, index: true },
-        canonical_url: { type: String, required: true, trim: true },
+        free_shipping: { type: Number, required: true, trim: true, index: true, default: 0 },
+        canonical_url: { type: String, required: false, trim: true },
         seo_title: LinguagemSchema,
         seo_description: LinguagemSchema,
         brand: LinguagemSchema,
-        created_at: { type: String, required: true, trim: true },
-        updated_at: { type: String, required: true, trim: true },
+        created_at: { type: String, required: false, trim: true },
+        updated_at: { type: String, required: false, trim: true },
         variants: [VariantSchema],
         tags: { type: String, required: false, trim: true },
         images: [ImagesSchema],
         categories: [CategoriesSchema],
-        codigo_vindi: { type: Number, required: true, trim: true, index: true },
+        codigo_vindi: { type: Number, required: false, trim: true, index: true },
     }, { versionKey: false, _id: true });
 
 

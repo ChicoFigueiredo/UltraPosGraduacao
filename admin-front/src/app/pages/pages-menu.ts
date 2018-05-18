@@ -8,6 +8,21 @@ export const MENU_ITEMS: NbMenuItem[] = [
     home: true,
   },
   {
+    title: 'ADMIN',
+    group: true,
+  },
+  {
+    title: 'Parâmetros',
+    icon: 'ion-code-working',
+    link: '/pages/ui-features',
+    children: [
+      {
+        title: 'Cupons',
+        link: '/pages/parametros/cupons',
+      },
+    ],
+  },
+  {
     title: 'FEATURES',
     group: true,
   },

@@ -11,6 +11,9 @@ const routes: Routes = [{
     path: 'dashboard',
     component: DashboardComponent,
   }, {
+    path: 'parametros',
+    loadChildren: './parametros/parametros.module#ParametrosModule',
+  }, {
     path: 'ui-features',
     loadChildren: './ui-features/ui-features.module#UiFeaturesModule',
   }, {

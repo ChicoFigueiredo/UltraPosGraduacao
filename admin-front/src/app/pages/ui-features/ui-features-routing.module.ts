@@ -17,6 +17,9 @@ const routes: Routes = [{
   children: [{
     path: 'buttons',
     component: ButtonsComponent,
+  },{
+    path: 'buttons2',
+    component: ButtonsComponent,
   }, {
     path: 'grid',
     component: GridComponent,

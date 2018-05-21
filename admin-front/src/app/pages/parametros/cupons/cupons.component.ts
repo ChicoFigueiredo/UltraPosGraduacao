@@ -52,4 +52,8 @@ export class CuponsComponent implements OnInit {
     const n = this.ultra.cupons.push(new Cupom());
     this.selCupom = this.ultra.cupons[n-1];
   }
+
+  onSubmit(f){
+    
+  }
 }

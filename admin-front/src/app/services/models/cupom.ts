@@ -1,3 +1,5 @@
+import {ObjectId} from ''
+
 export class Cupom {
   public _id:string = '';
   public codigoCupom:string = '';

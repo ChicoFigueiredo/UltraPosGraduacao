@@ -1,5 +1,10 @@
+// import * as ObjectId from 'objectid-purejs';
+// var ObjectId = require('objectid-purejs')
+
+import * as ObjectId from 'objectid-purejs';
+
 export class Cupom {
-  public _id:string = '';
+  public _id:string = (new ObjectId()).toHexString();
   public codigoCupom:string = '';
   public origemCupom:string = '';
   public tipoDesconto:string = 'percentual';

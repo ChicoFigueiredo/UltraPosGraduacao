@@ -14,6 +14,7 @@ export class Cupom {
   public percentualDesconto:number = 0;
   public valorDescontoMatricula:number = 0;
   public percentualDescontoMatricula:number = 0;
+  public quantidadeUsos:number = -1;
 
   constructor(o = null){
     if(o){
@@ -27,6 +28,7 @@ export class Cupom {
       this.percentualDesconto = o.percentualDesconto || this.percentualDesconto;
       this.valorDescontoMatricula = o.valorDescontoMatricula || this.valorDescontoMatricula;
       this.percentualDescontoMatricula = o.percentualDescontoMatricula || this.percentualDescontoMatricula;
+      this.quantidadeUsos = o.quantidadeUsos || this.quantidadeUsos;
     }
   }
 }

@@ -103,7 +103,9 @@ var indexRouter = require('./routes/index'),
     alunosRouter = require('./routes/ultra-pos/alunos'),
     cursosRouter = require('./routes/ultra-pos/cursos'),
     categoriasRouter = require('./routes/ultra-pos/categorias'),
-    cupomRouter = require('./routes/ultra-pos/cupom');
+    cupomRouter = require('./routes/ultra-pos/cupom'),
+    matriculaRouter = require('./routes/ultra-pos/matricula'),
+    utilRouter = require('./routes/ultra-pos/util');
 
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
@@ -111,6 +113,8 @@ app.use('/api/alunos', alunosRouter);
 app.use('/api/cursos', cursosRouter);
 app.use('/api/categorias', categoriasRouter);
 app.use('/api/cupom', cupomRouter);
+app.use('/api/matricula', matriculaRouter);
+app.use('/api/util', utilRouter);
 
 // rotas internas
 app.get('/login', function(req, res, next) {

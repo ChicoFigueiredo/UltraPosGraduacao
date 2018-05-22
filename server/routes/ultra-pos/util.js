@@ -1,3 +1,4 @@
+var db;
 var categorias;
 var cursos;
 var WooCommerce;
@@ -61,10 +62,32 @@ router.get("/sincronize", function(req, res) {
 })
 
 
+router.get("/db/list", function(req, res) {
+    db = db || require('../../model/ultra-pos/_db')(req.hostname);
+    var admin_mongo = db.connections[0].db.admin();
+    admin_mongo.listDatabases(function(err, result) {
+        var allDatabases = result.databases;
+        if (allDatabases.length > 0) {
+            allDatabases = allDatabases.filter((x) => {
+                return !x.name.search(/db_pos/gmi)
+            })
+            allDatabases.forEach((x) => {
+                x.value = x.name;
+                x.name = toTitleCase(x.value.replace(/db_pos_/gmi, '').replace('_', ' '));
+            })
+        }
+        res.send(allDatabases);
+    });
+})
+
 
 module.exports = router;
 
-
+function toTitleCase(str) {
+    return str.replace(/\w\S*/g, function(txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+}
 
 
 

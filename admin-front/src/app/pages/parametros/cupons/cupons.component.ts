@@ -42,7 +42,7 @@ export class CuponsComponent implements OnInit {
   }
 
   chValor(campo,valor){
-    const v2 = Number(valor.replace(/[^0-9,]/gmi,'').replace(/[,]/gmi,'.'));
+    const v2 = Number(valor.replace(/[^0-9,-]/gmi,'').replace(/[,]/gmi,'.'));
     if (v2){
       this.selCupom[campo] = v2;
     }
@@ -54,6 +54,6 @@ export class CuponsComponent implements OnInit {
   }
 
   onSubmit(f){
-    
+
   }
 }

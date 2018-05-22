@@ -10,12 +10,8 @@
               <div class="form-group row">
                 <label for="site" class="col-sm-2 col-form-label">Site:</label>
                 <div class="col-sm-10">
-                    <select class="form-control" name="site" id="site">
-                        <option>Minsk</option>
-                        <option>Gomel</option>
-                        <option>Brest</option>
-                        <option>Grodno</option>
-                        <option>Mogilev</option>
+                    <select #site class="form-control" name="site" id="site">
+                        <option *ngFor="let d of ultra.bancos" [value]="d.value" >{{d.name}}</option>
                     </select>
                 </div>
               </div>
@@ -24,19 +20,19 @@
         <div class="row">
           <div class="col-md-3">
             <h3>Cupons</h3>
-            <button type="button" class="btn btn-outline-primary btn-icon float-right first-btn" (click)="addNewCupom()">
+            <button type="button" class="btn btn-outline-primary btn-icon float-right first-btn" (click)="addNewCupom(site.value)">
               <i class="ion-android-add"></i>
             </button>
             <table  class="table table-striped" >
               <tbody>
-                <tr *ngFor='let c of ultra.cupons' (click)="selectCupom(c)">
+                <tr *ngFor='let c of ultra.listaCupons(site.value)' (click)="selectCupom(c)">
                   <td width="1%"><i class="fa fa-angle-right bold" *ngIf='c._id === selCupom?._id' ></i></td>
                   <td>{{c.codigoCupom}}</td>
                   <td width="1%" (click)="deleteCupom(c)" ><i class="fa fa-trash"></i></td>
                 </tr>
               </tbody>
             </table>
-            <button type="button" class="btn btn-outline-primary btn-icon float-right"  (click)="addNewCupom()">
+            <button type="button" class="btn btn-outline-primary btn-icon float-right"  (click)="addNewCupom(site.value)">
                 <i class="ion-android-add" style="color:#8a7fff" ></i>
             </button>
           </div>

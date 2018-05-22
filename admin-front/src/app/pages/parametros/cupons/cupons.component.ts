@@ -48,8 +48,8 @@ export class CuponsComponent implements OnInit {
     }
   }
 
-  addNewCupom() {
-    const n = this.ultra.cupons.push(new Cupom());
+  addNewCupom(d) {
+    const n = this.ultra.cupons.get(d).push(new Cupom());
     this.selCupom = this.ultra.cupons[n-1];
   }
 

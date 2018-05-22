@@ -14,6 +14,21 @@ router.get("/list", function(req, res) {
 })
 
 
+router.get("/:banco/list", function(req, res) {
+    var h = req.params.banco.replace(/db[_]pos[_]/gmi, '').replace(/[_]/gmi, '.');
+    console.log('h=', h);
+    var dbCupom = require('../../model/ultra-pos/cupom')(h);
+    dbCupom.find({}, {}, //, 'categories.name.pt': true
+        function(err, data) {
+            if (err) {
+                res.send(err);
+            } else {
+                res.send(data);
+            }
+        });
+})
+
+
 router.get("/find/:codigoCupom", function(req, res) {
     var dbCupom = require('../../model/ultra-pos/cupom')(req.hostname);
     dbCupom.find({ codigoCupom: req.params.codigoCupom }, {}, //, 'categories.name.pt': true
@@ -64,5 +79,8 @@ router.post("/calcula/:codigoCupom/:valor/:valorMatricula", function(req, res) {
             }
         });
 })
+
+
+
 
 module.exports = router;

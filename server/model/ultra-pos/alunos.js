@@ -1,26 +1,34 @@
-var mongo;
-var model;
+var mongo = {};
+var model = {};
+var AlunoCursoCupomSchema = {};
+var DadosCartaoSchema = {};
+var AlunoCursoSchema = {};
+var AlunosSchema = {};
 
 module.exports = function(url = '', initialize = false) {
-    mongo = mongo || require('./_db')(url);
+    mongo[url] = mongo[url] || require('./_db')(url);
 
-    // var Schema = mongo.Schema;
-    var AlunoCursoCupomSchema = mongo.Schema({
-        codigoCupom: { type: String, required: true, trim: true },
-        origemCupom: { type: String, required: true, trim: true },
-        tipoDesconto: { type: String, required: true, trim: true },
-        valorDesconto: { type: Number, required: true, default: 0 },
-        percentualDesconto: { type: Number, required: true, default: 0 },
-    }, { versionKey: false, _id: false }); // _id=false impede criar objectid em memoria antes de salvar
+    if (!AlunoCursoCupomSchema[url]) {
+        AlunoCursoCupomSchema[url] = mongo[url].Schema({
+            codigoCupom: { type: String, required: true, trim: true },
+            origemCupom: { type: String, required: true, trim: true },
+            tipoDesconto: { type: String, required: true, trim: true },
+            valorDesconto: { type: Number, required: true, default: 0 },
+            percentualDesconto: { type: Number, required: true, default: 0 },
+        }, { versionKey: false, _id: false }); // _id=false impede criar objectid em memoria antes de salvar
+    }
 
-    var DadosCartaoSchema = mongo.Schema({
-        numero: { type: String, required: true, trim: true },
-        nome: { type: String, required: true, trim: true },
-        bandeira: { type: String, required: true, trim: true },
-        CVV: { type: String, required: true, trim: true },
-    });
+    if (!DadosCartaoSchema[url]) {
+        DadosCartaoSchema[url] = mongo[url].Schema({
+            numero: { type: String, required: true, trim: true },
+            nome: { type: String, required: true, trim: true },
+            bandeira: { type: String, required: true, trim: true },
+            CVV: { type: String, required: true, trim: true },
+        });
+    }
 
-    var AlunoCursoSchema = mongo.Schema({
+    if (!AlunoCursoSchema[url]) {
+        AlunoCursoSchema[url] = mongo[url].Schema({
             codigoCurso: { type: String, required: true, trim: true },
             nomeCurso: { type: String, required: true, trim: true },
             deAcordo: { type: Boolean, required: false },
@@ -29,45 +37,48 @@ module.exports = function(url = '', initialize = false) {
                 parcelamento: { type: Number, required: true, default: 24 },
                 parcela: { type: Number, required: true, default: 0 },
                 melhorDia: { type: Number, required: true, default: 5 },
-                cupom: AlunoCursoCupomSchema,
+                cupom: AlunoCursoCupomSchema[url],
                 formaPagamento: { type: String, required: true, trim: true },
-                dadosCartao: DadosCartaoSchema
+                dadosCartao: DadosCartaoSchema[url]
             }
-        }, { versionKey: false, _id: false }) // _id=false impede criar objectid em memoria antes de salvar
+        }, { versionKey: false, _id: false }); // _id=false impede criar objectid em memoria antes de salvar
+    }
 
-    var AlunosSchema = mongo.Schema({
-        cpf: { type: String, index: true, unique: true, required: true, trim: true },
-        email: { type: String, index: true, unique: true, required: true, trim: true },
-        nome: { type: String, index: true, required: true, trim: true },
-        whatsapp: { type: String, required: true, trim: true },
-        celular: { type: String, required: true, trim: true },
-        opcaoSMS: { type: Boolean, required: false },
-        cep: { type: String, required: true, trim: true },
-        endereco: { type: String, required: true, trim: true },
-        numero: { type: String, required: true, trim: true },
-        complemento: { type: String, trim: true },
-        cep: { type: String, required: true, trim: true },
-        bairro: { type: String, required: true, trim: true },
-        cidade: { type: String, required: true, trim: true },
-        uf: { type: String, required: true, trim: true },
-        ufNaturalidade: { type: String, required: true, trim: true },
-        cidadeNaturalidade: { type: String, required: true, trim: true },
-        sexo: { type: String, required: true, trim: true },
-        dataNascimento: { type: String, required: true, trim: true },
-        estadoCivil: { type: String, required: true, trim: true },
-        numeroIdentidade: { type: String, required: true, trim: true },
-        orgaoExpedidor: { type: String, required: true, trim: true },
-        nomeMae: { type: String, required: true, trim: true },
-        nomePai: { type: String, trim: true },
-        cursos: [AlunoCursoSchema],
-        eAtivo: { type: Boolean, index: true, required: false },
-    }, { versionKey: false, _id: false }); // _id=false impede criar objectid em memoria antes de salvar
+    if (!AlunosSchema[url]) {
+        AlunosSchema[url] = mongo[url].Schema({
+            cpf: { type: String, index: true, unique: true, required: true, trim: true },
+            email: { type: String, index: true, unique: true, required: true, trim: true },
+            nome: { type: String, index: true, required: true, trim: true },
+            whatsapp: { type: String, required: true, trim: true },
+            celular: { type: String, required: true, trim: true },
+            opcaoSMS: { type: Boolean, required: false },
+            cep: { type: String, required: true, trim: true },
+            endereco: { type: String, required: true, trim: true },
+            numero: { type: String, required: true, trim: true },
+            complemento: { type: String, trim: true },
+            cep: { type: String, required: true, trim: true },
+            bairro: { type: String, required: true, trim: true },
+            cidade: { type: String, required: true, trim: true },
+            uf: { type: String, required: true, trim: true },
+            ufNaturalidade: { type: String, required: true, trim: true },
+            cidadeNaturalidade: { type: String, required: true, trim: true },
+            sexo: { type: String, required: true, trim: true },
+            dataNascimento: { type: String, required: true, trim: true },
+            estadoCivil: { type: String, required: true, trim: true },
+            numeroIdentidade: { type: String, required: true, trim: true },
+            orgaoExpedidor: { type: String, required: true, trim: true },
+            nomeMae: { type: String, required: true, trim: true },
+            nomePai: { type: String, trim: true },
+            cursos: [AlunoCursoSchema[url]],
+            eAtivo: { type: Boolean, index: true, required: false },
+        }, { versionKey: false, _id: false }); // _id=false impede criar objectid em memoria antes de salvar
+    }
 
-    model = model || mongo.model('alunos', AlunosSchema, 'alunos');
+    model[url] = model[url] || mongo[url].model('alunos', AlunosSchema, 'alunos');
 
-    if (initialize) initializeAlunos(model);
+    if (initialize) initializeAlunos(model[url]);
 
-    return model;
+    return model[url];
 }
 
 function initializeAlunos(model) {

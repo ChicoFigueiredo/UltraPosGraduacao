@@ -1,91 +1,104 @@
-var mongo;
-var model;
+var mongo = {};
+var model = {};
+var LinguagemSchema = {};
+var ImagesSchema = {};
+var CategoriesSchema = {};
+var VariantSchema = {};
+var CursosSchema = {};
 
 module.exports = function(url = '', initialize = false) {
-    mongo = mongo || require('./_db')(url);
+    mongo[url] = mongo[url] || require('./_db')(url);
 
-    var LinguagemSchema = mongo.Schema({
-        pt: { type: String, required: false, trim: true },
-        es: { type: String, required: false, trim: true },
-        en: { type: String, required: false, trim: true },
-    }, { versionKey: false, _id: false, strict: false });
+    if (!LinguagemSchema[url]) {
+        LinguagemSchema[url] = mongo[url].Schema({
+            pt: { type: String, required: false, trim: true },
+            es: { type: String, required: false, trim: true },
+            en: { type: String, required: false, trim: true },
+        }, { versionKey: false, _id: false, strict: false });
+    }
 
-    var ImagesSchema = mongo.Schema({
-        id: { type: Number, required: true, trim: true },
-        product_id: { type: Number, required: true, trim: true },
-        src: { type: String, required: true, trim: true },
-        height: { type: Number, required: true, trim: true },
-        position: { type: String, required: true, trim: true },
-        en: { type: String, required: true, trim: true },
-        alt: [LinguagemSchema],
-        created_at: { type: String, trim: true },
-        updated_at: { type: String, trim: true },
-    }, { versionKey: false, _id: true });
+    if (!ImagesSchema[url]) {
+        ImagesSchema[url] = mongo[url].Schema({
+            id: { type: Number, required: true, trim: true },
+            product_id: { type: Number, required: true, trim: true },
+            src: { type: String, required: true, trim: true },
+            height: { type: Number, required: true, trim: true },
+            position: { type: String, required: true, trim: true },
+            en: { type: String, required: true, trim: true },
+            alt: [LinguagemSchema[url]],
+            created_at: { type: String, trim: true },
+            updated_at: { type: String, trim: true },
+        }, { versionKey: false, _id: true });
+    }
 
-    var CategoriesSchema = mongo.Schema({
-        id: { type: Number, required: true, trim: true },
-        name: LinguagemSchema,
-        description: LinguagemSchema,
-        handle: LinguagemSchema,
-        parent: { type: Number, trim: true },
-        subcategories: [],
-        seo_title: LinguagemSchema,
-        seo_description: LinguagemSchema,
-        created_at: { type: String, trim: true },
-        updated_at: { type: String, trim: true },
-    }, { versionKey: false, _id: true });
+    if (!CategoriesSchema[url]) {
+        CategoriesSchema[url] = mongo[url].Schema({
+            id: { type: Number, required: true, trim: true },
+            name: LinguagemSchema[url],
+            description: LinguagemSchema[url],
+            handle: LinguagemSchema[url],
+            parent: { type: Number, trim: true },
+            subcategories: [],
+            seo_title: LinguagemSchema[url],
+            seo_description: LinguagemSchema[url],
+            created_at: { type: String, trim: true },
+            updated_at: { type: String, trim: true },
+        }, { versionKey: false, _id: true });
+    }
+
+    if (!VariantSchema[url]) {
+        VariantSchema[url] = mongo[url].Schema({
+            id: { type: Number, required: true, trim: true, index: true }, //, unique: true 
+            image_id: { type: Number, required: false, trim: true },
+            product_id: { type: Number, required: true, trim: true },
+            position: { type: Number, required: true, trim: true },
+            price: { type: Number, required: true, trim: true },
+            down_payment: { type: Number, required: false, trim: true, default: 0 },
+            promotional_price: { type: Number, required: false, trim: true },
+            stock_management: { type: Boolean, required: true, trim: true },
+            stock: { type: Number, required: false, trim: true },
+            weight: { type: Number, required: true, trim: true },
+            width: { type: Number, required: false, trim: true },
+            height: { type: Number, required: false, trim: true },
+            depth: { type: Number, required: false, trim: true },
+            sku: { type: String, required: false, trim: true },
+            values: [LinguagemSchema[url]],
+            barcode: { type: String, required: false, trim: true },
+            created_at: { type: String, trim: true },
+            updated_at: { type: String, trim: true },
+        }, { versionKey: false, _id: true });
+    }
+
+    if (!CursosSchema[url]) {
+        CursosSchema[url] = mongo[url].Schema({
+            id: { type: Number, required: true, trim: true, index: true, unique: true },
+            name: LinguagemSchema[url],
+            description: LinguagemSchema[url],
+            handle: LinguagemSchema[url],
+            attributes: [LinguagemSchema[url]],
+            published: { type: Boolean, required: true, trim: true, index: true },
+            free_shipping: { type: Number, required: true, trim: true, index: true, default: 0 },
+            canonical_url: { type: String, required: false, trim: true },
+            seo_title: LinguagemSchema[url],
+            seo_description: LinguagemSchema[url],
+            brand: LinguagemSchema[url],
+            created_at: { type: String, required: false, trim: true },
+            updated_at: { type: String, required: false, trim: true },
+            variants: [VariantSchema[url]],
+            tags: { type: String, required: false, trim: true },
+            images: [ImagesSchema[url]],
+            categories: [CategoriesSchema[url]],
+            codigo_vindi: { type: Number, required: false, trim: true, index: true },
+        }, { versionKey: false, _id: true });
+    }
 
 
-    var VariantSchema = mongo.Schema({
-        id: { type: Number, required: true, trim: true, index: true }, //, unique: true 
-        image_id: { type: Number, required: false, trim: true },
-        product_id: { type: Number, required: true, trim: true },
-        position: { type: Number, required: true, trim: true },
-        price: { type: Number, required: true, trim: true },
-        down_payment: { type: Number, required: false, trim: true, default: 0 },
-        promotional_price: { type: Number, required: false, trim: true },
-        stock_management: { type: Boolean, required: true, trim: true },
-        stock: { type: Number, required: false, trim: true },
-        weight: { type: Number, required: true, trim: true },
-        width: { type: Number, required: false, trim: true },
-        height: { type: Number, required: false, trim: true },
-        depth: { type: Number, required: false, trim: true },
-        sku: { type: String, required: false, trim: true },
-        values: [LinguagemSchema],
-        barcode: { type: String, required: false, trim: true },
-        created_at: { type: String, trim: true },
-        updated_at: { type: String, trim: true },
-    }, { versionKey: false, _id: true });
 
+    model[url] = model[url] || mongo[url].model('cursos', CursosSchema[url], 'cursos');
 
-    var CursosSchema = mongo.Schema({
-        id: { type: Number, required: true, trim: true, index: true, unique: true },
-        name: LinguagemSchema,
-        description: LinguagemSchema,
-        handle: LinguagemSchema,
-        attributes: [LinguagemSchema],
-        published: { type: Boolean, required: true, trim: true, index: true },
-        free_shipping: { type: Number, required: true, trim: true, index: true, default: 0 },
-        canonical_url: { type: String, required: false, trim: true },
-        seo_title: LinguagemSchema,
-        seo_description: LinguagemSchema,
-        brand: LinguagemSchema,
-        created_at: { type: String, required: false, trim: true },
-        updated_at: { type: String, required: false, trim: true },
-        variants: [VariantSchema],
-        tags: { type: String, required: false, trim: true },
-        images: [ImagesSchema],
-        categories: [CategoriesSchema],
-        codigo_vindi: { type: Number, required: false, trim: true, index: true },
-    }, { versionKey: false, _id: true });
+    if (initialize) initializeCursos(model[url]);
 
-
-
-    model = model || mongo.model('cursos', CursosSchema, 'cursos');
-
-    if (initialize) initializeCursos(model);
-
-    return model;
+    return model[url];
 }
 
 

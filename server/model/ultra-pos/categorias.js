@@ -1,34 +1,40 @@
-var mongo;
-var model;
+var mongo = {};
+var model = {};
+var LinguagemSchema = {};
+var CategoriesSchema = {};
 
 module.exports = function(url = '', initialize = false) {
-    mongo = mongo || require('./_db')(url);
+    mongo[url] = mongo[url] || require('./_db')(url);
 
-    var LinguagemSchema = mongo.Schema({
-        pt: { type: String, required: false, trim: true },
-        es: { type: String, required: false, trim: true },
-        en: { type: String, required: false, trim: true },
-    }, { versionKey: false, _id: false, strict: false });
+    if (!LinguagemSchema[url]) {
+        LinguagemSchema[url] = mongo[url].Schema({
+            pt: { type: String, required: false, trim: true },
+            es: { type: String, required: false, trim: true },
+            en: { type: String, required: false, trim: true },
+        }, { versionKey: false, _id: false, strict: false });
+    }
 
-    var CategoriesSchema = mongo.Schema({
-        id: { type: Number, required: true, trim: true, index: true, unique: true },
-        name: LinguagemSchema,
-        description: LinguagemSchema,
-        handle: LinguagemSchema,
-        parent: { type: Number, trim: true },
-        subcategories: [],
-        seo_title: LinguagemSchema,
-        seo_description: LinguagemSchema,
-        created_at: { type: String, trim: true },
-        updated_at: { type: String, trim: true },
-        published: { type: Boolean, required: true, trim: true, index: true, default: true },
-    }, { versionKey: false, _id: true });
+    if (!CategoriesSchema[url]) {
+        CategoriesSchema[url] = mongo[url].Schema({
+            id: { type: Number, required: true, trim: true, index: true, unique: true },
+            name: LinguagemSchema[url],
+            description: LinguagemSchema[url],
+            handle: LinguagemSchema[url],
+            parent: { type: Number, trim: true },
+            subcategories: [],
+            seo_title: LinguagemSchema[url],
+            seo_description: LinguagemSchema[url],
+            created_at: { type: String, trim: true },
+            updated_at: { type: String, trim: true },
+            published: { type: Boolean, required: true, trim: true, index: true, default: true },
+        }, { versionKey: false, _id: true });
+    }
 
-    model = model || mongo.model('categorias', CategoriesSchema, 'categorias');
+    model[url] = model[url] || mongo[url].model('categorias', CategoriesSchema[url], 'categorias');
 
-    if (initialize) initializeCategorias(model);
+    if (initialize) initializeCategorias(model[url]);
 
-    return model;
+    return model[url];
 }
 
 function initializeCategorias(model) {

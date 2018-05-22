@@ -70,11 +70,11 @@ router.get("/db/list", function(req, res) {
         if (allDatabases.length > 0) {
             allDatabases = allDatabases.filter((x) => {
                 return !x.name.search(/db_pos/gmi)
-            })
+            });
             allDatabases.forEach((x) => {
                 x.value = x.name;
-                x.name = toTitleCase(x.value.replace(/db_pos_/gmi, '').replace('_', ' '));
-            })
+                x.name = toTitleCase(x.value.replace(/db_pos_/gmi, '').replace(/[_]/gmi, ' ')).replace(' Com Br', '');
+            });
         }
         res.send(allDatabases);
     });

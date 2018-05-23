@@ -15,11 +15,11 @@ export class CuponsComponent implements OnInit {
     public ultra: UltraAdminService
   ) { 
     this.ultra.cupomAtualizado.subscribe((c) => {
-      if(this.ultra.cupons){
-        if(this.ultra.cupons[0]){
-          this.selCupom = this.ultra.cupons[0];
-        }
-      }
+      // if(this.ultra.cupons){
+      //   if(this.ultra.cupons[0]){
+      //     this.selCupom = this.ultra.cupons[0];
+      //   }
+      // }
     })
   }
 
@@ -49,7 +49,7 @@ export class CuponsComponent implements OnInit {
   }
 
   addNewCupom(d) {
-    const n = this.ultra.cupons.get(d).push(new Cupom());
+    const n = 0; //this.ultra.cupons.get(d).push(new Cupom());
     this.selCupom = this.ultra.cupons[n-1];
   }
 

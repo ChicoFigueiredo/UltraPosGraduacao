@@ -1,8 +1,8 @@
 var mongo = {};
 var model = {};
-var CupomSchema = {}
+var CupomSchema = {};
 
-module.exports = function(url = '', initialize = false) {
+module.exports = function(url = 'localhost', initialize = false) {
     //if (mongo[url]) { mongo[url] = null };
     mongo[url] = mongo[url] || require('./_db')(url);
 

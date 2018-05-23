@@ -24,12 +24,13 @@ export class UltraAdminService {
   constructor(
     private http: HttpClient 
   ) {
+    //this.cupons.set('',[new Cupom()]);
     this.getDatabases().subscribe((ldb:Database[]) => {
       ldb.forEach((db) => {
-        this.getCupons(db).subscribe(() => {});
+        this.getCupons(db.value).subscribe(() => {});
       })
     })
-    
+    //this.getDatabases().subscribe(()=>{});
   }
 
   getDatabases() {

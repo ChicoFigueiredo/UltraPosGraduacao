@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UltraAdminService } from './../../../services/ultra-admin.service';
 import { Cupom } from './../../../services/models/cupom';
+import { Database } from './../../../services/models/databases';
 
 @Component({
   selector: 'cupons',
@@ -10,14 +11,18 @@ import { Cupom } from './../../../services/models/cupom';
 export class CuponsComponent implements OnInit {
 
   public selCupom:Cupom = new Cupom();
+  public siteSelecionado:string='';
 
   constructor(
     public ultra: UltraAdminService
   ) { 
+    this.ultra.bancosAtualizado.subscribe((d:Database[]) => {
+      this.siteSelecionado = d[0].value;
+    });
     this.ultra.cupomAtualizado.subscribe((c) => {
       // if(this.ultra.cupons){
-      //   if(this.ultra.cupons[0]){
-      //     this.selCupom = this.ultra.cupons[0];
+      //   if(this.ultra.cuponsget(this.siteSelecionado)[0]){
+      //     this.selCupom = this.ultra.cupons.get(this.siteSelecionado)[0];
       //   }
       // }
     })
@@ -49,11 +54,13 @@ export class CuponsComponent implements OnInit {
   }
 
   addNewCupom(d) {
-    const n = 0; //this.ultra.cupons.get(d).push(new Cupom());
-    this.selCupom = this.ultra.cupons[n-1];
+    let n = this.ultra.cupons.get(d).push(new Cupom());
+    this.selCupom = this.ultra.cupons.get(d)[n-1];
   }
 
   onSubmit(f){
-
+    if (!f.valid) {
+      alert('Existem ainda erros na gravação, verifique');
+    }
   }
 }

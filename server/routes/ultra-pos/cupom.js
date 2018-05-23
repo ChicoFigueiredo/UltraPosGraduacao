@@ -16,9 +16,23 @@ router.get("/list", function(req, res) {
 
 router.get("/:banco/list", function(req, res) {
     var h = req.params.banco.replace(/db[_]pos[_]/gmi, '').replace(/[_]/gmi, '.');
-    console.log('h=', h);
     var dbCupom = require('../../model/ultra-pos/cupom')(h);
     dbCupom.find({}, {}, //, 'categories.name.pt': true
+        function(err, data) {
+            if (err) {
+                res.send(err);
+            } else {
+                res.send(data);
+            }
+        });
+})
+
+
+router.get("/:banco/save", function(req, res) {
+    var dbCupom = require('../../model/ultra-pos/cupom')(h);
+    let cupom = req.body;
+
+    dbCupom.findOneAndUpdate({ _id: cupom._id }, cupom, { new: true, upsert: true, runValidators: false },
         function(err, data) {
             if (err) {
                 res.send(err);

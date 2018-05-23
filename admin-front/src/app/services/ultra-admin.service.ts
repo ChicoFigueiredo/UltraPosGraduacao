@@ -9,7 +9,8 @@ import { Database } from './models/databases';
 const URL = {
   getDatabases: `${environment.urlApi}/api/util/db/list`,
   getCupons2 : `${environment.urlApi}/api/cupom/list`,
-  getCupons : (d) => `${environment.urlApi}/api/cupom/${d}/list`
+  getCupons : (d) => `${environment.urlApi}/api/cupom/${d}/list`,
+  saveCupons : (d) => `${environment.urlApi}/api/cupom/${d}/save`
 }
 
 @Injectable()
@@ -57,4 +58,11 @@ export class UltraAdminService {
       });
   }
 
+  saveCupom(d,c){
+    return this.http
+        .post(URL.saveCupons(d),c)
+        .map((c) => {
+          return c;
+        })
+  }
 }

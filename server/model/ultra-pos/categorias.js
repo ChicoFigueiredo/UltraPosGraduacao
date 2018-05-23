@@ -30,7 +30,7 @@ module.exports = function(url = '', initialize = false) {
         }, { versionKey: false, _id: true });
     }
 
-    model[url] = model[url] || mongo[url].model('categorias', CategoriesSchema[url], 'categorias');
+    model[url] = model[url] || mongo[url].model('categorias' + url, CategoriesSchema[url], 'categorias');
 
     if (initialize) initializeCategorias(model[url]);
 

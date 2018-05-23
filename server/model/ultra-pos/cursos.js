@@ -94,7 +94,7 @@ module.exports = function(url = '', initialize = false) {
 
 
 
-    model[url] = model[url] || mongo[url].model('cursos', CursosSchema[url], 'cursos');
+    model[url] = model[url] || mongo[url].model('cursos' + url, CursosSchema[url], 'cursos');
 
     if (initialize) initializeCursos(model[url]);
 

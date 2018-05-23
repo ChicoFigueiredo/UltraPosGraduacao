@@ -1,14 +1,17 @@
+var mongo = {};
+var db = {};
+
 module.exports = function(url) {
     console.log('URL :', url, ' - ', urlToDatabase(url));
-    var mongo = require('mongoose');
+    mongo[url] = mongo[url] || require('mongoose');
 
     // var db = mongo.connect("mongodb://localhost:27017/UltraPosGraduacao", function(err, response) {
-    var db = mongo.connect("mongodb://localhost:27017/" + urlToDatabase(url), { socketOptions: { socketTimeoutMS: 0, connectionTimeout: 0 } },
+    db[url] = db[url] || mongo[url].connect("mongodb://localhost:27017/" + urlToDatabase(url), { socketOptions: { socketTimeoutMS: 0, connectionTimeout: 0 } },
         function(err, response) {
 
         });
 
-    return mongo;
+    return mongo[url];
 };
 
 

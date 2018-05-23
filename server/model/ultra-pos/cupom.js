@@ -21,7 +21,7 @@ module.exports = function(url = 'localhost', initialize = false) {
         }, { versionKey: false, _id: false }); // _id=false impede criar objectid em memoria antes de salvar
     }
 
-    model[url] = model[url] || mongo[url].model('cupom', CupomSchema[url], 'cupom');
+    model[url] = model[url] || mongo[url].model('cupom' + url, CupomSchema[url], 'cupom');
 
     if (initialize) initializeCupons(model[url])
 

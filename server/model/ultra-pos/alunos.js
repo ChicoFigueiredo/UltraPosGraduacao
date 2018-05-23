@@ -74,7 +74,7 @@ module.exports = function(url = '', initialize = false) {
         }, { versionKey: false, _id: false }); // _id=false impede criar objectid em memoria antes de salvar
     }
 
-    model[url] = model[url] || mongo[url].model('alunos', AlunosSchema[url], 'alunos');
+    model[url] = model[url] || mongo[url].model('alunos' + url, AlunosSchema[url], 'alunos');
 
     if (initialize) initializeAlunos(model[url]);
 

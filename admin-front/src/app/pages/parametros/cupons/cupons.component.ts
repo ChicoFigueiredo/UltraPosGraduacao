@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { UltraAdminService } from './../../../services/ultra-admin.service';
 import { Cupom } from './../../../services/models/cupom';
 import { Database } from './../../../services/models/databases';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalComponentEx } from './modal/modal-ex.component';
 
 @Component({
   selector: 'cupons',
@@ -14,18 +16,20 @@ export class CuponsComponent implements OnInit {
   public siteSelecionado:string='';
 
   constructor(
-    public ultra: UltraAdminService
+    public ultra: UltraAdminService,
+    private modalService: NgbModal,
   ) { 
     this.ultra.bancosAtualizado.subscribe((d:Database[]) => {
       this.siteSelecionado = d[0].value;
+      this.ultra.cupomAtualizado.subscribe((c) => {
+        if(this.ultra.cupons.get(this.siteSelecionado)){
+          if(this.ultra.cupons.get(this.siteSelecionado)[0]){
+            this.selCupom = this.ultra.cupons.get(this.siteSelecionado)[0];
+          }
+        }
+      })
     });
-    this.ultra.cupomAtualizado.subscribe((c) => {
-      // if(this.ultra.cupons){
-      //   if(this.ultra.cuponsget(this.siteSelecionado)[0]){
-      //     this.selCupom = this.ultra.cupons.get(this.siteSelecionado)[0];
-      //   }
-      // }
-    })
+    
   }
 
   ngOnInit() {
@@ -60,7 +64,18 @@ export class CuponsComponent implements OnInit {
 
   onSubmit(f){
     if (!f.valid) {
-      alert('Existem ainda erros na gravação, verifique');
+      this.showStaticModal()
+      // alert('Existem ainda erros na gravação, verifique');
     }
   }
+
+  
+  showStaticModal() {
+    const activeModal = this.modalService.open(ModalComponentEx, {size: 'sm', backdrop: 'static', container: 'nb-layout',});
+
+    activeModal.componentInstance.addButtom('Fechar','close');
+    activeModal.componentInstance.modalHeader = 'Alerta';
+    activeModal.componentInstance.modalContent = `Ainda existem erros no cupom, verifique os campos em vermelho!`;
+  }
+
 }

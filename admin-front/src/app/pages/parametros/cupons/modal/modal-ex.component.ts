@@ -20,20 +20,22 @@ export class ModalComponentEx {
     this.activeModal.close();
   }
 
-  public addButtom(title,event,classe){
+  public addButtom(title, event:any, classe){
       let b:ModalButton;
+      let exEvent:any = () => { if (event()) { this.activeModal.close(); } }
+      let closeEvent:any = () => { this.activeModal.close(); }
       if(event){
         if(event.toLowerCase){
           if(event.toLowerCase() === 'fechar' || event.toLowerCase() === 'close'){
-            b = new ModalButton(title,classe,() => { this.activeModal.close(); });
+            b = new ModalButton(title,classe,closeEvent);
           } else {
-            b = new ModalButton(title,classe,event);
+            b = new ModalButton(title,classe,exEvent);
           }
         } else {
-          b = new ModalButton(title,classe,event);
+          b = new ModalButton(title,classe,exEvent);
         }
       } else {
-        b = new ModalButton(title,classe,event);
+        b = new ModalButton(title,classe,exEvent);
       }
        
       this.modalButtons.push(b);

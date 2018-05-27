@@ -62,11 +62,44 @@ export class CuponsComponent implements OnInit {
     this.selCupom = this.ultra.cupons.get(d)[n-1];
   }
 
-  onSubmit(f){
+  onSubmit(f,d){
     if (!f.valid) {
-      this.showStaticModal()
-      // alert('Existem ainda erros na gravação, verifique');
+      this.showModal('Existem ainda erros na gravação, verifique');
+    } else {
+      this.ultra.saveCupom(this.siteSelecionado,this.selCupom).subscribe((c:Cupom) => {
+        this.showModal('Cupom ' + c.codigoCupom + ' salvo com sucesso!','Sucesso!');
+      });
     }
+  }
+
+  deleteCupom(c){
+    if(c){
+      this.showDeleteModal('Deseja realmente excluir esse cupom?',
+      () => {
+        this.ultra.deleteCupom(this.siteSelecionado,c).subscribe((c) => {
+          this.ultra.getCupons(this.siteSelecionado).subscribe((c) => {});
+        })
+        return true;
+      }
+    )
+    }
+  }
+  
+  showDeleteModal(msg, evExcluir) {
+    const activeModal = this.modalService.open(ModalComponentEx, {size: 'sm', backdrop: 'static', container: 'nb-layout',});
+
+    activeModal.componentInstance.addButtom('Excluir',evExcluir);
+    activeModal.componentInstance.addButtom('Cancelar','close');
+    activeModal.componentInstance.modalHeader = 'Alerta';
+    activeModal.componentInstance.modalContent = msg;
+  }
+
+  showModal(msg,titulo='Alerta') {
+    const activeModal = this.modalService.open(ModalComponentEx, {size: 'sm', backdrop: 'static', container: 'nb-layout',});
+
+    activeModal.componentInstance.addButtom('Fechar','close');
+    activeModal.componentInstance.modalHeader = titulo;
+    activeModal.componentInstance.modalContent = msg;
   }
 
   

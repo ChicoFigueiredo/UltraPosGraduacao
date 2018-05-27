@@ -28,7 +28,8 @@ router.get("/:banco/list", function(req, res) {
 })
 
 
-router.get("/:banco/save", function(req, res) {
+router.post("/:banco/save", function(req, res) {
+    var h = req.params.banco.replace(/db[_]pos[_]/gmi, '').replace(/[_]/gmi, '.');
     var dbCupom = require('../../model/ultra-pos/cupom')(h);
     let cupom = req.body;
 
@@ -38,6 +39,23 @@ router.get("/:banco/save", function(req, res) {
                 res.send(err);
             } else {
                 res.send(data);
+            }
+        });
+});
+
+
+router.delete("/:banco/delete/:id", function(req, res) {
+    var h = req.params.banco.replace(/db[_]pos[_]/gmi, '').replace(/[_]/gmi, '.');
+    var id = req.params.id;
+    var dbCupom = require('../../model/ultra-pos/cupom')(h);
+    let cupom = req.body;
+
+    dbCupom.findOneAndRemove({ _id: id },
+        function(err, data) {
+            if (err) {
+                res.send({ deleted: false, err });
+            } else {
+                res.send({ deleted: true, err: null });
             }
         });
 })

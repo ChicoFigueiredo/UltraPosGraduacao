@@ -5,7 +5,8 @@
     "scripts": {
         "start": "node ./bin/www",
         "serve": "nodemon ./bin/www-matricula --ignore sessions",
-        "serve2": "nodemon ./bin/www",
+        "serve2": "nodemon ./bin/www --ignore sessions",
+        "s-admin": "nodemon ./bin/www-admin --ignore sessions",
         "deploy": "node ./deploy.js"
     },
     "dependencies": {

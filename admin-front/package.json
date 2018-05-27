@@ -27,7 +27,8 @@
         "docs:serve": "compodoc -p src/tsconfig.app.json -d docs -s",
         "prepush": "npm run lint:ci",
         "release:changelog": "npm run conventional-changelog -- -p angular -i CHANGELOG.md -s",
-        "deploy": "ng build -- --prod --aot && node ./deploy.js",
+        "build2": "ng build --prod --aot -e prod",
+        "deploy": "ng build --prod --aot -e prod && node ../server/deploy.js",
         "deploy-dev": "ng build && node ./deploy.js",
         "up": "node ./deploy.js"
     },

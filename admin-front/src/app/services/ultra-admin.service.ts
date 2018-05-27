@@ -10,7 +10,8 @@ const URL = {
   getDatabases: `${environment.urlApi}/api/util/db/list`,
   getCupons2 : `${environment.urlApi}/api/cupom/list`,
   getCupons : (d) => `${environment.urlApi}/api/cupom/${d}/list`,
-  saveCupons : (d) => `${environment.urlApi}/api/cupom/${d}/save`
+  saveCupons : (d) => `${environment.urlApi}/api/cupom/${d}/save`,
+  deleteCupons : (d,id) => `${environment.urlApi}/api/cupom/${d}/delete/${id}`
 }
 
 @Injectable()
@@ -60,9 +61,17 @@ export class UltraAdminService {
 
   saveCupom(d,c){
     return this.http
-        .post(URL.saveCupons(d),c)
-        .map((c) => {
-          return c;
-        })
+      .post(URL.saveCupons(d),c)
+      .map((c) => {
+        return c;
+      });
+  }
+
+  deleteCupom(d,c){
+    return this.http
+      .delete(URL.deleteCupons(d,c._id))
+      .map((c) => {
+        return c;
+      });
   }
 }

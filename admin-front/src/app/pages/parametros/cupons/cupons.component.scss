@@ -28,3 +28,23 @@ table {
 .detalhe {
   border-left: #909090 solid 2px;
 }
+
+.btn {
+  cursor: pointer;
+}
+
+.btn-danger {
+  cursor: pointer !important;
+  i {
+    cursor: pointer !important;
+  }
+}
+
+select {
+  width: 100% !important;
+}
+
+label {
+  margin-top: auto;
+  margin-bottom: auto;
+}

@@ -8,6 +8,7 @@ module.exports = function(url = 'localhost', initialize = false) {
 
     if (!CupomSchema[url]) {
         CupomSchema[url] = mongo[url].Schema({
+            _id: { type: mongo[url].Schema.ObjectId, auto: true },
             codigoCupom: { type: String, required: true, trim: true, index: true, unique: true },
             origemCupom: { type: String, required: true, trim: true },
             tipoDesconto: { type: String, required: true, trim: true },

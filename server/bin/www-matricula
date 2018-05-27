@@ -11,8 +11,14 @@ var http = require('http');
 /**
  * Get port from environment and store in Express.
  */
-
-var port = normalizePort(process.env.PORT || '3002');
+var porta_config = 3002;
+process.argv.forEach(function(val, index, array) {
+    if (/[-]{1,2}p.*?[=]/gmi.test(val)) {
+        porta_config = val.split(/[=]/g)[1]
+    }
+});
+console.log(porta_config);
+var port = normalizePort(process.env.PORT || porta_config);
 app.set('port', port);
 
 

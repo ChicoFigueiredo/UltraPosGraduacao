@@ -7,6 +7,7 @@ var AlunosSchema = {};
 
 module.exports = function(url = '', initialize = false) {
     mongo[url] = mongo[url] || require('./_db')(url);
+    let prefix = mongo[url].urlToTable(url);
 
     if (!AlunoCursoCupomSchema[url]) {
         AlunoCursoCupomSchema[url] = mongo[url].Schema({
@@ -74,7 +75,7 @@ module.exports = function(url = '', initialize = false) {
         }, { versionKey: false, _id: false }); // _id=false impede criar objectid em memoria antes de salvar
     }
 
-    model[url] = model[url] || mongo[url].model('alunos' + url, AlunosSchema[url], 'alunos');
+    model[url] = model[url] || mongo[url].model('alunos' + url, AlunosSchema[url], prefix + 'alunos');
 
     if (initialize) initializeAlunos(model[url]);
 

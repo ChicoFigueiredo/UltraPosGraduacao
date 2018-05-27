@@ -5,6 +5,7 @@ var CupomSchema = {};
 module.exports = function(url = 'localhost', initialize = false) {
     //if (mongo[url]) { mongo[url] = null };
     mongo[url] = mongo[url] || require('./_db')(url);
+    let prefix = mongo[url].urlToTable(url);
 
     if (!CupomSchema[url]) {
         CupomSchema[url] = mongo[url].Schema({
@@ -22,7 +23,7 @@ module.exports = function(url = 'localhost', initialize = false) {
         }, { versionKey: false, _id: false }); // _id=false impede criar objectid em memoria antes de salvar
     }
 
-    model[url] = model[url] || mongo[url].model('cupom' + url, CupomSchema[url], 'cupom');
+    model[url] = model[url] || mongo[url].model('cupom' + url, CupomSchema[url], prefix + 'cupom');
 
     if (initialize) initializeCupons(model[url])
 

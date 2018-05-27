@@ -17,7 +17,7 @@ process.argv.forEach(function(val, index, array) {
         porta_config = val.split(/[=]/g)[1]
     }
 });
-console.log(porta_config);
+console.log('conectado a porta: ', porta_config);
 var port = normalizePort(process.env.PORT || porta_config);
 app.set('port', port);
 

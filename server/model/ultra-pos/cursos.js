@@ -8,6 +8,7 @@ var CursosSchema = {};
 
 module.exports = function(url = '', initialize = false) {
     mongo[url] = mongo[url] || require('./_db')(url);
+    let prefix = mongo[url].urlToTable(url);
 
     if (!LinguagemSchema[url]) {
         LinguagemSchema[url] = mongo[url].Schema({
@@ -95,7 +96,7 @@ module.exports = function(url = '', initialize = false) {
 
 
 
-    model[url] = model[url] || mongo[url].model('cursos' + url, CursosSchema[url], 'cursos');
+    model[url] = model[url] || mongo[url].model('cursos' + url, CursosSchema[url], prefix + 'cursos');
 
     if (initialize) initializeCursos(model[url]);
 

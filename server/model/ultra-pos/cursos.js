@@ -54,6 +54,7 @@ module.exports = function(url = '', initialize = false) {
             position: { type: Number, required: true, trim: true },
             price: { type: Number, required: true, trim: true },
             down_payment: { type: Number, required: false, trim: true, default: 0 },
+            max_payments: { type: Number, required: false, trim: true, default: 24 },
             promotional_price: { type: Number, required: false, trim: true },
             stock_management: { type: Boolean, required: true, trim: true },
             stock: { type: Number, required: false, trim: true },

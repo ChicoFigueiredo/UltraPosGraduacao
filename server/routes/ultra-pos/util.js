@@ -55,7 +55,30 @@ router.post("/update/product", function(req, res) {
         }],
         codigo_vindi: cu.weight
     }
-    cursos.findOneAndUpdate()
+    cursos.findOneAndUpdate({ id: nc.id }, nc, { upsert: true, new: true, runValidators: true }, function(err, curso) {
+        if (err) {
+            console.log('fudeu ' + JSON.stringify(err));
+            res.send({ Ok: false, err });
+        } else {
+            res.send({ Ok: true, curso })
+        }
+    })
+});
+
+router.post("/delete/product", function(req, res) {
+    cursos = cursos || require('../../model/ultra-pos/cursos')(req.hostname);
+    cu = req.body;
+    var nc = {
+        "id": cu.id,
+    }
+    cursos.remove({ id: nc.id }, function(err, curso) {
+        if (err) {
+            console.log('fudeu ' + JSON.stringify(err));
+            res.send({ Ok: false, err });
+        } else {
+            res.send({ Ok: true, curso })
+        }
+    })
 });
 
 
@@ -80,6 +103,7 @@ router.get("/sincronize", function(req, res) {
                     oRes.count = docs.length;
                     oRes.cat_count = docs.length;
                     //oRes.cat = docs;
+                    cursos_capture = [];
                     cursos.remove({}, function(err) {
                         if (err) {
                             res.send(err)

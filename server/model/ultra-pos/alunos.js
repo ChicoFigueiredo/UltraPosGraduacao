@@ -304,7 +304,7 @@ function initializeAlunos(model) {
         });
 
     model.findOne({ cpf: '039.100.557-02' }, function(err, alunos) {
-        console.log(alunos.cursos[0].pagamento.cupom.codigoCupom);
+        //console.log(alunos.cursos[0].pagamento.cupom.codigoCupom);
     });
 
     return;

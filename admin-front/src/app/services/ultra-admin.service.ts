@@ -4,10 +4,11 @@ import { environment } from '../../environments/environment';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
 import { Cupom } from './models/cupom';
-import { Database } from './models/databases';
+import { Site } from './models/site';
 
 const URL = {
   getDatabases: `${environment.urlApi}/api/util/db/list`,
+  getSites: `${environment.urlApi}/api/util/sites/list/cursos`,
   getCupons2 : `${environment.urlApi}/api/cupom/list`,
   getCupons : (d) => `${environment.urlApi}/api/cupom/${d}/list`,
   saveCupons : (d) => `${environment.urlApi}/api/cupom/${d}/save`,
@@ -17,7 +18,7 @@ const URL = {
 @Injectable()
 export class UltraAdminService {
 
-  public bancos:Database[] = [new Database()];
+  public bancos:Site[] = [new Site()];
   public bancosAtualizado:BehaviorSubject<any> = new BehaviorSubject<any>(this.bancos);
 
   public cupons:Map<string,Cupom[]> = new Map<string,Cupom[]>();
@@ -27,9 +28,9 @@ export class UltraAdminService {
     private http: HttpClient 
   ) {
     //this.cupons.set('',[new Cupom()]);
-    this.getDatabases().subscribe((ldb:Database[]) => {
+    this.getDatabases().subscribe((ldb:Site[]) => {
       ldb.forEach((db) => {
-        this.getCupons(db.value).subscribe(() => {});
+        this.getCupons(db.nome).subscribe(() => {});
       })
     })
     //this.getDatabases().subscribe(()=>{});
@@ -37,8 +38,8 @@ export class UltraAdminService {
 
   getDatabases() {
     return this.http
-    .get(URL.getDatabases)
-    .map((d:Database[]) => {
+    .get(URL.getSites)
+    .map((d:Site[]) => {
       this.bancos = d;
       this.bancosAtualizado.next(d);
       return d;

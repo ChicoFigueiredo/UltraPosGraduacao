@@ -148,8 +148,41 @@ router.get("/db/list", function(req, res) {
         }
         res.send(allDatabases);
     });
-})
+});
 
+router.get("/sites/list", function(req, res) {
+    db = db || require('../../model/ultra-pos/_db')(req.hostname);
+    const sulfix = req.params.sulfix || '_cupom';
+    const rx = new RegExp(sulfix + '$')
+    db.connections[0].db.listCollections().toArray((err, names) => {
+        let sites = [];
+        names.forEach(e => {
+            if (e.name.match(rx)) {
+                sites.push(e.name.replace(rx, ''));
+            }
+        });
+        res.send(sites);
+        return;
+    });
+    // res.send({ Ok: false })
+});
+
+router.get("/sites/list/:sulfix", function(req, res) {
+    db = db || require('../../model/ultra-pos/_db')(req.hostname);
+    const sulfix = '_' + (req.params.sulfix || 'cupom');
+    const rx = new RegExp(sulfix + '$')
+    db.connections[0].db.listCollections().toArray((err, names) => {
+        let sites = [];
+        names.forEach(e => {
+            if (e.name.match(rx)) {
+                sites.push({ nome: e.name.replace(rx, '') });
+            }
+        });
+        res.send(sites);
+        return;
+    });
+    // res.send({ Ok: false })
+});
 
 module.exports = router;
 

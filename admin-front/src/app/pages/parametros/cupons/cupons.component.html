@@ -11,7 +11,7 @@
                   <label for="site" class="col-sm-2 col-form-label">Site:</label>
                   <div class="col-sm-10">
                       <select #site class="form-control" name="site" id="site"  [(ngModel)]="siteSelecionado"  >
-                          <option *ngFor="let d of ultra.bancos" [value]="d.nome" >{{d.nome}}</option>
+                          <option *ngFor="let d of ultra.bancos" [value]="d.valor" >{{d.nome}}</option>
                       </select>
                   </div>
               </div>

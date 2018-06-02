@@ -14,6 +14,57 @@ router.get("/initialize", function(req, res) {
     res.send({ foi: true });
 })
 
+router.post("/update/categorie", function(req, res) {
+    categorias = categorias || require('../../model/ultra-pos/categorias')(req.hostname);
+    cu = req.body;
+    var nc = {
+        "id": ct.id,
+        "name": {
+            "pt": ct.name
+        },
+        "description": {
+            "pt": ct.description
+        },
+        "handle": {
+            "pt": ct.slug
+        },
+        "parent": ct.parent,
+        "subcategories": [],
+        "seo_title": {
+            "pt": null
+        },
+        "seo_description": {
+            "pt": null
+        },
+        published: true
+    }
+    categorias.findOneAndUpdate({ id: nc.id }, nc, { upsert: true, new: true, runValidators: true }, function(err, curso) {
+        if (err) {
+            console.log('fudeu ' + JSON.stringify(err));
+            res.send({ Ok: false, err });
+        } else {
+            res.send({ Ok: true, curso })
+        }
+    })
+});
+
+router.post("/delete/categoria", function(req, res) {
+    cursos = cursos || require('../../model/ultra-pos/cursos')(req.hostname);
+    cu = req.body;
+    var nc = {
+        "id": cu.id,
+    }
+    cursos.remove({ id: nc.id }, function(err, curso) {
+        if (err) {
+            console.log('fudeu ' + JSON.stringify(err));
+            res.send({ Ok: false, err });
+        } else {
+            res.send({ Ok: true, curso })
+        }
+    })
+});
+
+
 router.post("/update/product", function(req, res) {
     cursos = cursos || require('../../model/ultra-pos/cursos')(req.hostname);
     cu = req.body;
@@ -150,24 +201,7 @@ router.get("/db/list", function(req, res) {
     });
 });
 
-router.get("/sites/list", function(req, res) {
-    db = db || require('../../model/ultra-pos/_db')(req.hostname);
-    const sulfix = req.params.sulfix || '_cupom';
-    const rx = new RegExp(sulfix + '$')
-    db.connections[0].db.listCollections().toArray((err, names) => {
-        let sites = [];
-        names.forEach(e => {
-            if (e.name.match(rx)) {
-                sites.push(e.name.replace(rx, ''));
-            }
-        });
-        res.send(sites);
-        return;
-    });
-    // res.send({ Ok: false })
-});
-
-router.get("/sites/list/:sulfix", function(req, res) {
+var fcListaSite = function(req, res) {
     db = db || require('../../model/ultra-pos/_db')(req.hostname);
     const sulfix = '_' + (req.params.sulfix || 'cupom');
     const rx = new RegExp(sulfix + '$')
@@ -175,14 +209,18 @@ router.get("/sites/list/:sulfix", function(req, res) {
         let sites = [];
         names.forEach(e => {
             if (e.name.match(rx)) {
-                sites.push({ nome: e.name.replace(rx, '') });
+                sites.push({ nome: e.name.replace(rx, '').replace(/[_]/gmi, '.'), valor: e.name.replace(rx, '') });
             }
         });
         res.send(sites);
         return;
     });
     // res.send({ Ok: false })
-});
+}
+
+router.get("/sites/list", fcListaSite);
+
+router.get("/sites/list/:sulfix", fcListaSite);
 
 module.exports = router;
 

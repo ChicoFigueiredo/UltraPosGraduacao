@@ -30,7 +30,7 @@ export class UltraAdminService {
     //this.cupons.set('',[new Cupom()]);
     this.getDatabases().subscribe((ldb:Site[]) => {
       ldb.forEach((db) => {
-        this.getCupons(db.nome).subscribe(() => {});
+        this.getCupons(db.valor).subscribe(() => {});
       })
     })
     //this.getDatabases().subscribe(()=>{});

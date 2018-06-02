@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import { toObservable } from '@angular/forms/src/validators';
+import { Observable } from 'rxjs/Observable';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -72,6 +75,9 @@ export class ApiUltraService {
       + '/' + valorCobrado.toString()
       + '/' + taxaMatricula.toString(), {}
         );
+        // .catch((err, c: any) => {
+        //   return new Observable<any>(err); // err.error;
+        // });
   }
 
   salvarMatricula(obj) {

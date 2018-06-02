@@ -43,7 +43,8 @@ function initializeCupons(model) {
         valorDescontoMatricula: 0,
         percentualDescontoMatricula: 0,
         validoAte: '2018-06-30 00:00:00.000',
-        eValido: true
+        eValido: true,
+        quantidadeUsos: -1
     }
 
     model.findOneAndUpdate({ codigoCupom: nc.codigoCupom }, // find a document with that filter
@@ -64,7 +65,8 @@ function initializeCupons(model) {
         valorDescontoMatricula: 0,
         percentualDescontoMatricula: 0,
         validoAte: '2018-06-30 00:00:00.000',
-        eValido: true
+        eValido: true,
+        quantidadeUsos: -1
     }
 
     model.findOneAndUpdate({ codigoCupom: nc.codigoCupom }, // find a document with that filter

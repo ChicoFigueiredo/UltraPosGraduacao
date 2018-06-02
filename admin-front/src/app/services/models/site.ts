@@ -1,3 +1,4 @@
 export class Site {
-  nome:string=''
+  nome:string='';
+  valor:string='';
 }

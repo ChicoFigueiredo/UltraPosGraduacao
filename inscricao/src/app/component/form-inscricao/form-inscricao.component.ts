@@ -187,21 +187,27 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
         txtCupom,
         this.cursoEscolhido.pagamento.valorOriginal,
         this.cursoEscolhido.pagamento.taxaMatricula
-      ).subscribe((cupomProcessado: any) => {
-        this.cursoEscolhido.pagamento.taxaMatricula = cupomProcessado.valorMatriculaCalculado;
-        this.cursoEscolhido.pagamento.valorCobrado = cupomProcessado.valorCalculado;
-        this.gerarArrayValores(this.cursoEscolhido.pagamento.valorCobrado, 24);
-
-        this.cursoEscolhido.pagamento.cupom.codigoCupom = cupomProcessado.codigoCupom;
-        this.cursoEscolhido.pagamento.cupom.origemCupom = cupomProcessado.origemCupom;
-        this.cursoEscolhido.pagamento.cupom.tipoDesconto = cupomProcessado.tipoDesconto;
-        this.cursoEscolhido.pagamento.cupom.valorDesconto = cupomProcessado.valorDesconto;
-        this.cursoEscolhido.pagamento.cupom.percentualDesconto = cupomProcessado.percentualDesconto;
-        this.selMatricula.nativeElement.classList.add('promotion');
-        this.selMensalidade.nativeElement.classList.add('promotion');
-        this.txtCupom.nativeElement.disabled = true;
-        this.btnCupom.nativeElement.disabled = true;
-        alert('Parabéns, CUPOM ' + txtCupom + ' válido! Os novos valores estão nos campos em azul!');
+      ).subscribe((c: any) => {
+        if (c.Ok) {
+          const cupomProcessado = c.cupom;
+          this.cursoEscolhido.pagamento.taxaMatricula = cupomProcessado.valorMatriculaCalculado;
+          this.cursoEscolhido.pagamento.valorCobrado = cupomProcessado.valorCalculado;
+          this.gerarArrayValores(this.cursoEscolhido.pagamento.valorCobrado, 24);
+          this.cursoEscolhido.pagamento.cupom.codigoCupom = cupomProcessado.codigoCupom;
+          this.cursoEscolhido.pagamento.cupom.origemCupom = cupomProcessado.origemCupom;
+          this.cursoEscolhido.pagamento.cupom.tipoDesconto = cupomProcessado.tipoDesconto;
+          this.cursoEscolhido.pagamento.cupom.valorDesconto = cupomProcessado.valorDesconto;
+          this.cursoEscolhido.pagamento.cupom.percentualDesconto = cupomProcessado.percentualDesconto;
+          this.selMatricula.nativeElement.classList.add('promotion');
+          this.selMensalidade.nativeElement.classList.add('promotion');
+          this.txtCupom.nativeElement.disabled = true;
+          this.btnCupom.nativeElement.disabled = true;
+          alert('Parabéns, CUPOM ' + txtCupom + ' válido! Os novos valores estão nos campos em azul!');
+        } else {
+          alert('Erro: ' + c.msg );
+        }
+      }, function(c) {
+        alert('Erro: ' + c.error.msg );
       });
     }
   }

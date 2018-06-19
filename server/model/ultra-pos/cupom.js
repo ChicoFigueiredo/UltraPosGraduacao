@@ -77,4 +77,4 @@ function initializeCupons(model) {
                 console.log('fudeu ' + JSON.stringify(err));
             }
         });
-}
+}   

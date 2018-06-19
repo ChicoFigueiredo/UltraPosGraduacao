@@ -15,6 +15,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { ThemeModule } from './@theme/theme.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import localePt from '@angular/common/locales/pt';
+import { AuthGuard } from './@core/auth-guard.service';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -33,7 +34,8 @@ registerLocaleData(localePt, 'pt-BR');
   bootstrap: [AppComponent],
   providers: [
     { provide: APP_BASE_HREF, useValue: '/' },
-    { provide: LOCALE_ID, useValue: 'pt-BR' }   
+    { provide: LOCALE_ID, useValue: 'pt-BR' },
+    AuthGuard
   ],
 })
 export class AppModule {

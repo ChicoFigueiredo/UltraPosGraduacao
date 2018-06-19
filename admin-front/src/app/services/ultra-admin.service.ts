@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
 import { Cupom } from './models/cupom';
 import { Site } from './models/site';
+import { NbAuthService } from '@nebular/auth';
 
 const URL = {
   getDatabases: `${environment.urlApi}/api/util/db/list`,
@@ -25,20 +26,23 @@ export class UltraAdminService {
   public cupomAtualizado:BehaviorSubject<any> = new BehaviorSubject<any>(this.cupons);
 
   constructor(
-    private http: HttpClient 
+    private http: HttpClient ,
+    private auth:NbAuthService
   ) {
-    //this.cupons.set('',[new Cupom()]);
-    this.getDatabases().subscribe((ldb:Site[]) => {
-      ldb.forEach((db) => {
-        this.getCupons(db.valor).subscribe(() => {});
+    this.auth.getToken().subscribe((tk) => {
+      //this.cupons.set('',[new Cupom()]);
+      this.getDatabases().subscribe((ldb:Site[]) => {
+        ldb.forEach((db) => {
+          this.getCupons(db.valor).subscribe(() => {});
+        })
       })
+      //this.getDatabases().subscribe(()=>{});
     })
-    //this.getDatabases().subscribe(()=>{});
   }
 
   getDatabases() {
     return this.http
-    .get(URL.getSites)
+    .get(URL.getSites,{withCredentials:true})
     .map((d:Site[]) => {
       this.bancos = d;
       this.bancosAtualizado.next(d);
@@ -52,7 +56,7 @@ export class UltraAdminService {
 
   getCupons(d){
     return this.http
-      .get(URL.getCupons(d))
+      .get(URL.getCupons(d),{withCredentials:true})
       .map((c:Cupom[]) => {
         this.cupons.set(d,c);
         this.cupomAtualizado.next(c);
@@ -62,7 +66,7 @@ export class UltraAdminService {
 
   saveCupom(d,c){
     return this.http
-      .post(URL.saveCupons(d),c)
+      .post(URL.saveCupons(d),c,{withCredentials:true})
       .map((c) => {
         return c;
       });
@@ -70,7 +74,7 @@ export class UltraAdminService {
 
   deleteCupom(d,c){
     return this.http
-      .delete(URL.deleteCupons(d,c._id))
+      .delete(URL.deleteCupons(d,c._id),{withCredentials:true})
       .map((c) => {
         return c;
       });

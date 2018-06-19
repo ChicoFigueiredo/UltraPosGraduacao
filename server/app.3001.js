@@ -79,7 +79,7 @@ var isAuthenticated = function(req, res, next) {
     console.log(JSON.stringify(req.isAuthenticated()));
     if (req.isAuthenticated())
         return next();
-    res.redirect('/caraaa');
+    res.status(403).send({ Ok: false, msg: 'Acesso negado' });
 }
 
 /****************************************************************************************************
@@ -88,11 +88,17 @@ var isAuthenticated = function(req, res, next) {
  */
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    //intercepts OPTIONS method
+    if (req.method === 'OPTIONS') {
+        res.status(200).send();
+    } else {
+        //move on
+        next();
+    }
     next();
 });
-
 
 /****************************************************************************************************
  * Roteamento
@@ -122,33 +128,47 @@ app.get('/login', function(req, res, next) {
     res.render('login', { title: 'CL Benefí­cios de ' + req.hostname });
 });
 
-app.post('/login',
-    function(request, response, next) {
-        console.log(request.session)
-        passport.authenticate('local',
-            function(err, user, info) {
-                if (!user) { response.send(info.message); } else {
+app.post('/login', function(request, response, next) {
+    console.log('request.session', request.session)
+        // use ngx-admin
+        // if (!req.param.username) { req.param.username = req.body.email };
+        // if (!req.param.password) { req.param.password = req.body.password };
+    passport.authenticate('local',
+        function(err, user, info) {
+            console.log("user:", user);
+            console.log("info:", info);
+            if (!user) {
+                response.status(403).send({ Ok: false, msg: info.message });
+            } else {
+                request.login(user, function(error) {
+                    if (error) return next(error);
+                    console.log("Request Login supossedly successful.");
+                    var jwt = require('jsonwebtoken');
+                    var token = jwt.sign({ id: user._id, email: user.email }, 'superrrrsecret', { expiresIn: 1800 }); // 30 minutos
+                    return response.status(200).send({ Ok: false, msg: 'Login successful', data: { token } });
+                });
+                //response.send('Login successful');
+            }
 
-                    request.login(user, function(error) {
-                        if (error) return next(error);
-                        console.log("Request Login supossedly successful.");
-                        return response.send('Login successful');
-                    });
-                    //response.send('Login successful');
-                }
-
-            })(request, response, next);
-    }
-);
+        })(request, response, next);
+});
 
 app.get('/logout', function(req, res) {
     req.logout();
     req.session.destroy(function(err) {
         //res.redirect('/'); //Inside a callback… bulletproof!
-        res.write("Fechou buteco!!!");
+        //res.write("Fechou buteco!!!");
         res.end();
     });
     res.end();
+});
+
+
+app.options("/*", function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+    res.status(200).send();
 });
 
 app.get('/teste', isAuthenticated, function(req, res) {
@@ -191,7 +211,7 @@ app.use(function(err, req, res, next) {
 
     // render the error page
     res.status(err.status || 500);
-    res.render('error');
+    //res.render('error');
 });
 
 /****************************************************************************************************

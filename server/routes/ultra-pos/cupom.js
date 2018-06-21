@@ -8,7 +8,7 @@ router.get("/list", function(req, res) {
             if (err) {
                 res.send(err);
             } else {
-                res.send(data);
+                res.status(200).send(data);
             }
         });
 })
@@ -22,7 +22,7 @@ router.get("/:banco/list", function(req, res) {
             if (err) {
                 res.send(err);
             } else {
-                res.send(data);
+                res.status(200).send(data);
             }
         });
 })
@@ -38,7 +38,7 @@ router.post("/:banco/save", function(req, res) {
             if (err) {
                 res.send(err);
             } else {
-                res.send(data);
+                res.status(200).send(data);
             }
         });
 });
@@ -55,7 +55,7 @@ router.delete("/:banco/delete/:id", function(req, res) {
             if (err) {
                 res.send({ deleted: false, err });
             } else {
-                res.send({ deleted: true, err: null });
+                res.status(200).send({ deleted: true, err: null });
             }
         });
 })
@@ -68,7 +68,7 @@ router.get("/find/:codigoCupom", function(req, res) {
             if (err) {
                 res.send(err);
             } else {
-                res.send(data[0]);
+                res.status(200).send(data[0]);
             }
         });
 })
@@ -115,7 +115,7 @@ router.post("/calcula/:codigoCupom/:valor/:valorMatricula", function(req, res) {
                                     res.status(500);
                                     res.send({ Ok: false, err, cupom })
                                 } else {
-                                    res.send({ Ok: true, cupom });
+                                    res.status(200).send({ Ok: true, cupom });
                                 }
                             })
                         }

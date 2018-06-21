@@ -16,6 +16,9 @@ import { ThemeModule } from './@theme/theme.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import localePt from '@angular/common/locales/pt';
 import { AuthGuard } from './@core/auth-guard.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from './services/token.interceptor';
+ 
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -35,7 +38,8 @@ registerLocaleData(localePt, 'pt-BR');
   providers: [
     { provide: APP_BASE_HREF, useValue: '/' },
     { provide: LOCALE_ID, useValue: 'pt-BR' },
-    AuthGuard
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    AuthGuard,
   ],
 })
 export class AppModule {

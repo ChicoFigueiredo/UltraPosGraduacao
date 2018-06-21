@@ -29,14 +29,17 @@ export class UltraAdminService {
     private http: HttpClient ,
     private auth:NbAuthService
   ) {
-    this.auth.getToken().subscribe((tk) => {
-      //this.cupons.set('',[new Cupom()]);
-      this.getDatabases().subscribe((ldb:Site[]) => {
-        ldb.forEach((db) => {
-          this.getCupons(db.valor).subscribe(() => {});
-        })
+    //this.cupons.set('',[new Cupom()]);
+    this.restart();
+    //this.getDatabases().subscribe(()=>{});
+    this.auth.getToken().subscribe((tk) => {});
+  }
+
+  restart(){
+    this.getDatabases().subscribe((ldb:Site[]) => {
+      ldb.forEach((db) => {
+        this.getCupons(db.valor).subscribe(() => {});
       })
-      //this.getDatabases().subscribe(()=>{});
     })
   }
 

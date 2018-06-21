@@ -8,8 +8,10 @@ var express = require('express'),
     session = require('express-session'),
     passport = require('./config/passaport'),
     LocalStrategy = require('passport-local').Strategy,
-    flash = require("connect-flash");
+    flash = require("connect-flash"),
+    config = require('./config/config');
 
+const sitesCORS = 'http://localhost:4200';
 
 var app = express();
 
@@ -87,12 +89,13 @@ var isAuthenticated = function(req, res, next) {
  * 
  */
 app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Origin", sitesCORS);
+    res.header("Access-Control-Allow-Credentials", 'true');
     res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, Content-Length, X-Requested-With, Accept");
     //intercepts OPTIONS method
     if (req.method === 'OPTIONS') {
-        res.status(200).send();
+        res.status(200);
     } else {
         //move on
         next();
@@ -130,9 +133,6 @@ app.get('/login', function(req, res, next) {
 
 app.post('/login', function(request, response, next) {
     console.log('request.session', request.session)
-        // use ngx-admin
-        // if (!req.param.username) { req.param.username = req.body.email };
-        // if (!req.param.password) { req.param.password = req.body.password };
     passport.authenticate('local',
         function(err, user, info) {
             console.log("user:", user);
@@ -144,7 +144,9 @@ app.post('/login', function(request, response, next) {
                     if (error) return next(error);
                     console.log("Request Login supossedly successful.");
                     var jwt = require('jsonwebtoken');
-                    var token = jwt.sign({ id: user._id, email: user.email }, 'superrrrsecret', { expiresIn: 1800 }); // 30 minutos
+                    const sc = config.get('secret');
+                    console.log(sc, config);
+                    var token = jwt.sign({ id: user._id, email: user.email }, sc, { expiresIn: 1800 }); // 30 minutos
                     return response.status(200).send({ Ok: false, msg: 'Login successful', data: { token } });
                 });
                 //response.send('Login successful');
@@ -165,9 +167,10 @@ app.get('/logout', function(req, res) {
 
 
 app.options("/*", function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Origin', sitesCORS);
+    res.header("Access-Control-Allow-Credentials", 'true');
     res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, Accept');
     res.status(200).send();
 });
 

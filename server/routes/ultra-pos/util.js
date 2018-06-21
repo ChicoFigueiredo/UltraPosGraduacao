@@ -6,6 +6,10 @@ var WooCommerce = {};
 var express = require('express');
 var router = express.Router();
 
+// Assim como qualquer middleware, é quintessencial chamarmos next()
+// Se o usuário estiver autenticado
+var isAuthenticated = require('../../config/veriify.auth');
+
 router.get("/initialize", function(req, res) {
     var dbAlunos = require('../../model/ultra-pos/alunos')(req.hostname, true);
     var dbCategorias = require('../../model/ultra-pos/categorias')(req.hostname, true);
@@ -202,32 +206,25 @@ router.get("/db/list", function(req, res) {
 });
 
 var fcListaSite = function(req, res) {
-        db = db || require('../../model/ultra-pos/_db')(req.hostname);
-        const sulfix = '_' + (req.params.sulfix || 'cupom');
-        const rx = new RegExp(sulfix + '$')
-        db.connections[0].db.listCollections().toArray((err, names) => {
-            let sites = [];
-            names.forEach(e => {
-                if (e.name.match(rx)) {
-                    sites.push({ nome: e.name.replace(rx, '').replace(/[_]/gmi, '.'), valor: e.name.replace(rx, '') });
-                }
-            });
-            res.status(200).send(sites);
-            return;
+    db = db || require('../../model/ultra-pos/_db')(req.hostname);
+    const sulfix = '_' + (req.params.sulfix || 'cupom');
+    const rx = new RegExp(sulfix + '$')
+    db.connections[0].db.listCollections().toArray((err, names) => {
+        let sites = [];
+        names.forEach(e => {
+            if (e.name.match(rx)) {
+                sites.push({ nome: e.name.replace(rx, '').replace(/[_]/gmi, '.'), valor: e.name.replace(rx, '') });
+            }
         });
-        // res.send({ Ok: false })
-    }
-    // Assim como qualquer middleware, é quintessencial chamarmos next()
-    // Se o usuário estiver autenticado
-var isAuthenticated = function(req, res, next) {
-    console.log(JSON.stringify(req.isAuthenticated()));
-    if (req.isAuthenticated())
-        return next();
-    res.status(403).send({ Ok: false, msg: 'Acesso negado' });
-}
+        res.status(200).send(sites);
+        return;
+    });
+    // res.send({ Ok: false })
+};
+
 router.get("/sites/list", isAuthenticated, fcListaSite);
 
-router.get("/sites/list/:sulfix", fcListaSite);
+router.get("/sites/list/:sulfix", isAuthenticated, fcListaSite);
 
 module.exports = router;
 

@@ -1,0 +1,7 @@
+{
+    "port": 1337,
+    "secret": "AvjatY6EhNzfq57uZuqPSlmfcYN7/BkAhckWXFkwgBXEF+bylG+xAN3ZDj9tubwsBk7Wd9q2oVnoOMlr4gMZTAgMBAAE=",
+    "mongoose": {
+        "uri": "mongodb://localhost/test1"
+    }
+}

@@ -3,7 +3,7 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
-        "start": "node ./bin/www",
+        "start": "nodemon ./bin/www",
         "serve": "nodemon ./bin/www-matricula --ignore sessions",
         "serve2": "nodemon ./bin/www --ignore sessions",
         "admin": "nodemon ./bin/www-admin --ignore sessions",

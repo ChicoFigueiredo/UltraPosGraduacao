@@ -12,7 +12,9 @@ module.exports = function(url = 'localhost', initialize = false) {
             email: { type: String, unique: true, required: true, trim: true, index: true },
             username: { type: String, unique: true, required: true, trim: true, index: true },
             password: { type: String, required: true, },
-            passwordConf: { type: String, required: true, }
+            passwordConf: { type: String, required: true, },
+            admin: { type: Boolean, default: false, required: true },
+            sites: [{ type: String, trim: true }]
         }, { versionKey: false }); // _id=false impede criar objectid em memoria antes de salvar
     }
 

@@ -13,73 +13,79 @@ const URL = {
   getCupons2 : `${environment.urlApi}/api/cupom/list`,
   getCupons : (d) => `${environment.urlApi}/api/cupom/${d}/list`,
   saveCupons : (d) => `${environment.urlApi}/api/cupom/${d}/save`,
-  deleteCupons : (d,id) => `${environment.urlApi}/api/cupom/${d}/delete/${id}`
+  deleteCupons : (d, id) => `${environment.urlApi}/api/cupom/${d}/delete/${id}`,
 }
 
 @Injectable()
 export class UltraAdminService {
 
-  public bancos:Site[] = [new Site()];
-  public bancosAtualizado:BehaviorSubject<any> = new BehaviorSubject<any>(this.bancos);
+  estaCarregando: boolean = false;
 
-  public cupons:Map<string,Cupom[]> = new Map<string,Cupom[]>();
-  public cupomAtualizado:BehaviorSubject<any> = new BehaviorSubject<any>(this.cupons);
+  public bancos: Site[] = [new Site()];
+  public bancosAtualizado: BehaviorSubject<any> = new BehaviorSubject<any>(this.bancos);
+
+  public cupons: Map<string, Cupom[]> = new Map<string, Cupom[]>();
+  public cupomAtualizado: BehaviorSubject<any> = new BehaviorSubject<any>(this.cupons);
 
   constructor(
     private http: HttpClient ,
-    private auth:NbAuthService
+    private auth: NbAuthService,
   ) {
-    //this.cupons.set('',[new Cupom()]);
+    // this.cupons.set('',[new Cupom()]);
     this.restart();
-    //this.getDatabases().subscribe(()=>{});
+    // this.getDatabases().subscribe(()=>{});
     this.auth.getToken().subscribe((tk) => {});
   }
 
-  restart(){
-    this.getDatabases().subscribe((ldb:Site[]) => {
-      ldb.forEach((db) => {
-        this.getCupons(db.valor).subscribe(() => {});
-      })
-    })
+  restart() {
+    if (!this.estaCarregando) {
+      this.estaCarregando = true;
+      this.getDatabases().subscribe((ldb: Site[]) => {
+        ldb.forEach((db) => {
+          this.getCupons(db.valor).subscribe(() => {});
+          this.estaCarregando = false;
+        })
+      }, err => {
+        this.estaCarregando = false;
+      });
+    };
   }
 
   getDatabases() {
     return this.http
-    .get(URL.getSites,{withCredentials:true})
-    .map((d:Site[]) => {
+    .get(URL.getSites, {withCredentials: true})
+    .map((d: Site[]) => {
       this.bancos = d;
       this.bancosAtualizado.next(d);
       return d;
     });
   };
 
-  listaCupons(d){
+  listaCupons(d) {
     return this.cupons.get(d);
   }
 
-  getCupons(d){
+  getCupons(d) {
     return this.http
-      .get(URL.getCupons(d),{withCredentials:true})
-      .map((c:Cupom[]) => {
-        this.cupons.set(d,c);
+      .get(URL.getCupons(d), {withCredentials: true})
+      .map((c: Cupom[]) => {
+        this.cupons.set(d, c);
         this.cupomAtualizado.next(c);
         return c;
       });
   }
 
-  saveCupom(d,c){
+  saveCupom(d, c) {
     return this.http
-      .post(URL.saveCupons(d),c,{withCredentials:true})
-      .map((c) => {
-        return c;
+      .post(URL.saveCupons(d), c, {withCredentials: true})
+      .map((cp) => {
+        return cp;
       });
   }
 
-  deleteCupom(d,c){
+  deleteCupom(d, c) {
     return this.http
-      .delete(URL.deleteCupons(d,c._id),{withCredentials:true})
-      .map((c) => {
-        return c;
-      });
+      .delete(URL.deleteCupons(d, c._id), {withCredentials: true})
+      .map( cp => cp );
   }
 }

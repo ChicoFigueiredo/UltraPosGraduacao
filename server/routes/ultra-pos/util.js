@@ -207,13 +207,22 @@ router.get("/db/list", function(req, res) {
 
 var fcListaSite = function(req, res) {
     db = db || require('../../model/ultra-pos/_db')(req.hostname);
+    const payload = jwt.verify(req.headers.authorization.replace('Bearer ', ''), config.secret);
+    console.log(payload);
     const sulfix = '_' + (req.params.sulfix || 'cupom');
     const rx = new RegExp(sulfix + '$')
     db.connections[0].db.listCollections().toArray((err, names) => {
         let sites = [];
         names.forEach(e => {
             if (e.name.match(rx)) {
-                sites.push({ nome: e.name.replace(rx, '').replace(/[_]/gmi, '.'), valor: e.name.replace(rx, '') });
+                const sitevalor = e.name.replace(rx, '');
+                if (payload.admin) {
+                    sites.push({ nome: e.name.replace(rx, '').replace(/[_]/gmi, '.'), valor: sitevalor });
+                } else {
+                    if (payload.sites.indexOf(sitevalor) >= 0) {
+                        sites.push({ nome: e.name.replace(rx, '').replace(/[_]/gmi, '.'), valor: sitevalor });
+                    }
+                }
             }
         });
         res.status(200).send(sites);

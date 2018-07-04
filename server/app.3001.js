@@ -9,7 +9,7 @@ var express = require('express'),
     passport = require('./config/passaport'),
     LocalStrategy = require('passport-local').Strategy,
     flash = require("connect-flash"),
-    config = require('./config/config');
+    config = require('./config');
 
 const sitesCORS = 'http://localhost:4200';
 
@@ -144,9 +144,14 @@ app.post('/login', function(request, response, next) {
                     if (error) return next(error);
                     console.log("Request Login supossedly successful.");
                     var jwt = require('jsonwebtoken');
-                    const sc = config.get('secret');
+                    const sc = config.secret
                     console.log(sc, config);
-                    var token = jwt.sign({ id: user._id, email: user.email }, sc, { expiresIn: 1800 }); // 30 minutos
+                    var token = jwt.sign({
+                        id: user._id,
+                        email: user.email,
+                        admin: user.admin,
+                        sites: user.sites
+                    }, sc, { expiresIn: 36000 }); // 30 minutos
                     return response.status(200).send({ Ok: false, msg: 'Login successful', data: { token } });
                 });
                 //response.send('Login successful');

@@ -183,7 +183,9 @@ router.post("/batch", function(req, res) {
     Promise.all(prm)
             .then ((v) => {
                 res.send(v);
-            })
+            }).catch((v)=>{
+                res.send(v);
+            });
 })
 
 
@@ -192,4 +194,14 @@ router.post("/batch", function(req, res) {
 module.exports = router;
 
 
- 
+ /**
+POST /api/cupom/batch HTTP/1.1
+Host: localhost
+cache-control: no-cache
+Postman-Token: de598497-8c1b-48e8-9f19-46c3dde4ce54
+sieeesp.espg.com.br	FANTASTICO2	Valor	2.400,00	01,00	-1
+top10family.espg.com.br;FANTASTICO3;Valor;2.401,00;10,00;-1
+ultraposgraduacao.com.br|FANTASTICO4|Percentual|66,25%|10%|-1
+ultraposgraduacao.com.br|CABRON1|Percentual|60%|0,00|1000
+top10family.espg.com.br;CABRON3;Em Percentual;2.401,00;0,00;-1
+  */

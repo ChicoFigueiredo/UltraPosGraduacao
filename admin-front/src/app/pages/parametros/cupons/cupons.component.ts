@@ -81,12 +81,12 @@ export class CuponsComponent implements OnInit {
     if (c) {
       this.showDeleteModal('Deseja realmente excluir esse cupom?',
       () => {
-        this.ultra.deleteCupom(this.siteSelecionado, c).subscribe((cp) => {
-          this.ultra.getCupons(this.siteSelecionado).subscribe((cp2) => {});
-        })
-        return true;
-      },
-    )
+          this.ultra.deleteCupom(this.siteSelecionado, c).subscribe((cp) => {
+            this.ultra.getCupons(this.siteSelecionado).subscribe((cp2) => {});
+          })
+          return true;
+        },
+      )
     }
   }
 

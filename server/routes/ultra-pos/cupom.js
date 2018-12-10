@@ -136,7 +136,60 @@ router.post("/calcula/:codigoCupom/:valor/:valorMatricula", function(req, res) {
         });
 })
 
+router.post("/batch", function(req, res) {
+    // var dbCupom = require('../../model/ultra-pos/cupom')(req.hostname);
+    // dbCupom.find({ codigoCupom: req.params.codigoCupom }, {}, //, 'categories.name.pt': true
+    //     function(err, data) {
+    //         if (err) {
+    //             res.send(err);
+    //         } else {
+    //             res.status(200).send(data[0]);
+    //         }
+    //     });
+    const arrLinhas = req.rawBody.split(/\r\n|\n\r|\n|\r/gm);
+    let prm = []
+    arrLinhas.forEach(el => {
+        let [banco,codigo,tipo,valor,valorMatr,qtd] = el.split(/\t|[;]|[|]|[#]/gm);
+        
+        var dbCupom = require('../../model/ultra-pos/cupom')(banco);
+
+        tipo = /percent/gmi.test(tipo) ? 'percentual' : 'valor'
+        valor = valor.replace(/[.]/gmi,'').replace(/[,]/gmi,'.').replace(/[%]/gmi,'') * 1;
+        valorMatr = valorMatr.replace(/[.]/gmi,'').replace(/[,]/gmi,'.').replace(/[%]/gmi,'') * 1;
+        qtd = qtd * 1;
+        const cp = {
+            codigoCupom: codigo,
+            origemCupom:'Admin',
+            tipoDesconto: tipo,
+            validoAte: '2099-12-31 00:00:00',
+            eValido: true,
+            valorDesconto: tipo === 'valor' ? valor : 0,
+            percentualDesconto: tipo === 'percentual' ? valor/100. : 0,
+            valorDescontoMatricula: tipo === 'valor' ? valorMatr : 0,
+            percentualDescontoMatricula: tipo === 'percentual' ? valorMatr/100.   : 0,
+            quantidadeUsos: qtd
+        }
+        prm.push(
+            dbCupom.findOneAndUpdate({ codigoCupom: cp.codigoCupom }, cp, { new: true, upsert: true, runValidators: false },
+                function(err, data) {
+                    // if (err) {
+                    //     res.send(err);
+                    // } else {
+                    //     res.status(200).send(data);
+                    // }
+                })
+        );
+    });
+    Promise.all(prm)
+            .then ((v) => {
+                res.send(v);
+            })
+})
+
 
 
 
 module.exports = router;
+
+
+ 

@@ -6,6 +6,7 @@ import { CuponsComponent } from './cupons/cupons.component';
 import { ThemeModule } from './../../@theme/theme.module';
 import { UltraAdminService } from '../../services/ultra-admin.service';
 import { ModalComponentEx } from './cupons/modal/modal-ex.component';
+import { CuponsLotesComponent } from './cupons-lotes/cupons-lotes.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { ModalComponentEx } from './cupons/modal/modal-ex.component';
   ],
   declarations: [
     CuponsComponent,
-    ModalComponentEx
+    ModalComponentEx,
+    CuponsLotesComponent
   ]
 })
 export class ParametrosModule { }

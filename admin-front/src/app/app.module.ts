@@ -23,7 +23,7 @@ import { TokenInterceptor } from './services/token.interceptor';
 registerLocaleData(localePt, 'pt-BR');
 
 @NgModule({
-  declarations: [AppComponent, CuponsLotesComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

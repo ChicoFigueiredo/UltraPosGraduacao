@@ -1,0 +1,211 @@
+<div class="row">
+  <div class="col-md-12">
+    <nb-card>
+      <nb-card-header>
+        Editor de Usuários do Sistema 
+      </nb-card-header>
+      <nb-card-body>
+        <div class="row pesquisa">
+          <div class="input-group col-md-10">
+            <input #qPesquisa type="text" class="form-control" placeholder="Digite o nome ou código a ser pesquisado ([Enter] Pesquisa no nome ou principio ativo)" (keydown)="pesquisaNomeBarraBusca($event)" >
+            <div class="dropdown input-group-btn" ngbDropdown>
+              <button type="button" class="btn btn-success dropdown-toggle" ngbDropdownToggle><i class="fa fa-search" style="color:white"></i> Pesquisa no Campo:</button>
+              <ul class="dropdown-menu" ngbDropdownMenu>
+                <li class="dropdown-item" (click)='pesquisaNome(qPesquisa.value)'>Nome, email ou slug</li>
+                <li class="dropdown-item" (click)='pesquisaCodigo(qPesquisa.value)'>CPF</li>
+                <li class="dropdown-item" (click)='pesquisaCodigo(qPesquisa.value)'>ID do usuário</li>
+              </ul>
+            </div>
+            <!-- span class="btn btn-success" (click)="deleteCupom(selObject)"><i class="fa fa-search" style="color:white"></i> Buscar Nome / Scope Ativo</span -->
+          </div>
+          <div class="col-md-2">
+              <button type="button" class="btn btn-success btn-icon float-right novo" (click)="addNovoUser()">
+                  <i class="ion ion-android-add"></i> Novo
+                </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <h4>Users Encontrados</h4>
+            <div class="row">
+              <div class="col-md-12">
+                  <ngb-pagination [collectionSize]="pgUser.total" [(page)]="pgUser.page" [pageSize]="pgUser.limit" [maxSize]="3" [boundaryLinks]="true" (pageChange)="navigationChange($event)" ></ngb-pagination>
+              </div>
+            </div>
+            <div class="row">
+              <table  class="table table-striped lista" >
+                <tbody>
+                  <tr *ngFor='let c of pgUser.docs' (click)="selecionarObject(c)">
+                    <td width="1%"><i class="fa fa-angle-right bold" *ngIf='c._id === selObject?._id' ></i></td>
+                    <td width="9%"><b>{{c.nome}}</b><BR> <div class='lab'>{{c.email}} {{c.username}} <B>({{c.celular}})</B></div></td>
+                    <td width="1%" (click)="deleteObject(c)" ><i class="fa fa-trash"></i></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-md-8 detalhe">
+            <form #f="ngForm" (ngSubmit)="onSubmit(f,siteSelecionado)">
+              <h4>Detalhes do Usuário:<BR> <span class="med"><b>{{selObject.nome}}</b></span><BR> </h4>
+
+
+              <div class="form-group row">
+                <div class="input-group col-md-6">
+                  <span class="input-group-text">ID:</span>
+                  <input #codigoUser="ngModel" type="text" name="codigoUser" id="codigoUser" [(ngModel)]="selObject['_id']" placeholder="ID do usuário" class="form-control" disabled="true">
+                </div>
+              </div>
+
+
+              <div class="form-group row">
+                <div class="input-group col-md-6">
+                  <span class="input-group-text">CPF:</span>
+                  <input #cpfUser="ngModel" type="text" name="cpfUser" id="cpfUser" [(ngModel)]="selObject.cpf" placeholder="CPF do usuário" required [class.form-control-danger]="cpfUser.invalid" class="form-control">
+                </div>
+              </div>
+
+
+              <div class="form-group row">
+                  <div class="input-group col-md-6">
+                    <span class="input-group-text">Celular (Mobile):</span>
+                    <input #celularUser="ngModel" type="text" name="celularUser" id="celularUser" [(ngModel)]="selObject.celular" placeholder="CPF do usuário" required [class.form-control-danger]="cpfUser.invalid" class="form-control">
+                  </div>
+                </div>
+      
+
+              <div class="form-group row">
+                <div class="input-group col-md-12">
+                  <span class="input-group-text">Nome:</span>
+                  <input #nomeUser="ngModel" type="text" name="nomeUser" id="nomeUser" [(ngModel)]="selObject.nome" placeholder="Nome do usuário" class="form-control" required [class.form-control-danger]="nomeUser.invalid">
+                </div>
+              </div>
+
+
+              <div class="form-group row">
+                <div class="input-group col-md-12">
+                  <span class="input-group-text">e-Mail:</span>
+                  <input #emailUser="ngModel" type="text" name="emailUser" id="emailUser" [(ngModel)]="selObject.email" placeholder="e-mail do usuário" class="form-control" required [class.form-control-danger]="emailUser.invalid">
+                </div>
+              </div>
+
+
+              <div class="form-group row">
+                <div class="input-group col-md-12">
+                  <span class="input-group-text">UserName (slug):</span>
+                  <input #usernameUser="ngModel" type="text" name="usernameUser" id="usernameUser" [(ngModel)]="selObject.username" placeholder="username (slug) do usuário" class="form-control" required [class.form-control-danger]="usernameUser.invalid" >
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <div class="input-group col-md-12">
+                  <span class="input-group-text">Senha do Usuário:</span>
+                  <input #passwordUser="ngModel" type="password" name="passwordUser" id="passwordUser" [(ngModel)]="selObject.password" placeholder="password" class="form-control" required [class.form-control-danger]="passwordUser.invalid">
+                </div>
+              </div>
+
+
+              <div class="form-group row">
+                  <div class="input-group col-md-12">
+                    <span class="input-group-text">Escopo<BR>de<BR>Seguranca:</span>
+                      <!-- <div class="form-control" [class.form-control-danger]="scopeList.length == 0" > -->
+                      <div class="form-control">
+                          <div class="row">
+                            <table  class="table table-striped" >
+                              <tbody>
+                                <tr *ngFor='let p of scopeList'>
+                                  <td>{{p}}</td>
+                                  <td width="1%" (click)="deleteScope(p)" ><i class="fa fa-trash"></i></td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="row">
+                              <div class="input-group">
+                                  <!-- <input #scopeInserir type="text" class="form-control" placeholder="Digite o nome do principio ativo e clique em + ou [Enter]" (keydown)='addScopeEnter($event)'  oninput="this.value = this.value.toUpperCase()"> -->
+                                  <select #scopeInserir class="form-control mingua" placeholder="Digite o nome do principio ativo e clique em + ou [Enter]" (keydown)='addScopeEnter($event)'>
+                                    <option *ngFor='let s of scopeSelectList' [value]="s">{{s}}</option>
+                                  </select>
+                                  <span class="input-group-append">
+                                    <button class="btn btn-success input-group-text mais" (click)='addScope(scopeInserir)' ><i class="fa fa-plus mais"></i></button>
+                                  </span>
+                                </div>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+<!--   
+
+              <div class="form-group row">
+                  <div class="input-group col-md-12">
+                    <span class="input-group-text">Apresentação: </span>
+                    <div class="form-control">
+                      <div *ngFor='let a of selObject.apresentacao; let i = index' class="espacar">
+
+                        <div class="input-group  tam-12">
+                          <span class="form-control h2">Apresentação {{i+1}}:</span>
+                          <span class="input-group-append">
+                              <button class="btn btn-danger input-group-text mais" (click)='deleteApresentacao(a)' ><i class="fa fa-trash mais"></i></button>
+                          </span>
+                        </div>
+                        
+                        <div class="input-group tam-6">
+                            <span class="input-group-text">EAN:</span>
+                            <input #ean="ngModel" type="text" name="ean{{i}}" id="ean{{i}}" [(ngModel)]="a.ean" placeholder="Código EAN do produto" class="form-control" required [class.form-control-danger]="ean.invalid"  oninput="this.value = this.value.replace(/\D/gmi,'')">
+                        </div>
+                        <div class="input-group tam-6">
+                            <span class="input-group-text">Registro:</span>
+                            <input #registro="ngModel" type="text" name="registro{{i}}" id="registro{{i}}" [(ngModel)]="a.registro" placeholder="Código de registro na Anvisa" class="form-control" required  [class.form-control-danger]="registro.invalid"  oninput="this.value = this.value.replace(/\D/gmi,'')">
+                        </div>
+                        <div class="input-group tam-6">
+                            <span class="input-group-text">GGEREM:</span>
+                            <input #ggerem="ngModel" type="text" name="ggerem{{i}}" id="ggerem{{i}}" [(ngModel)]="a.ggerem" placeholder="Código ggerem na Anvisa" class="form-control" required [class.form-control-danger]="ggerem.invalid"  oninput="this.value = this.value.replace(/\D/gmi,'')">
+                        </div>
+                        <div class="input-group tam-12">
+                            <span class="input-group-text">Descriçao:</span>
+                            <input #descricao="ngModel" type="text" name="descricao{{i}}" id="descricao{{i}}" [(ngModel)]="a.descricao" placeholder="Descrição do User" class="form-control" required [class.form-control-danger]="descricao.invalid" oninput="this.value = this.value.toUpperCase()">
+                        </div>
+                        <div class="input-group tam-12">
+                            <span class="input-group-text">Preços:</span>
+                            <div class="form-control">
+                            <div class="row">
+                                <table  class="table table-striped" >
+                                  <tbody>
+                                    <tr *ngFor='let qc of a.precos; let j = index'>
+                                        <td>{{qc.classe}}</td>
+                                        <td><input #prc="ngModel" type="text" name="preco_{{i}}_{{j}}" id="preco_{{i}}_{{j}}" [(ngModel)]="qc.preco" (focus)='$event.target.select()'  placeholder="Valor Desconto Cupom" class="form-control" ></td>
+                                        <td>{{qc.preco | currency:'BRL':'symbol':'1.2-2'}}</td>
+                                        <td width="1%" (click)="deleteObject(c)" ><i class="fa fa-trash"></i></td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                      
+                      <div class="input-group  tam-12">
+                        <span class="form-control h2">Adicionar mais uma apresentação ao medicamento:</span>
+                        <span class="input-group-append dedo">
+                            <span class="btn btn-success input-group-text mais dedo" (click)='adicionaApresentacao()' ><i class="fa fa-plus mais"></i></span>
+                        </span>
+                      </div>
+                        
+                    </div>
+                  </div>
+                </div> -->
+  
+
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <button type="submit" class="btn btn-success float-right" (click)="salvarObject(f,selObject)"><i class="fa fa-save fa-2x" style="color:white"></i> Salvar User</button>
+                  <span class="btn btn-danger" (click)="deleteObject(selObject)"><i class="fa fa-trash fa-2x" style="color:white"></i> Deletar User</span>
+                </div>
+              </div>
+              
+            </form>            
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

@@ -1,0 +1,226 @@
+<div class="row">
+    <div class="col-md-12">
+        <nb-card>
+            <nb-card-header>
+                Editor de Medicamentos
+            </nb-card-header>
+            <nb-card-body>
+                <div class="row pesquisa">
+                    <div class="input-group col-md-10">
+                        <input #qPesquisa type="text" class="form-control" placeholder="Digite o nome ou código a ser pesquisado ([Enter] Pesquisa no nome ou principio ativo)" (keydown)="pesquisaNomeBarraBusca($event)">
+                        <div class="dropdown input-group-btn" ngbDropdown>
+                            <button type="button" class="btn btn-success dropdown-toggle" ngbDropdownToggle><i class="fa fa-search" style="color:white"></i> Pesquisa no Campo:</button>
+                            <ul class="dropdown-menu" ngbDropdownMenu>
+                                <li class="dropdown-item" (click)='pesquisaNome(qPesquisa.value)'>Nome ou Principio Ativo</li>
+                                <li class="dropdown-item" (click)='pesquisaCNPJ(qPesquisa.value)'>CNPJ do Fabricante</li>
+                                <li class="dropdown-item" (click)='pesquisaCodigo(qPesquisa.value)'>EAN (Código Barras)</li>
+                                <li class="dropdown-item" (click)='pesquisaCodigo(qPesquisa.value)'>Registro Anvisa</li>
+                                <li class="dropdown-item" (click)='pesquisaCodigo(qPesquisa.value)'>Código GEREN</li>
+                            </ul>
+                        </div>
+                        <!-- span class="btn btn-success" (click)="deleteCupom(selObject)"><i class="fa fa-search" style="color:white"></i> Buscar Nome / Principio Ativo</span -->
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-success btn-icon float-right novo" (click)="addNovoMedicamento()">
+                  <i class="ion ion-android-add"></i> Novo
+                </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h4>Medicamentos Encontrados</h4>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <ngb-pagination [collectionSize]="pgMedicamento.total" [(page)]="pgMedicamento.page" [pageSize]="pgMedicamento.limit" [maxSize]="3" [boundaryLinks]="true" (pageChange)="navigationChange($event)"></ngb-pagination>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <table class="table table-striped lista">
+                                <tbody>
+                                    <tr *ngFor='let c of pgMedicamento.docs' (click)="selectObject(c)">
+                                        <td width="1%"><i class="fa fa-angle-right bold" *ngIf='c._id === selObject?._id'></i></td>
+                                        <td width="9%"><b>{{c.nome}}</b>
+                                            <BR> <div class='lab'>{{c.principio}} <B>({{c.laboratorio.nome}})</B></div></td>
+                                        <td width="1%" (click)="deleteObject(c)"><i class="fa fa-trash"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-8 detalhe">
+                        <form #f="ngForm" (ngSubmit)="onSubmit(f,siteSelecionado)">
+                            <h4>Detalhe do Medicamento:
+                                <BR> <span class="med"><b>{{selObject.nome}}</b></span>
+                                <BR> </h4>
+
+
+                            <div class="form-group row">
+                                <div class="input-group col-md-6">
+                                    <span class="input-group-text">ID:</span>
+                                    <input #codigoMedicamento="ngModel" type="text" name="codigoMedicamento" id="codigoCupom" [(ngModel)]="selObject['_id']" placeholder="ID do medicamento" class="form-control" disabled="true">
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <div class="input-group col-md-12">
+                                    <span class="input-group-text">Nome:</span>
+                                    <input #nomeMedicamento="ngModel" type="text" name="nomeMedicamento" id="nomeMedicamento" [(ngModel)]="selObject.nome" placeholder="Nome do Medicamento" class="form-control" required [class.form-control-danger]="nomeMedicamento.invalid" oninput="this.value = this.value.toUpperCase()">
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group row">
+                                <div class="input-group col-md-12">
+                                    <span class="input-group-text">Principio(s)<BR>Ativo(s):</span>
+                                    <div class="form-control" [class.form-control-danger]="selObject.principiosAtivos.length == 0">
+                                        <!-- input #principio="ngModel" type="text" name="principio" id="principio" [(ngModel)]="selObject.principio" placeholder="Princípios Ativos (quando mais que 1 separar por ;)" class="form-control" disabled="true"  oninput="this.value = this.value.toUpperCase()" -->
+                                        <div class="row">
+                                            <table class="table table-striped">
+                                                <tbody>
+                                                    <tr *ngFor='let p of selObject.principiosAtivos'>
+                                                        <td>{{p}}</td>
+                                                        <td width="1%" (click)="deletePrincipio(p)"><i class="fa fa-trash"></i></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="row">
+                                            <div class="input-group">
+                                                <input #principioInserir type="text" class="form-control" placeholder="Digite o nome do principio ativo e clique em + ou [Enter]" (keydown)='addPrincipioEnter($event)' oninput="this.value = this.value.toUpperCase()">
+                                                <span class="input-group-append">
+                                    <button class="btn btn-success input-group-text mais" (click)='addPrincipio(principioInserir)' ><i class="fa fa-plus mais"></i></button>
+                                  </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <div class="input-group col-md-6">
+                                    <span class="input-group-text">Tarja:</span>
+                                    <select #tarjaMedicamento="ngModel" name="tarjaMedicamento" id="tarjaMedicamento" [(ngModel)]="selObject.tarja" class="form-control mingua">
+                        <option *ngFor='let o of enumTarja' [value]='o'>{{o}}</option>
+                    </select>
+                                </div>
+                                <div class="input-group col-md-6">
+                                    <span class="input-group-text">Restrição Hospitalar:</span>
+                                    <span class="form-control">
+                        <input type="checkbox" #restricaoHospitalar="ngModel" name="restricaoHospitalar" id="restricaoHospitalar" [(ngModel)]="selObject.restricaoHospitalar" class="mingua"> &nbsp;<label for="restricaoHospitalar">Sim</label>
+                    </span>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="input-group col-md-12">
+                                    <span class="input-group-text">Classe<BR>Terapeutica:</span>
+                                    <div class="form-control">
+                                        <div class="input-group tam-4">
+                                            <span class="input-group-text">Código:</span>
+                                            <input #codigoTerapeutico="ngModel" type="text" name="codigoTerapeutico" id="codigoTerapeutico" [(ngModel)]="selObject.classe.codigo" placeholder="Código ATC" class="form-control" oninput="this.value = this.value.toUpperCase()">
+                                        </div>
+                                        <div class="input-group tam-12">
+                                            <span class="input-group-text">Descrição:</span>
+                                            <input #descricaoTerapeutico="ngModel" type="text" name="descricaoTerapeutico" id="descricaoTerapeutico" [(ngModel)]="selObject.classe.descricao" placeholder="Descrição da classe Terapeutica" class="form-control" oninput="this.value = this.value.toUpperCase()">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group row">
+                                <div class="input-group col-md-12">
+                                    <span class="input-group-text">Laboratório:</span>
+                                    <div class="form-control">
+                                        <div class="input-group tam-8">
+                                            <span class="input-group-text">CNPJ:</span>
+                                            <input #cnpjLaboratorio="ngModel" type="text" name="cnpjLaboratorio" id="cnpjLaboratorio" [(ngModel)]="selObject.laboratorio.cnpj" placeholder="CNPJ do Laboratório" class="form-control" oninput="this.value = Number(this.value.replace(/\D/gmi,''))">
+                                        </div>
+                                        <div class="input-group tam-12">
+                                            <span class="input-group-text">Nome:</span>
+                                            <input #nomeLaboratorio="ngModel" type="text" name="nomeLaboratorio" id="nomeLaboratorio" [(ngModel)]="selObject.laboratorio.nome" placeholder="Nome do Laboratório" class="form-control" oninput="this.value = this.value.toUpperCase()">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <div class="input-group col-md-12">
+                                    <span class="input-group-text">Apresentação: </span>
+                                    <div class="form-control">
+                                        <div *ngFor='let a of selObject.apresentacao; let i = index' class="espacar">
+
+                                            <div class="input-group  tam-12">
+                                                <span class="form-control h2">Apresentação {{i+1}}:</span>
+                                                <span class="input-group-append">
+                              <button class="btn btn-danger input-group-text mais" (click)='deleteApresentacao(a)' ><i class="fa fa-trash mais"></i></button>
+                          </span>
+                                            </div>
+
+                                            <div class="input-group tam-6">
+                                                <span class="input-group-text">EAN:</span>
+                                                <input #ean="ngModel" type="text" name="ean{{i}}" id="ean{{i}}" [(ngModel)]="a.ean" placeholder="Código EAN do produto" class="form-control" required [class.form-control-danger]="ean.invalid" oninput="this.value = this.value.replace(/\D/gmi,'')">
+                                            </div>
+                                            <div class="input-group tam-6">
+                                                <span class="input-group-text">Registro:</span>
+                                                <input #registro="ngModel" type="text" name="registro{{i}}" id="registro{{i}}" [(ngModel)]="a.registro" placeholder="Código de registro na Anvisa" class="form-control" required [class.form-control-danger]="registro.invalid" oninput="this.value = this.value.replace(/\D/gmi,'')">
+                                            </div>
+                                            <div class="input-group tam-6">
+                                                <span class="input-group-text">GGEREM:</span>
+                                                <input #ggerem="ngModel" type="text" name="ggerem{{i}}" id="ggerem{{i}}" [(ngModel)]="a.ggerem" placeholder="Código ggerem na Anvisa" class="form-control" required [class.form-control-danger]="ggerem.invalid" oninput="this.value = this.value.replace(/\D/gmi,'')">
+                                            </div>
+                                            <div class="input-group tam-12">
+                                                <span class="input-group-text">Descriçao:</span>
+                                                <input #descricao="ngModel" type="text" name="descricao{{i}}" id="descricao{{i}}" [(ngModel)]="a.descricao" placeholder="Descrição do Medicamento" class="form-control" required [class.form-control-danger]="descricao.invalid" oninput="this.value = this.value.toUpperCase()">
+                                            </div>
+                                            <div class="input-group tam-12">
+                                                <span class="input-group-text">Preços:</span>
+                                                <div class="form-control">
+                                                    <div class="row">
+                                                        <table class="table table-striped">
+                                                            <tbody>
+                                                                <tr *ngFor='let qc of a.precos; let j = index'>
+                                                                    <td>{{qc.classe}}</td>
+                                                                    <td><input #prc="ngModel" type="text" name="preco_{{i}}_{{j}}" id="preco_{{i}}_{{j}}" [(ngModel)]="qc.preco" (focus)='$event.target.select()' placeholder="Valor Desconto Cupom" class="form-control"></td>
+                                                                    <td>{{qc.preco | currency:'BRL':'symbol':'1.2-2'}}</td>
+                                                                    <td width="1%" (click)="deleteObject(c)"><i class="fa fa-trash"></i></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="input-group  tam-12">
+                                            <span class="form-control h2">Adicionar mais uma apresentação ao medicamento:</span>
+                                            <span class="input-group-append dedo">
+                            <span class="btn btn-success input-group-text mais dedo" (click)='adicionaApresentacao()' ><i class="fa fa-plus mais"></i></span>
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-success float-right" (click)="salvarObject(f,selObject)"><i class="fa fa-save fa-2x" style="color:white"></i> Salvar Medicamento</button>
+                                    <span class="btn btn-danger" (click)="deleteObject(selObject)"><i class="fa fa-trash fa-2x" style="color:white"></i> Deletar Medicamento</span>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </div>
+</div>

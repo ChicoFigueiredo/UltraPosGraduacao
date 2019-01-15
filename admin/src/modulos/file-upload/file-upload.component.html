@@ -1,0 +1,23 @@
+<div>
+    <div [style.display]="showBase64Contents ? '' : 'none'">
+        <textarea class='textarea' id="ngModelarea" [ngModel]="ngModel" placeholder="Base64 will appear here" rows="1"></textarea>
+    </div>
+    <table width='100%'>
+        <tr>
+            <td width='30%' class='tamanhoMinimo' valign="top">
+                <div ng2FileDrop 
+                    [ngClass]="{'areaDragDrop':true, 'nv-file-over': temArquivoSobreAreaDragDrop}" 
+                    (fileOver)="arquivoSobreDragDrop($event)" 
+                    [uploader]="uploader" 
+                    class="well my-drop-zone" 
+                    [style.background-image]="imagePreview()" 
+                    [style.font-size]="(ngModel || '').length > 500 ? '0' : '12px'">
+                    Arraste e solte o arquivo ou imagem aqui!
+                </div>
+            </td>
+            <td>
+                <input type="file" ng2FileSelect [uploader]="uploader" (change)="arquivoSobreDragDrop(false)" />
+            </td>
+        </tr>
+    </table>
+</div>

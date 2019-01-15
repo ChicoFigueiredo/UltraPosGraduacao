@@ -1,0 +1,612 @@
+<div class="row">
+        <div class="col-md-12">
+            <nb-card>
+                <nb-card-header>
+                    Editor de Pacientes
+                </nb-card-header>
+                <nb-card-body>
+                    <div class="row pesquisa">
+                        <div class="input-group col-md-10">
+                            <input #qPesquisa type="text" class="form-control" placeholder="Digite o nome ou código a ser pesquisado ([Enter] Pesquisa no nome ou principio ativo)" (keydown)="pesquisaNomeBarraBusca($event)">
+                            <div class="dropdown input-group-btn" ngbDropdown>
+                                <button type="button" class="btn btn-success dropdown-toggle" ngbDropdownToggle><i class="fa fa-search" style="color:white"></i> Pesquisa no Campo:</button>
+                                <ul class="dropdown-menu" ngbDropdownMenu>
+                                    <li class="dropdown-item" (click)='pesquisaNome(qPesquisa.value)'>Nome, email ou slug</li>
+                                    <li class="dropdown-item" (click)='pesquisaCodigo(qPesquisa.value)'>CPF</li>
+                                    <li class="dropdown-item" (click)='pesquisaCodigo(qPesquisa.value)'>ID do paciente</li>
+                                </ul>
+                            </div>
+                            <!-- span class="btn btn-success" (click)="deleteCupom(selObject)"><i class="fa fa-search" style="color:white"></i> Buscar Nome / Telefone Ativo</span -->
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-success btn-icon float-right novo" (click)="addNovoPaciente()">
+                      <i class="ion ion-android-add"></i> Novo
+                    </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h4>Pacientes Encontrados</h4>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <ngb-pagination [collectionSize]="pgPaciente.total" [(page)]="pgPaciente.page" [pageSize]="pgPaciente.limit" [maxSize]="3" [boundaryLinks]="true" (pageChange)="navigationChange($event)"></ngb-pagination>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <table class="table table-striped lista">
+                                    <tbody>
+                                        <tr *ngFor='let c of pgPaciente.docs' (click)="selecionarObject(c)">
+                                            <td width="1%"><i class="fa fa-angle-right bold" *ngIf='c._id === selObject?._id'></i></td>
+                                            <td width="9%"><b>{{c.nome}}</b>
+                                                <BR> <div class='lab'>CPF {{c.cpf}} - Identidade {{c.identidade.numero}}/{{c.identidade.uf}} <B>({{c.celular}})</B></div></td>
+                                            <td width="1%" (click)="deleteObject(c)"><i class="fa fa-trash"></i></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-8 detalhe">
+                            <form #f="ngForm" name="formPaciente" (ngSubmit)="onSubmit(f,siteSelecionado)">
+                                <h4>Detalhes do Paciente:
+                                    <BR> <span class="med"><b>{{selObject.nome}}</b></span>
+                                    <BR> </h4>
+    
+    
+                                <div class="form-group row">
+                                    <div class="input-group col-md-6">
+                                        <span class="input-group-text">ID:</span>
+                                        <input #codigoPaciente="ngModel" type="text" name="codigoPaciente" id="codigoPaciente" [(ngModel)]="selObject['_id']" placeholder="ID do paciente" class="form-control" disabled="true">
+                                    </div>
+                                </div>
+    
+    
+                                <div class="form-group row">
+                                    <div class="input-group col-md-6">
+                                        <span class="input-group-text">CPF:</span>
+                                        <input #cpfPaciente="ngModel" type="text" name="cpfPaciente" id="cpfPaciente" [(ngModel)]="selObject.cpf" placeholder="CPF do paciente" required pattern="\d\d\d[.]\d\d\d[.]\d\d\d[-]\d\d" [class.form-control-danger]="cpfPaciente.invalid" class="form-control"
+                                            mask="000.000.000-00" [dropSpecialCharacters]="false">
+                                    </div>
+                                    <div class="input-group col-md-6">
+                                        <span class="input-group-text">Celular (Mobile):</span>
+                                        <input #celularPaciente="ngModel" type="text" name="celularPaciente" id="celularPaciente" [(ngModel)]="selObject.celular" placeholder="Celular do paciente (será usado no mobile)" required pattern="\d\d\w\d{8,9}" [class.form-control-danger]="celularPaciente.invalid"
+                                            class="form-control" specialCharacters="[ '(' ,'}','-','.' ]" mask="(00) 000000009">
+                                    </div>
+                                </div>
+    
+                                <div class="form-group row">
+                                    <div class="input-group col-md-4">
+                                        <span class="input-group-text">Identidade:</span>
+                                        <input #crmNumero="ngModel" type="text" name="crmNumero" id="crmNumero" [(ngModel)]="selObject.identidade.numero" placeholder="CRM do paciente" required [class.form-control-danger]="crmNumero.invalid" class="form-control">
+                                    </div>
+                                    <div class="input-group col-md-4">
+                                        <span class="input-group-text">Emissor:</span>
+                                        <!-- <input #crmEmissor="ngModel" type="text" name="crmEmissor" id="crmEmissor" [(ngModel)]="selObject.identidade.emissor" placeholder="Emissor do paciente" required [class.form-control-danger]="crmEmissor.invalid" class="form-control" disabled="true"> -->
+                                        <select #crmEmissor name="crmEmissor" id="crmEmissor" [(ngModel)]="selObject.identidade.emissor" class="form-control mingua" placeholder="" style="max-width: 35% !important">
+                                            <option *ngFor='let e of emissores' [value]="e">{{e}}</option>
+                                        </select>
+                                        <select #crmUF name="crmUF" id="crmUF" [(ngModel)]="selObject.identidade.uf" class="form-control mingua" placeholder="" style="max-width: 35% !important">
+                                            <option *ngFor='let u of ufs' [value]="u">{{u}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group col-md-4">
+                                        <span class="input-group-text">Validade:</span>
+                                        <input #crmValidade="ngModel" type="date" name="crmValidade" id="crmValidade" [ngModel]="selObject.identidade.validade | date:'yyyy-MM-dd'" placeholder="Emissor do paciente" class="form-control" (focusout)="selObject.identidade.validade = $event.target.value"
+                                            (ngModelChange)="retardChangeFieldCRMValidade($event.target.value, 700)">
+                                    </div>
+                                </div>
+    
+    
+                                <div class="form-group row">
+                                    <div class="input-group col-md-12">
+                                        <span class="input-group-text">Nome:</span>
+                                        <input #nomePaciente="ngModel" type="text" name="nomePaciente" id="nomePaciente" [(ngModel)]="selObject.nome" placeholder="Nome do paciente" class="form-control" required [class.form-control-danger]="nomePaciente.invalid">
+                                    </div>
+                                </div>
+    
+    
+                                <div class="form-group row">
+                                    <div class="input-group col-md-12">
+                                        <span class="input-group-text">e-Mail:</span>
+                                        <input #emailPaciente="ngModel" type="text" name="emailPaciente" id="emailPaciente" [(ngModel)]="selObject.email" placeholder="e-mail do paciente" class="form-control" required [class.form-control-danger]="emailPaciente.invalid" pattern='^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$'>
+                                    </div>
+                                </div>
+    
+                                <div class="form-group row">
+                                    <div class="input-group col-md-6">
+                                        <span class="input-group-text">Nascimento:</span>
+                                        <input #nascimentoPaciente="ngModel" type="date" name="nascimentoPaciente" id="nascimentoPaciente" [ngModel]="selObject.nascimento | date:'yyyy-MM-dd'" (focusout)="selObject.nascimento = $event.target.value" (ngModelChange)="retardChangeFieldNascimento($event, 700)"
+                                            placeholder="Data de Nascimento do paciente" class="form-control">
+                                    </div>
+                                    <div class="input-group col-md-6">
+                                        <span class="input-group-text">Sexo:</span>
+                                        <select #sexoPaciente name="sexoPaciente" id="sexoPaciente" [(ngModel)]="selObject.sexo" class="form-control mingua" placeholder="" style="max-width: 95% !important">
+                                            <option *ngFor='let s of sexos' [value]="s">{{s}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+    
+                                <div class="form-group row">
+                                    <div class="input-group col-md-6">
+                                        <span class="input-group-text">Estado Civil:</span>
+                                        <select #estadoCivilPaciente name="estadoCivilPaciente" id="estadoCivilPaciente" [(ngModel)]="selObject.estadoCivil" class="form-control mingua" placeholder="" style="max-width: 95% !important">
+                                            <option *ngFor='let e of estadoscivies' [value]="e">{{e}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group col-md-6">
+                                        <span class="input-group-text">Etnia:</span>
+                                        <select #etniaPaciente name="etniaPaciente" id="etniaPaciente" [(ngModel)]="selObject.etnia" class="form-control mingua" placeholder="" style="max-width: 95% !important">
+                                            <option *ngFor='let t of etnias' [value]="t">{{t}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+    
+                                <div class="form-group row">
+                                    <div class="input-group col-md-8">
+                                        <span class="input-group-text">Escolaridade:</span>
+                                        <select #escolaridadePaciente name="escolaridadePaciente" id="escolaridadePaciente" [(ngModel)]="selObject.escolaridade" class="form-control mingua" placeholder="" style="max-width: 95% !important">
+                                            <option *ngFor='let e of escolaridades' [value]="e">{{e}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+    
+                                <div class="form-group row">
+                                    <div class="input-group col-md-12">
+                                        <span class="input-group-text">Filiação:</span>
+                                        <div class="form-control">
+                                            <div class="input-group tam-12">
+                                                <span class="input-group-text">Mãe:</span>
+                                                <input #maePaciente="ngModel" type="text" name="maePaciente" id="maePaciente" [(ngModel)]="selObject.filiacao.mae" placeholder="Nome completo da mãe do paciente" class="form-control" rows="10">
+                                            </div>
+                                            <div class="input-group tam-12">
+                                                <span class="input-group-text">Pai:</span>
+                                                <input #paiPaciente="ngModel" type="text" name="paiPaciente" id="paiPaciente" [(ngModel)]="selObject.filiacao.pai" placeholder="Nome completo do pai do paciente" class="form-control" rows="10">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+    
+    
+                                <div class="form-group row">
+                                    <div class="input-group col-md-12">
+                                        <span class="input-group-text">Profissão:</span>
+                                        <ng-select name="especialidadesCombo" [items]="especialidades | async" bindLabel="descricao" bindValue="descricao" [multiple]="false" [hideSelected]="true" [searchFn]="customSearchFn" [(ngModel)]="selObject.profissao" class="form-control">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                {{item.descricao}} ( {{concatArray(item.sinonimos)}} )
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+    
+    
+                                <div class="form-group row">
+                                    <div class="input-group col-md-12">
+                                        <span class="input-group-text">Endereço<BR>Telefone: </span>
+                                        <div class="form-control">
+    
+                                            <div class="input-group tam-6">
+                                                <span class="input-group-text">CEP:</span>
+                                                <input #cepEndereco="ngModel" type="text" name="cepEndereco" id="cepEndereco" [(ngModel)]="selObject.endereco.cep" placeholder="Digite o CEP e o endereço se autocompletará" class="form-control" mask="00000-000" [dropSpecialCharacters]="false" pattern="\d\d\d\d\d[-]\d\d\d"
+                                                    [class.form-control-danger]="cepEndereco.invalid" (keyup)="onKeyCEP($event,selObject.endereco)">
+                                            </div>
+    
+                                            <div class="input-group tam-12">
+                                                <span class="input-group-text">Logradouro:</span>
+                                                <input #logradouroEndereco="ngModel" type="text" name="logradouroEndereco" id="logradouroEndereco" [(ngModel)]="selObject.endereco.logradouro" placeholder="Logradouro do Endereço" class="form-control">
+                                            </div>
+    
+                                            <div class="input-group tam-5">
+                                                <span class="input-group-text">Numero:</span>
+                                                <input #numeroEndereco="ngModel" type="text" name="numeroEndereco" id="numeroEndereco" [(ngModel)]="selObject.endereco.numero" placeholder="Número do Endereço" class="form-control">
+                                            </div>
+    
+                                            <div class="input-group tam-12">
+                                                <span class="input-group-text">Complemento:</span>
+                                                <input #complementoEndereco="ngModel" type="text" name="complementoEndereco" id="complementoEndereco" [(ngModel)]="selObject.endereco.complemento" placeholder="Complemento do Endereço" class="form-control">
+                                            </div>
+    
+                                            <div class="input-group tam-8">
+                                                <span class="input-group-text">Bairro:</span>
+                                                <input #bairroEndereco="ngModel" type="text" name="bairroEndereco" id="bairroEndereco" [(ngModel)]="selObject.endereco.bairro" placeholder="Complemento do Endereço" class="form-control">
+                                            </div>
+    
+                                            <div class="input-group tam-12">
+                                                <span class="input-group-text">Cidade:</span>
+                                                <input #cidadeEndereco="ngModel" type="text" name="cidadeEndereco" id="cidadeEndereco" [(ngModel)]="selObject.endereco.cidade" placeholder="Cidade do Endereço" class="form-control">
+                                                <span class="input-group-text">UF:</span>
+                                                <select #enderecoUF name="enderecoUF" id="enderecoUF" [(ngModel)]="selObject.endereco.uf" class="form-control mingua" placeholder="" style="max-width: 15% !important">
+                                                        <option *ngFor='let u of ufs' [value]="u">{{u}}</option>
+                                                    </select>
+                                            </div>
+    
+                                            <div class="input-group tam-12">
+                                                <span class="input-group-text">Telefones:</span>
+                                                <ng-select name="telefones" [items]="[]" bindValue="label" bindLabel="label" [addTag]="true" [multiple]="true" [(ngModel)]="selObject.endereco.telefones" class="form-control">
+                                                </ng-select>
+                                            </div>
+    
+                                        </div>
+                                    </div>
+                                </div>
+    
+                                <div class="form-group row">
+                                    <div class="input-group col-md-12">
+                                        <span class="input-group-text">Dados<BR>Médicos:</span>
+                                        <div class="form-control">
+                                            <div class="input-group">
+                                                <span class="input-group-text">Peso:</span>
+                                                <input #pesoPaciente="ngModel" type="text" name="pesoPaciente" id="pesoPaciente" [(ngModel)]="selObject.dadosMedicos.peso" placeholder="peso em kg do paciente" class="form-control" rows="10">
+                                                <span class="input-group-text">Altura:</span>
+                                                <input #alturaPaciente="ngModel" type="text" name="alturaPaciente" id="alturaPaciente" [(ngModel)]="selObject.dadosMedicos.altura" placeholder="altura em m do paciente" class="form-control" rows="10">
+                                                <span class="input-group-text">Sangue:</span>
+                                                <select #aboPaciente name="aboPaciente" id="aboPaciente" [(ngModel)]="selObject.dadosMedicos.tipoSanguineo.abo" class="form-control mingua" placeholder="" style="max-width: 15% !important">
+                                                    <option *ngFor='let e of abos' [value]="e">{{e}}</option>
+                                                </select>
+                                                <select #rhPaciente name="rhPaciente" id="rhPaciente" [(ngModel)]="selObject.dadosMedicos.tipoSanguineo.rh" class="form-control mingua" placeholder="" style="max-width: 15% !important">
+                                                    <option *ngFor='let u of rhs' [value]="u">{{u}}</option>
+                                                </select>
+                                            </div>
+                                            <div class="input-group tam-12">
+                                                <span class="input-group-text">Alergias Medicamentos:</span>
+                                                <ng-select name="alergiasMedicamentosas" [items]="[]" bindValue="label" bindLabel="label" [addTag]="true" [multiple]="true" [(ngModel)]="selObject.dadosMedicos.alergiasMedicamentosas" class="form-control">
+                                                </ng-select>
+                                            </div>
+                                            <div class="input-group tam-12">
+                                                <span class="input-group-text">Alergias diversas:</span>
+                                                <ng-select name="alergiasDiversas" [items]="[]" bindValue="label" bindLabel="label" [addTag]="true" [multiple]="true" [(ngModel)]="selObject.dadosMedicos.alergiasDiversas" class="form-control">
+                                                </ng-select>
+                                            </div>
+    
+    
+    
+                                            <span class="input-group-text">Historico Médico: </span>
+                                            <div class="form-control">
+                                                <div *ngFor='let e of selObject.dadosMedicos.historicoMedico; let i = index' class="espacar">
+    
+                                                    <div class="input-group  tam-12">
+                                                        <span class="form-control h2">Histórico {{i+1}}:</span>
+                                                        <span class="input-group-append">
+                                                        <button class="btn btn-danger input-group-text mais" (click)='deleteHistorico(a)' ><i class="fa fa-trash mais"></i></button>
+                                                    </span>
+                                                    </div>
+    
+                                                    <div class="input-group tam-6">
+                                                        <span class="input-group-text">Data:</span>
+                                                        <input #dataHistorico="ngModel" type="date" name="dataHistorico{{i}}" id="dataHistorico{{i}}" [ngModel]="e.data | date:'yyyy-MM-dd'" (focusout)="e.data = $event.target.value" (ngModelChange)="retardChangeFieldDataHistorico(i,$event, 700)" placeholder="Data de Nascimento do paciente"
+                                                            class="form-control">
+                                                    </div>
+    
+                                                    <div class="input-group tam-12">
+                                                        <span class="input-group-text">Dados:</span>
+                                                        <textarea #descricaoHistorico="ngModel" type="text" name="descricaoHistorico{{i}}" id="descricaoHistorico{{i}}" [(ngModel)]="e.descricao" placeholder="Digite o CEP e o endereço se autocompletará" class="form-control"></textarea>
+                                                    </div>
+                                                </div>
+    
+                                                <div class="input-group  tam-12">
+                                                    <span class="form-control h2">Adicionar mais um historico médico ao paciente:</span>
+                                                    <span class="input-group-append dedo">
+                                                    <span class="btn btn-success input-group-text mais dedo" (click)='adicionaHistorico()' ><i class="fa fa-plus mais"></i></span>
+                                                    </span>
+                                                </div>
+    
+                                            </div>
+    
+    
+                                        </div>
+                                    </div>
+                                </div>
+    
+    
+                                <div class="form-group row">
+                                    <div class="input-group col-md-12">
+                                        <span class="input-group-text">Representantes<BR>Legais: </span>
+                                        <div class="form-control">
+                                            <div *ngFor='let e of selObject.representantesLegais; let i = index' class="espacar">
+    
+                                                <div class="input-group  tam-12">
+                                                    <span class="form-control h2">Representante {{i+1}}:</span>
+                                                    <span class="input-group-append">
+                                                            <button class="btn btn-danger input-group-text mais" (click)='deleteRepresentante(a)' ><i class="fa fa-trash mais"></i></button>
+                                                        </span>
+                                                </div>
+    
+                                                <div class="input-group tam-6">
+                                                    <span class="input-group-text">CPF:</span>
+                                                    <input #cpfRepresentante="ngModel" type="text" name="cpfRepresentante{{i}}" id="cpfRepresentante{{i}}" [(ngModel)]="e.cpf" placeholder="CPF  do representante legal do paciente" required pattern="\d\d\d[.]\d\d\d[.]\d\d\d[-]\d\d" [class.form-control-danger]="cpfRepresentante.invalid"
+                                                        class="form-control" mask="000.000.000-00" [dropSpecialCharacters]="false">
+                                                </div>
+    
+                                                <div class="input-group tam-6">
+                                                    <span class="input-group-text">Celular:</span>
+                                                    <input #celularRepresentante="ngModel" type="text" name="celularRepresentante{{i}}" id="celularRepresentante{{i}}" [(ngModel)]="e.celular" placeholder="Celular do representante legal do paciente (será usado no mobile)" required pattern="\d\d\w\d{8,9}" [class.form-control-danger]="celularRepresentante.invalid"
+                                                        class="form-control" specialCharacters="[ '(' ,'}','-','.' ]" mask="(00) 000000009">
+                                                </div>
+    
+                                                <div class="input-group tam-12">
+                                                    <span class="input-group-text">Nome:</span>
+                                                    <input #nomeRepresentante="ngModel" type="text" name="nomeRepresentante{{i}}" id="nomeRepresentante{{i}}" [(ngModel)]="e.nome" placeholder="Nome do representante legal do paciente" class="form-control" required [class.form-control-danger]="nomeRepresentante.invalid">
+                                                </div>
+    
+                                                <div class="input-group tam-12">
+                                                    <span class="input-group-text">E-Mail:</span>
+                                                    <input #emailRepresentante="ngModel" type="text" name="emailRepresentante{{i}}" id="emailRepresentante{{i}}" [(ngModel)]="e.email" placeholder="e-mail do representante legal do paciente" class="form-control" required [class.form-control-danger]="emailRepresentante.invalid"
+                                                        pattern='^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$'>
+                                                </div>
+                                                <div class="input-group">
+                                                        <span class="input-group-text">Identidade:</span>
+                                                        <input #identidadeNumeroRepresentante="ngModel" type="text" name="identidadeNumeroRepresentante{{i}}" id="identidadeNumeroRepresentante{{i}}" [(ngModel)]="e.identidade.numero" placeholder="Identidade do representante legal do paciente" required [class.form-control-danger]="identidadeNumeroRepresentante.invalid" class="form-control">
+                                                        <span class="input-group-text">Emissor:</span>
+                                                        <select #identidadeEmissorRepresentante name="identidadeEmissorRepresentante{{i}}" id="identidadeEmissorRepresentante{{i}}" [(ngModel)]="e.identidade.emissor" class="form-control mingua" placeholder="" style="max-width: 15% !important">
+                                                                    <option *ngFor='let e of emissores' [value]="e">{{e}}</option>
+                                                                </select>
+                                                        <select #identidadeUFRepresentante name="identidadeUFRepresentante{{i}}" id="identidadeUFRepresentante{{i}}" [(ngModel)]="e.identidade.uf" class="form-control mingua" placeholder="" style="max-width: 15% !important">
+                                                                    <option *ngFor='let u of ufs' [value]="u">{{u}}</option>
+                                                                </select>
+                                                        <span class="input-group-text">Validade:</span>
+                                                        <input #identidadeValidadeRepresentante="ngModel" type="date" name="identidadeValidadeRepresentante{{i}}" id="identidadeValidadeRepresentante{{i}}" [ngModel]="e.identidade.validade | date:'yyyy-MM-dd'" placeholder="Data de emissão do paciente" class="form-control" (focusout)="selObject.identidade.validade = $event.target.value"
+                                                            (ngModelChange)="retardChangeFieldidentidadeValidadeRepresentante(i,$event.target.value, 700)">
+                                                </div>
+                                            </div>
+    
+                                            <div class="input-group  tam-12">
+                                                <span class="form-control h2">Adicionar mais um representante legal ao paciente:</span>
+                                                <span class="input-group-append dedo">
+                                                        <span class="btn btn-success input-group-text mais dedo" (click)='adicionaRepresentante()' ><i class="fa fa-plus mais"></i></span>
+                                                </span>
+                                            </div>
+    
+                                        </div>
+                                    </div>
+                                </div>
+    
+                                <!-- 
+                                <div class="form-group row">
+                                    <div class="input-group col-md-12">
+                                        <span class="input-group-text">Especialidades:</span>
+                                        <ng-select name="especialidadesCombo" [items]="especialidades | async" bindLabel="descricao" [multiple]="true" [hideSelected]="true" [(ngModel)]="selObject.especialidades" class="form-control">
+                                        </ng-select>
+                                    </div>
+                                </div>
+    
+                                <div class="form-group row">
+                                    <div class="input-group col-md-12">
+                                        <span class="input-group-text">Telefones:</span>
+                                        <ng-select name="telefones" [items]="[]" bindValue="label" bindLabel="label" [addTag]="true" [multiple]="true" [(ngModel)]="selObject.telefones" class="form-control">
+                                        </ng-select>
+                                    </div>
+                                </div>
+    
+                                <div class="form-group row">
+                                    <div class="input-group col-md-12">
+                                        <span class="input-group-text">Emails:</span>
+                                        <ng-select name="emails" [items]="[]" bindValue="label" bindLabel="label" [addTag]="true" [multiple]="true" [(ngModel)]="selObject.emails" class="form-control">
+    
+                                        </ng-select>
+                                    </div>
+                                </div>
+    
+                                <div class="form-group row">
+                                    <div class="input-group col-md-12">
+                                        <span class="input-group-text">Currículo:</span>
+                                        <div class="form-control">
+                                            <div class="input-group tam-12">
+                                                <span class="input-group-text">Descrição:</span>
+                                                <textarea #descricaoCurriculo="ngModel" type="text" name="descricaoCurriculo" id="descricaoCurriculo" [(ngModel)]="selObject.curriculo.descricao" placeholder="Descrição do Curriculo do Médico" class="form-control" rows="10"></textarea>
+                                            </div>
+                                            <div class="input-group tam-12">
+                                                <span class="input-group-text">Titulos:</span>
+                                                <ng-select name="titulos" [items]="[]" bindValue="label" bindLabel="label" [addTag]="true" [multiple]="true" [(ngModel)]="selObject.curriculo.titulos" class="form-control"></ng-select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                                <div class="form-group row">
+                                    <div class="input-group col-md-12">
+                                        <span class="input-group-text">Redes<BR>Sociais:</span>
+                                        <div class="form-control">
+                                            <div class="input-group tam-12">
+                                                <span class="input-group-text">LinkedIn:</span>
+                                                <input #socialLinkedIn="ngModel" type="text" name="socialLinkedIn" id="socialLinkedIn" [(ngModel)]="selObject.redesSociais.linkedin" placeholder="Endereço do LinkedIn do Médico" class="form-control" rows="10">
+                                            </div>
+                                            <div class="input-group tam-12">
+                                                <span class="input-group-text">Instagram:</span>
+                                                <input #socialInstagram="ngModel" type="text" name="socialInstagram" id="socialInstagram" [(ngModel)]="selObject.redesSociais.instagram" placeholder="Endereço do Instagram do Médico" class="form-control" rows="10">
+                                            </div>
+                                            <div class="input-group tam-12">
+                                                <span class="input-group-text">Facebook:</span>
+                                                <input #socialFacebook="ngModel" type="text" name="socialFacebook" id="socialFacebook" [(ngModel)]="selObject.redesSociais.facebook" placeholder="Endereço do Facebook do Médico" class="form-control" rows="10">
+                                            </div>
+                                            <div class="input-group tam-12">
+                                                <span class="input-group-text">Snapchat:</span>
+                                                <input #socialSnapchat="ngModel" type="text" name="socialSnapchat" id="socialSnapchat" [(ngModel)]="selObject.redesSociais.snapchat" placeholder="Endereço do Snapchat do Médico" class="form-control" rows="10">
+                                            </div>
+    
+                                        </div>
+                                    </div>
+                                </div>
+    
+                                <div class="form-group row">
+                                    <div class="input-group col-md-12">
+                                        <span class="input-group-text">Endereços: </span>
+                                        <div class="form-control">
+                                            <div *ngFor='let e of selObject.enderecos; let i = index' class="espacar">
+    
+                                                <div class="input-group  tam-12">
+                                                    <span class="form-control h2">Endereço {{i+1}}:</span>
+                                                    <span class="input-group-append">
+                                                        <button class="btn btn-danger input-group-text mais" (click)='deleteEndereco(a)' ><i class="fa fa-trash mais"></i></button>
+                                                    </span>
+                                                </div>
+    
+                                                <div class="input-group tam-6">
+                                                    <span class="input-group-text">Tipo:</span>
+                                                    <select #tipoEndereco="ngModel" type="text" name="tipoEndereco{{i}}" id="tipoEndereco{{i}}" [(ngModel)]="e.tipo" placeholder="Código EAN do produto" class="form-control" style="width: 60% !important">
+                                                        <option *ngFor='let tp of tiposEndereco' value="{{tp}}">{{tp}}{{tp.value}}</option>
+                                                    </select>
+                                                </div>
+    
+                                                <div class="input-group tam-6">
+                                                    <span class="input-group-text">CEP:</span>
+                                                    <input #cepEndereco="ngModel" type="text" name="cepEndereco{{i}}" id="cepEndereco{{i}}" [(ngModel)]="e.cep" placeholder="Digite o CEP e o endereço se autocompletará" class="form-control" mask="00000-000" [dropSpecialCharacters]="false" pattern="\d\d\d\d\d[-]\d\d\d"
+                                                        [class.form-control-danger]="cepEndereco.invalid" (keyup)="onKeyCEP($event,e)">
+                                                </div>
+    
+                                                <div class="input-group tam-12">
+                                                    <span class="input-group-text">Logradouro:</span>
+                                                    <input #logradouroEndereco="ngModel" type="text" name="logradouroEndereco{{i}}" id="logradouroEndereco{{i}}" [(ngModel)]="e.logradouro" placeholder="Logradouro do Endereço" class="form-control">
+                                                </div>
+    
+                                                <div class="input-group tam-5">
+                                                    <span class="input-group-text">Numero:</span>
+                                                    <input #numeroEndereco="ngModel" type="text" name="numeroEndereco{{i}}" id="numeroEndereco{{i}}" [(ngModel)]="e.numero" placeholder="Número do Endereço" class="form-control">
+                                                </div>
+    
+                                                <div class="input-group tam-12">
+                                                    <span class="input-group-text">Complemento:</span>
+                                                    <input #complementoEndereco="ngModel" type="text" name="complementoEndereco{{i}}" id="complementoEndereco{{i}}" [(ngModel)]="e.complemento" placeholder="Complemento do Endereço" class="form-control">
+                                                </div>
+    
+                                                <div class="input-group tam-8">
+                                                    <span class="input-group-text">Bairro:</span>
+                                                    <input #bairroEndereco="ngModel" type="text" name="bairroEndereco{{i}}" id="bairroEndereco{{i}}" [(ngModel)]="e.bairro" placeholder="Complemento do Endereço" class="form-control">
+                                                </div>
+    
+                                                <div class="input-group tam-12">
+                                                    <span class="input-group-text">Cidade:</span>
+                                                    <input #cidadeEndereco="ngModel" type="text" name="cidadeEndereco{{i}}" id="cidadeEndereco{{i}}" [(ngModel)]="e.cidade" placeholder="Cidade do Endereço" class="form-control">
+                                                    <span class="input-group-text">UF:</span>
+                                                    <select #enderecoUF name="enderecoUF{{i}}" id="enderecoUF{{i}}" [(ngModel)]="e.uf" class="form-control mingua" placeholder="" style="max-width: 15% !important">
+                                                        <option *ngFor='let u of ufs' [value]="u">{{u}}</option>
+                                                    </select>
+                                                </div>
+    
+                                            </div>
+    
+                                            <div class="input-group  tam-12">
+                                                <span class="form-control h2">Adicionar mais um endereço ao paciente:</span>
+                                                <span class="input-group-append dedo">
+                                                    <span class="btn btn-success input-group-text mais dedo" (click)='adicionaEndereco()' ><i class="fa fa-plus mais"></i></span>
+                                                </span>
+                                            </div>
+    
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="input-group col-md-12">
+                                        <span class="input-group-text">Comercial: </span>
+                                        <div class="form-control">
+                                            <div *ngFor='let lt of selObject.comercial; let i2 = index' class="espacar">
+                                                <div class="input-group  tam-12">
+                                                    <span class="form-control h2">Atuação Comercial {{i2+1}}:</span>
+                                                    <span class="input-group-append">
+                                                        <button class="btn btn-danger input-group-text mais" (click)='deleteLocal(lt)' ><i class="fa fa-trash mais"></i></button>
+                                                    </span>
+                                                </div>
+    
+                                                <div class="input-group tam-12">
+                                                    <span class="input-group-text">Estabelecimento/Local:</span>
+                                                    <input #localComercial="ngModel" type="text" name="localComercial{{i2}}" id="localComercial{{i2}}" [(ngModel)]="lt.local" placeholder="Nome do Local onde o paciente atua" class="form-control">
+                                                </div>
+    
+                                                <div class="input-group tam-12">
+                                                    <span class="input-group-text">Cargo/Função:</span>
+                                                    <input #funcaoComercial="ngModel" type="text" name="funcaoComercial{{i2}}" id="funcaoComercial{{i2}}" [(ngModel)]="lt.cargo" placeholder="Cargo ou função exercido pelo paciente nesse estabelecimento" class="form-control">
+                                                </div>
+    
+                                                <div class="input-group tam-12">
+                                                    <span class="input-group-text">Endereço: </span>
+                                                    <div class="form-control">
+    
+                                                        <div class="input-group tam-5">
+                                                            <span class="input-group-text">CEP:</span>
+                                                            <input #cepEnderecoLocal="ngModel" type="text" name="cepEnderecoLocal{{i2}}" id="cepEnderecoLocal{{i2}}" [(ngModel)]="lt.endereco.cep" placeholder="Digite o CEP e o endereço se autocompletará" class="form-control" mask="00000-000" [dropSpecialCharacters]="false"
+                                                                pattern="\d\d\d\d\d[-]\d\d\d" [class.form-control-danger]="cepEnderecoLocal.invalid" (keyup)="onKeyCEP($event,lt.endereco)">
+                                                        </div>
+    
+                                                        <div class="input-group tam-12">
+                                                            <span class="input-group-text">Logradouro:</span>
+                                                            <input #logradouroEnderecoLocal="ngModel" type="text" name="logradouroEnderecoLocal{{i2}}" id="logradouroEnderecoLocal{{i2}}" [(ngModel)]="lt.endereco.logradouro" placeholder="Logradouro do Endereço" class="form-control">
+                                                        </div>
+    
+                                                        <div class="input-group tam-6">
+                                                            <span class="input-group-text">Numero:</span>
+                                                            <input #numeroEnderecoLocal="ngModel" type="text" name="numeroEnderecoLocal{{i2}}" id="numeroEnderecoLocal{{i2}}" [(ngModel)]="lt.endereco.numero" placeholder="Número do Endereço" class="form-control">
+                                                        </div>
+    
+                                                        <div class="input-group tam-12">
+                                                            <span class="input-group-text">Complemento:</span>
+                                                            <input #complementoEnderecoLocal="ngModel" type="text" name="complementoEnderecoLocal{{i2}}" id="complementoEnderecoLocal{{i2}}" [(ngModel)]="lt.endereco.complemento" placeholder="Complemento do Endereço" class="form-control">
+                                                        </div>
+    
+                                                        <div class="input-group tam-8">
+                                                            <span class="input-group-text">Bairro:</span>
+                                                            <input #bairroEnderecoLocal="ngModel" type="text" name="bairroEnderecoLocal{{i2}}" id="bairroEnderecoLocal{{i2}}" [(ngModel)]="lt.endereco.bairro" placeholder="Complemento do Endereço" class="form-control">
+                                                        </div>
+    
+                                                        <div class="input-group tam-12">
+                                                            <span class="input-group-text">Cidade:</span>
+                                                            <input #cidadeEnderecoLocal="ngModel" type="text" name="cidadeEnderecoLocal{{i2}}" id="cidadeEnderecoLocal{{i2}}" [(ngModel)]="lt.endereco.cidade" placeholder="Cidade do Endereço" class="form-control">
+                                                            <span class="input-group-text">UF:</span>
+                                                            <select #enderecoUFLocal name="enderecoUFLocal{{i2}}" id="enderecoUFLocal{{i2}}" [(ngModel)]="lt.endereco.uf" class="form-control mingua" placeholder="" style="max-width: 15% !important">
+                                                                        <option *ngFor='let u of ufs' [value]="u">{{u}}</option>
+                                                                    </select>
+                                                        </div>
+    
+                                                    </div>
+                                                </div>
+    
+                                                <div class="input-group tam-12">
+                                                    <span class="input-group-text">Telefones:</span>
+                                                    <ng-select name="telefonesLocal{{i2}}" id="telefonesLocal{{i2}}" [items]="[]" bindValue="label" bindLabel="label" [addTag]="true" [multiple]="true" [(ngModel)]="lt.telefones" class="form-control">
+                                                    </ng-select>
+                                                </div>
+    
+                                                <div class="input-group tam-12">
+                                                    <span class="input-group-text">E-Mails:</span>
+                                                    <ng-select name="emailsLocal{{i2}}" id="emailsLocal{{i2}}" [items]="[]" bindValue="label" bindLabel="label" [addTag]="true" [multiple]="true" [(ngModel)]="lt.emails" class="form-control">
+                                                    </ng-select>
+                                                </div>
+    
+                                                <div class="input-group tam-12">
+                                                    <span class="input-group-text">Sites:</span>
+                                                    <ng-select name="sitesLocal{{i2}}" id="sitesLocal{{i2}}" [items]="[]" bindValue="label" bindLabel="label" [addTag]="true" [multiple]="true" [(ngModel)]="lt.sites" class="form-control">
+                                                    </ng-select>
+                                                </div>
+    
+                                            </div>
+    
+                                            <div class="input-group  tam-12">
+                                                <span class="form-control h2">Adicionar mais um estabelecimentos/locais referente ao paciente:</span>
+                                                <span class="input-group-append dedo">
+                                                    <span class="btn btn-success input-group-text mais dedo" (click)='adicionaLocal()' ><i class="fa fa-plus mais"></i></span>
+                                                </span>
+                                            </div>
+    
+                                        </div>
+                                    </div>
+                                </div> -->
+    
+                                <div class="form-group row">
+                                    <div class="input-group col-md-6">
+                                        <span class="input-group-text">Foto:</span>
+                                        <span class="input-group-append">
+                                            <file-upload #fotoPaciente="ngModel" [isImage]="true" [showBase64Contents]="false" [(ngModel)]="selObject.foto" name="fotoPaciente" ></file-upload>
+                                        </span>
+                                    </div>
+                                </div>
+    
+                                <div class="form-group row">
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn btn-success float-right" (click)="salvarObject(f,selObject)"><i class="fa fa-save fa-2x" style="color:white"></i> Salvar Paciente</button>
+                                        <span class="btn btn-danger" (click)="deleteObject(selObject)"><i class="fa fa-trash fa-2x" style="color:white"></i> Deletar Paciente</span>
+                                    </div>
+                                </div>
+    
+                            </form>
+                        </div>
+                    </div>
+                </nb-card-body>
+            </nb-card>
+        </div>
+    </div>

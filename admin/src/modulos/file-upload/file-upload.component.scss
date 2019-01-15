@@ -1,0 +1,27 @@
+.my-drop-zone {
+    border: dotted 2px lightgray;
+    min-height: 100px;
+}
+
+.nv-file-over {
+    border: dotted 3px red;
+    min-height: 100px;
+}
+
+img.preview {
+    max-width: 95%;
+    max-height: 95%;
+}
+
+td.tamanhoMinimo {
+    min-width: 100px;
+}
+textarea.textarea{
+    min-width: 100%;
+}
+
+.areaDragDrop {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+}

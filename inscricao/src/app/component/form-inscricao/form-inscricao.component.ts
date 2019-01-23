@@ -28,6 +28,9 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
   cursoEscolhido: Curso = new Curso();
   idCursoSelecionado = '';
   valoresMensalidade: Array<ValoresMensalidade> = [];
+
+  displayForm = 'initial';
+
   @ViewChild('erroCPF') private erroCPF: ElementRef;
   @ViewChild('selMatricula') private selMatricula: ElementRef;
   @ViewChild('selMensalidade') private selMensalidade: ElementRef;

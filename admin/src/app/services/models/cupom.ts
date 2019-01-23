@@ -1,7 +1,7 @@
 // import * as ObjectId from 'objectid-purejs';
 // var ObjectId = require('objectid-purejs')
 
-import * as ObjectId from 'objectid-purejs';
+import * as ObjectId from '../../../../node_modules/objectid-purejs/lib/binary_parser.js';
 
 export class Cupom {
   public _id:string = (new ObjectId()).toHexString();

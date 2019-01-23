@@ -376,7 +376,7 @@
                                                         </div>
 
                                                         <div class="form-group btn-group group-inline" style="display: block;">
-                                                            <button id="btnMatricularPorBoleto" type="button" class="btn btn-primary" name="Salva" (click)='efeturarMatricula("boleto")'>Efetuar Matrícula</button>
+                                                            <button id="btnMatricularPorBoleto" type="button" class="btn btn-primary" name="Salva" (click)='efeturarMatricula("boleto")' [disable]="disableButton" >Efetuar Matrícula</button>
                                                         </div>
 
                                                     </div>

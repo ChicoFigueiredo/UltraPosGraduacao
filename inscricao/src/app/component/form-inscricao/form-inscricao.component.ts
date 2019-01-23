@@ -230,8 +230,10 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
     this.cursoEscolhido.pagamento.dadosCartao.bandeira = __cc.type($event.target.value.replace(/\D/gmi, ''));
   }
 
+  disableButton:boolean = false;
   efeturarMatricula(tipoPagamento: string = 'cartao') {
     if (this.validarFormulario()) {
+      this.disableButton = true;
       if (tipoPagamento === 'cartao') {
         if ( this.validarCartao() ) {
           this.saveMatricula(tipoPagamento);
@@ -256,6 +258,7 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
         .subscribe((retorno: any) => {
           console.log(retorno);
           if (tipoPagamento === 'boleto') {
+            this.displayForm = 'none';
             // this.ifrmMensagem.nativeElement.src = retorno.fat.bill.url;
             this.TituloModal.nativeElement.innerHTML = 'Matricula realizada com sucesso!';
             this.msgRetorno.nativeElement.innerHTML =
@@ -267,6 +270,7 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
             $('#exampleModal').modal();
           } else if (tipoPagamento === 'cartao') {
             if ( retorno.fat.bill.charges[0].last_transaction.status === 'rejected' ) {
+              this.displayForm = 'none';
               // this.ifrmMensagem.nativeElement.src = retorno.fat.bill.url;
               this.TituloModal.nativeElement.innerHTML = 'Matricula realizada com sucesso!';
               this.msgRetorno.nativeElement.innerHTML =
@@ -279,6 +283,7 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
                 'e verifique ou troque o cartão utilizado';
               $('#exampleModal').modal();
             } else {
+              this.displayForm = 'none';
               // this.ifrmMensagem.nativeElement.src = retorno.fat.bill.url;
               this.TituloModal.nativeElement.innerHTML = 'Matricula realizada com sucesso!';
               this.msgRetorno.nativeElement.innerHTML =

@@ -43,15 +43,19 @@ app.use(logger('dev'));
 /** Função para capturar body texto */
 app.use(function(req, res, next) {
     req.rawBody = '';
-    req.setEncoding('utf8');
+    try {
+        //req.setEncoding('utf8');
   
-    req.on('data', function(chunk) { 
-      req.rawBody += chunk;
-    });
-  
-    req.on('end', function() {
-      next();
-    });
+        req.on('data', function(chunk) { 
+          req.rawBody += chunk;
+        });
+      
+        req.on('end', function() {
+          next();
+        });
+    } catch (error) {
+        next()        
+    }
   });
   
 app.use(express.json());

@@ -13,6 +13,7 @@ import { FormInscricaoComponent } from './component/form-inscricao/form-inscrica
 import { ApiUltraService } from './services/api-ultra.service';
 import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { WindowRef } from './WindowRef';
 
 registerLocaleData(localePTBR);
 
@@ -34,6 +35,7 @@ const options = {};
     ApiUltraService,
     HttpClientModule,
     { provide: LOCALE_ID, useValue: 'pt' },
+    WindowRef,
   ],
   bootstrap: [
     AppComponent

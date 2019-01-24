@@ -6,6 +6,7 @@ import * as card from 'creditcards/card';
 import * as cvv from 'creditcards/cvc';
 import * as cardTypes from 'creditcards-types';
 import * as expiration from 'creditcards/expiration';
+import { WindowRef } from '../../WindowRef';
 
 const __cc = card(cardTypes);
 const __cvv = cvv(cardTypes);
@@ -45,6 +46,7 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
     public alunoService: ApiUltraService,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
+    private winRef: WindowRef
   ) {
 
     this.alunoService.getUF().subscribe((x: Array<any>) => {
@@ -230,13 +232,16 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
     this.cursoEscolhido.pagamento.dadosCartao.bandeira = __cc.type($event.target.value.replace(/\D/gmi, ''));
   }
 
+  disableButton = false;
   efeturarMatricula(tipoPagamento: string = 'cartao') {
     if (this.validarFormulario()) {
+      this.disableButton = true;
       if (tipoPagamento === 'cartao') {
         if ( this.validarCartao() ) {
           this.saveMatricula(tipoPagamento);
         } else {
           // nada
+          this.disableButton = false;
         }
       } else {
         this.saveMatricula(tipoPagamento);
@@ -256,6 +261,8 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
         .subscribe((retorno: any) => {
           console.log(retorno);
           if (tipoPagamento === 'boleto') {
+            this.displayForm = 'none';
+            //this.winRef.nativeWindow.parent.scroll(0,0);
             // this.ifrmMensagem.nativeElement.src = retorno.fat.bill.url;
             this.TituloModal.nativeElement.innerHTML = 'Matricula realizada com sucesso!';
             this.msgRetorno.nativeElement.innerHTML =
@@ -267,6 +274,8 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
             $('#exampleModal').modal();
           } else if (tipoPagamento === 'cartao') {
             if ( retorno.fat.bill.charges[0].last_transaction.status === 'rejected' ) {
+              this.displayForm = 'none';
+              //this.winRef.nativeWindow.parent.scroll(0,0);
               // this.ifrmMensagem.nativeElement.src = retorno.fat.bill.url;
               this.TituloModal.nativeElement.innerHTML = 'Matricula realizada com sucesso!';
               this.msgRetorno.nativeElement.innerHTML =
@@ -279,6 +288,8 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
                 'e verifique ou troque o cartão utilizado';
               $('#exampleModal').modal();
             } else {
+              this.displayForm = 'none';
+              //this.winRef.nativeWindow.parent.scroll(0,0);
               // this.ifrmMensagem.nativeElement.src = retorno.fat.bill.url;
               this.TituloModal.nativeElement.innerHTML = 'Matricula realizada com sucesso!';
               this.msgRetorno.nativeElement.innerHTML =

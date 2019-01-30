@@ -41,22 +41,23 @@ app.use(sassMiddleware({
 app.use(logger('dev'));
 
 /** Função para capturar body texto */
-app.use(function(req, res, next) {
-    req.rawBody = '';
-    try {
-        //req.setEncoding('utf8');
+/** TO-DO Estudar outra forma de fazer cupom bacth */
+// app.use(function(req, res, next) {
+//     req.rawBody = '';
+//     try {
+//         req.setEncoding('utf8');
   
-        req.on('data', function(chunk) { 
-          req.rawBody += chunk;
-        });
+//         req.on('data', function(chunk) { 
+//           req.rawBody += chunk;
+//         });
       
-        req.on('end', function() {
-          next();
-        });
-    } catch (error) {
-        next()        
-    }
-  });
+//         req.on('end', function() {
+//           next();
+//         });
+//     } catch (error) {
+//         next()        
+//     }
+//   });
   
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

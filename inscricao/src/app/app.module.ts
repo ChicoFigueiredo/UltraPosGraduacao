@@ -14,6 +14,7 @@ import { ApiUltraService } from './services/api-ultra.service';
 import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { WindowRef } from './WindowRef';
+import { FinalizaInscricaoComponent } from './finaliza-inscricao/finaliza-inscricao.component';
 
 registerLocaleData(localePTBR);
 
@@ -22,7 +23,8 @@ const options = {};
 @NgModule({
   declarations: [
     AppComponent,
-    FormInscricaoComponent
+    FormInscricaoComponent,
+    FinalizaInscricaoComponent
   ],
   imports: [
     BrowserModule,

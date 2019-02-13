@@ -418,6 +418,7 @@ export class CursoPagamento {
   cupom: CursoPagamentoCupom;
   formaPagamento = '';
   dadosCartao: DadosCartao;
+  pagarPrimeiraParcelaJuntoComMatricula = false;
 
   constructor() {
     this.cupom = new CursoPagamentoCupom();

@@ -38,6 +38,7 @@ module.exports = function(url = '', initialize = false) {
                 parcelamento: { type: Number, required: true, default: 24 },
                 parcela: { type: Number, required: true, default: 0 },
                 melhorDia: { type: Number, required: true, default: 5 },
+                pagarPrimeiraParcelaJuntoComMatricula: { type: Boolean, required: true, default: false },
                 cupom: AlunoCursoCupomSchema[url],
                 formaPagamento: { type: String, required: true, trim: true },
                 dadosCartao: DadosCartaoSchema[url]

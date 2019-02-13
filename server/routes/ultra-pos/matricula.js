@@ -142,28 +142,42 @@ router.post("/inscrever", function(req, res) {
 
     function geraFaturamentoImediatoEAssinatura(idCli, idCartao) {
         const dias = cu.pagamento.formaPagamento === 'cartao' ? 0 : 7;
+
         let cobrarEm = new Date(cu.pagamento.formaPagamento === 'cartao' ? (new Date()) : (new Date()).setHours(23, 59, 59, 999));
         cobrarEm = (new Date(cobrarEm.setDate(cobrarEm.getDate() + dias))); // formato final deve ser "2018-05-10T23:59:59.000-03:00"
+        
+        
         let fatura = {
             "customer_id": idCli,
             "payment_method_code": cu.pagamento.formaPagamento === 'boleto' ? 'bank_slip' : 'credit_card',
-            "due_at": cobrarEm.toISOString().replace('Z', '-03:00'),
-            "bill_items": [{
-                "product_id": cu.codigo_vindi === null || cu.codigo_vindi <= 0 ? PRODUCT_ID_PADRAO : cu.codigo_vindi, // TIRAR HARD CODE
-                "amount": cu.pagamento.valorCobrado / cu.pagamento.parcelamento
-            }]
+            "bill_items": []
         };
 
+        // Se pagamento for CARTÃO, adiciona o id do cartão gravado na vindi
         if (cu.pagamento.formaPagamento === 'cartao') {
             fatura.payment_profile = { id: idCartao };
         }
 
+        // MATRICULA - Cobrar matricula
         if (cu.pagamento.taxaMatricula > 0) {
             fatura.bill_items.push({
                 "product_id": PRODUCT_ID_PADRAO_MATRICULA,
-                "amount": cu.pagamento.taxaMatricula
+                "amount": cu.pagamento.taxaMatricula,
+                "due_at": cobrarEm.toISOString().replace('Z', '-03:00'),
             })
         }
+
+        // MENSALIDADE - Cobrar 1º mensalidade com a matricula
+        if (cu.pagamento.pagarPrimeiraParcelaJuntoComMatricula) {
+            fatura.bill_items.push({
+                "product_id": cu.codigo_vindi === null || cu.codigo_vindi <= 0 ? PRODUCT_ID_PADRAO : cu.codigo_vindi, // TIRAR HARD CODE
+                "amount": cu.pagamento.valorCobrado / cu.pagamento.parcelamento,
+                "due_at": cobrarEm.toISOString().replace('Z', '-03:00'),
+            })
+        }
+
+
+        // Submete a fatura e cria a trigger de pagamento
         console.log('fatura: ', fatura);
         cVindi.post({ uri: '/api/v1//bills', debug: false }, fatura).then((fat) => {
             ret.fat = fat;
@@ -176,7 +190,7 @@ router.post("/inscrever", function(req, res) {
                     "payment_method_code": cu.pagamento.formaPagamento === 'boleto' ? 'bank_slip' : 'credit_card',
                     "billing_trigger_type": "day_of_month",
                     "billing_trigger_day": cu.pagamento.melhorDia,
-                    "billing_cycles": (cu.pagamento.parcelamento - 1),
+                    "billing_cycles": (cu.pagamento.parcelamento - (cu.pagamento.pagarPrimeiraParcelaJuntoComMatricula ? 1 : 0)),
                     "product_items": [{
                         "product_id": cu.codigo_vindi === null || cu.codigo_vindi <= 0 ? PRODUCT_ID_PADRAO : cu.codigo_vindi,
                         "cycles": (cu.pagamento.parcelamento - 1),

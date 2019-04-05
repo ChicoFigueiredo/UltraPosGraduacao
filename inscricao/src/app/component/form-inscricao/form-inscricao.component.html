@@ -328,6 +328,16 @@
                                                     </select><span id="errId28" class="error"></span></div>
 
                                         </div>
+                                        <div class="form-group">
+                                            <label class="control-label-left sr-only"></label>
+                                            <div class="controls">
+
+                                                <label class="checkbox" for="marcaConcordo">
+                                                    <input  autocomplete="off" [(ngModel)]='cursoEscolhido.pagamento.pagarPrimeiraParcelaJuntoComMatricula' type="checkbox" value="Pagar primeira mensalidade junto com a matricula" id="pagarPrimeiraParcelaJuntoComMatricula" name="pagarPrimeiraParcelaJuntoComMatricula" data-parsley-errors-container="#pagarPrimeiraParcelaJuntoComMatricula">Pagar primeira mensalidade junto com a matricula</label>
+                                                <span id="errId25" class="error"></span>
+                                            </div>
+
+                                        </div>
                                         <div class="form-group" style="display: block;">
                                             <label class="control-label-left" for="cupom">Aplicar o cupom</label>
                                             <div class="controls">
@@ -364,11 +374,11 @@
 
                                                                 <label class="checkbox" for="primeiroBoleto">
                                                                         <input  autocomplete="off" checked="checked" disabled type="checkbox" value="266,67" id="primeiroBoleto" name="field228" data-parsley-errors-container="#errId30">
-                                                                        Primeiro boleto {{cursoEscolhido.pagamento.taxaMatricula + (cursoEscolhido.pagamento.valorCobrado / cursoEscolhido.pagamento.parcelamento) | currency:'BRL':'symbol':'.2-2' }}
+                                                                        Primeiro boleto {{cursoEscolhido.pagamento.taxaMatricula + (cursoEscolhido.pagamento.pagarPrimeiraParcelaJuntoComMatricula ? (cursoEscolhido.pagamento.valorCobrado / cursoEscolhido.pagamento.parcelamento) : 0) | currency:'BRL':'symbol':'.2-2' }}
                                                                     </label>
                                                                 <label class="checkbox" for="valorMensalidadeBoleto">
                                                                         <input  autocomplete="off" checked="checked" disabled type="checkbox" value="166,67" id="valorMensalidadeBoleto" name="field228" data-parsley-errors-container="#errId30">
-                                                                        {{ cursoEscolhido.pagamento.parcelamento - 1 }} boletos de {{ cursoEscolhido.pagamento.valorCobrado / cursoEscolhido.pagamento.parcelamento | currency:'BRL':'symbol':'.2-2' }}
+                                                                        {{ cursoEscolhido.pagamento.parcelamento - (cursoEscolhido.pagamento.pagarPrimeiraParcelaJuntoComMatricula ? 1 : 0) }} boletos de {{ cursoEscolhido.pagamento.valorCobrado / cursoEscolhido.pagamento.parcelamento | currency:'BRL':'symbol':'.2-2' }}
                                                                     </label>
                                                                 <span id="errId30" class="error"></span>
                                                             </div>
@@ -376,7 +386,7 @@
                                                         </div>
 
                                                         <div class="form-group btn-group group-inline" style="display: block;">
-                                                            <button id="btnMatricularPorBoleto" type="button" class="btn btn-primary" name="Salva" (click)='efeturarMatricula("boleto")' [disable]="disableButton" >Efetuar Matrícula</button>
+                                                            <button id="btnMatricularPorBoleto" type="button" class="btn btn-primary" name="Salva" (click)='efeturarMatricula("boleto")' [disabled]="disableButton" >Efetuar Matrícula</button>
                                                         </div>
 
                                                     </div>

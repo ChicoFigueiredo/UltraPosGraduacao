@@ -1,10 +1,12 @@
+
+import {map} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+
+
 import { toObservable } from '@angular/forms/src/validators';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -34,19 +36,19 @@ export class ApiUltraService {
   }
 
   findUser(cpf) {
-    return this.http.get(API.FIND_USER + cpf)
-      .map((aluno) => {
+    return this.http.get(API.FIND_USER + cpf).pipe(
+      map((aluno) => {
         this.alunoAtual = aluno;
         return aluno;
-      });
+      }));
   }
 
   getUF() {
-    return this.http.get(API.UF)
-    .map((listaUF: Array<any>) => {
+    return this.http.get(API.UF).pipe(
+    map((listaUF: Array<any>) => {
       this.listaUF = listaUF;
       return listaUF;
-    });
+    }));
   }
 
   getCEP(cep) {
@@ -54,11 +56,11 @@ export class ApiUltraService {
   }
 
   getMunicipios() {
-    return this.http.get(API.MUNICIPIOS)
-    .map((listaMunicipios: Array<any>) => {
+    return this.http.get(API.MUNICIPIOS).pipe(
+    map((listaMunicipios: Array<any>) => {
       this.listaMunicipios = listaMunicipios;
       return listaMunicipios;
-    });
+    }));
   }
 
   getCursos() {

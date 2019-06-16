@@ -65,9 +65,11 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
       x = x.sort((a, b) => a.name.pt > b.name.pt ? 1 : -1);
            // .filter((c) => c.published );
       this.cursos = x;
-      this.cursoEscolhido.codigoCategoria = Number( this.getCategoriaDoCurso(this.idCursoSelecionado).id );
-      this.cursoEscolhido.codigoCurso = Number(this.idCursoSelecionado);
-      this.selectCurso({ target : { value : this.idCursoSelecionado }});
+      if (this.idCursoSelecionado && this.getCategoriaDoCurso(this.idCursoSelecionado) && this.getCategoriaDoCurso(this.idCursoSelecionado).id) {
+        this.cursoEscolhido.codigoCategoria = Number( this.getCategoriaDoCurso(this.idCursoSelecionado).id );
+        this.cursoEscolhido.codigoCurso = Number(this.idCursoSelecionado);
+        this.selectCurso({ target : { value : this.idCursoSelecionado }});
+      }
     });
   }
 
@@ -76,7 +78,7 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
     this.cursoEscolhido.pagamento.parcelamento = 24;
     this.route.params.subscribe(params => {
       this.idCursoSelecionado = params['id'];
-      if (this.idCursoSelecionado){
+      if (this.idCursoSelecionado && this.getCategoriaDoCurso(this.idCursoSelecionado) && this.getCategoriaDoCurso(this.idCursoSelecionado).id){
         this.cursoEscolhido.codigoCategoria = Number( this.getCategoriaDoCurso(this.idCursoSelecionado).id );
         this.cursoEscolhido.codigoCurso = Number(this.idCursoSelecionado);
         this.selectCurso({ target : { value : this.idCursoSelecionado }});

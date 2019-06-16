@@ -76,9 +76,11 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
     this.cursoEscolhido.pagamento.parcelamento = 24;
     this.route.params.subscribe(params => {
       this.idCursoSelecionado = params['id'];
-      this.cursoEscolhido.codigoCategoria = Number( this.getCategoriaDoCurso(this.idCursoSelecionado).id );
-      this.cursoEscolhido.codigoCurso = Number(this.idCursoSelecionado);
-      this.selectCurso({ target : { value : this.idCursoSelecionado }});
+      if (this.idCursoSelecionado){
+        this.cursoEscolhido.codigoCategoria = Number( this.getCategoriaDoCurso(this.idCursoSelecionado).id );
+        this.cursoEscolhido.codigoCurso = Number(this.idCursoSelecionado);
+        this.selectCurso({ target : { value : this.idCursoSelecionado }});
+      }
     });
   }
 
@@ -102,7 +104,7 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
               this.ultimaBuscaValidaCPF = cpf;
               this.alunoAtual = a[0];
             }
-           });
+           },err => console.log('err = ', err));
         }
       } else {
         // this.erroCPF.nativeElement.innerHTML = 'CPF com erro de validação, verifique'

@@ -1,12 +1,11 @@
-
-import {map} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-
-
-import { toObservable } from '@angular/forms/src/validators';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators'
+
+
+// import { toObservable } from '@angular/forms/src/validators';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -35,8 +34,8 @@ export class ApiUltraService {
   ) {
   }
 
-  findUser(cpf) {
-    return this.http.get(API.FIND_USER + cpf).pipe(
+  findUser(cpf): Observable<any> {
+    return this.http.get<any>(API.FIND_USER + cpf).pipe(
       map((aluno) => {
         this.alunoAtual = aluno;
         return aluno;
@@ -52,7 +51,7 @@ export class ApiUltraService {
   }
 
   getCEP(cep) {
-    return this.http.get(API.CEP + cep);
+    return this.http.get(API.CEP + cep).pipe(map(cep => cep));
   }
 
   getMunicipios() {
@@ -64,11 +63,17 @@ export class ApiUltraService {
   }
 
   getCursos() {
-    return this.http.get(API.GET_CURSOS);
+    return this.http.get(API.GET_CURSOS).pipe(
+      map((cursos) => {
+        return cursos;
+      }));
   }
 
   getCategorias() {
-    return this.http.get(API.GET_CATEGORIAS);
+    return this.http.get(API.GET_CATEGORIAS).pipe(
+      map((categorias) => {
+        return categorias;
+      }));
   }
 
   processarCupom(Cupom: string, valorCobrado: number, taxaMatricula: number) {
@@ -76,7 +81,10 @@ export class ApiUltraService {
       + '/' + Cupom
       + '/' + valorCobrado.toString()
       + '/' + taxaMatricula.toString(), {}
-        );
+        ).pipe(
+          map((cupom) => {
+            return cupom;
+          }));;
         // .catch((err, c: any) => {
         //   return new Observable<any>(err); // err.error;
         // });

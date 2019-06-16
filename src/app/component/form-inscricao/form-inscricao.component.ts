@@ -174,7 +174,7 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
   selectCurso(e) {
     const codigoCurso = Number(e.target.value);
     const detalheCurso = this.cursos.filter((c) => c.id === codigoCurso)[0];
-    this.cursoEscolhido.pagamento.taxaMatricula = detalheCurso.variants[0].down_payment;
+    this.cursoEscolhido.pagamento.taxaMatricula = detalheCurso.variants[0].down_payment || 100;
     this.cursoEscolhido.pagamento.valorOriginal = detalheCurso.variants[0].price;
     this.cursoEscolhido.pagamento.valorCobrado = detalheCurso.variants[0].price;
     this.cursoEscolhido.codigo_vindi = detalheCurso.codigo_vindi;
@@ -216,7 +216,7 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
           alert('Erro: ' + c.msg );
         }
       }, function(c) {
-        alert('Erro: ' + c.error.msg );
+        alert('Erro: ' + c.error.message );
       });
     }
   }

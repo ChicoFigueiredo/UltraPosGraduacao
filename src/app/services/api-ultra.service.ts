@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, observable, of } from 'rxjs';
 import { map } from 'rxjs/operators'
 
 
@@ -78,18 +78,25 @@ export class ApiUltraService {
       }));
   }
 
-  processarCupom(Cupom: string, valorCobrado: number, taxaMatricula: number) {
-    return this.http.post(API.POST_PROCESS_CUPOM
+  processarCupom(Cupom: string = '', valorCobrado: number = 0, taxaMatricula: number = 0) {
+    if (Cupom !== ''){
+      const url = API.POST_PROCESS_CUPOM
       + '/' + Cupom
-      + '/' + valorCobrado.toString()
-      + '/' + taxaMatricula.toString(), {}
-        ).pipe(
-          map((cupom) => {
-            return cupom;
-          }));;
-        // .catch((err, c: any) => {
-        //   return new Observable<any>(err); // err.error;
-        // });
+      + '/' + (valorCobrado || 0).toString()
+      + '/' + (taxaMatricula || 0).toString();
+
+      return this.http.post(url, {}).pipe(
+                        map((cupom) => {
+                          return cupom;
+                        }));;
+                        // .catch((err, c: any) => {
+                        //   return new Observable<any>(err); // err.error;
+                        // });
+    } else {
+      alert('É necessário preencher o campo Cartão');
+      return of(null)
+    }
+
   }
 
   salvarMatricula(obj) {

@@ -72,7 +72,8 @@ iframe {
 }
 
 img.icon {
-    width: 2.5em !important;
+    width: 5vh !important;
+    display: flex;
 }
 
 .nav-tabs>li.active>a,

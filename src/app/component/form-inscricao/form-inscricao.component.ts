@@ -32,15 +32,15 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
 
   displayForm = 'initial';
 
-  @ViewChild('erroCPF') private erroCPF: ElementRef;
-  @ViewChild('selMatricula') private selMatricula: ElementRef;
-  @ViewChild('selMensalidade') private selMensalidade: ElementRef;
-  @ViewChild('txtCupom') private txtCupom: ElementRef;
-  @ViewChild('btnCupom') private btnCupom: ElementRef;
-  @ViewChild('formAluno') private formAluno;
-  @ViewChild('TituloModal') private TituloModal: ElementRef;
-  @ViewChild('msgRetorno') private msgRetorno: ElementRef;
-  @ViewChild('ifrmMensagem') private ifrmMensagem: ElementRef;
+  @ViewChild('erroCPF', { static: false }) private erroCPF: ElementRef;
+  @ViewChild('selMatricula', { static: true }) private selMatricula: ElementRef;
+  @ViewChild('selMensalidade', { static: true }) private selMensalidade: ElementRef;
+  @ViewChild('txtCupom', { static: true }) private txtCupom: ElementRef;
+  @ViewChild('btnCupom', { static: true }) private btnCupom: ElementRef;
+  @ViewChild('formAluno', { static: true }) private formAluno;
+  @ViewChild('TituloModal', { static: true }) private TituloModal: ElementRef;
+  @ViewChild('msgRetorno', { static: true }) private msgRetorno: ElementRef;
+  @ViewChild('ifrmMensagem', { static: false }) private ifrmMensagem: ElementRef;
 
   constructor(
     public alunoService: ApiUltraService,
@@ -65,9 +65,11 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
       x = x.sort((a, b) => a.name.pt > b.name.pt ? 1 : -1);
            // .filter((c) => c.published );
       this.cursos = x;
-      this.cursoEscolhido.codigoCategoria = Number( this.getCategoriaDoCurso(this.idCursoSelecionado).id );
-      this.cursoEscolhido.codigoCurso = Number(this.idCursoSelecionado);
-      this.selectCurso({ target : { value : this.idCursoSelecionado }});
+      if (this.idCursoSelecionado && this.getCategoriaDoCurso(this.idCursoSelecionado) && this.getCategoriaDoCurso(this.idCursoSelecionado).id) {
+        this.cursoEscolhido.codigoCategoria = Number( this.getCategoriaDoCurso(this.idCursoSelecionado).id );
+        this.cursoEscolhido.codigoCurso = Number(this.idCursoSelecionado);
+        this.selectCurso({ target : { value : this.idCursoSelecionado }});
+      }
     });
   }
 
@@ -76,9 +78,11 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
     this.cursoEscolhido.pagamento.parcelamento = 24;
     this.route.params.subscribe(params => {
       this.idCursoSelecionado = params['id'];
-      this.cursoEscolhido.codigoCategoria = Number( this.getCategoriaDoCurso(this.idCursoSelecionado).id );
-      this.cursoEscolhido.codigoCurso = Number(this.idCursoSelecionado);
-      this.selectCurso({ target : { value : this.idCursoSelecionado }});
+      if (this.idCursoSelecionado && this.getCategoriaDoCurso(this.idCursoSelecionado) && this.getCategoriaDoCurso(this.idCursoSelecionado).id){
+        this.cursoEscolhido.codigoCategoria = Number( this.getCategoriaDoCurso(this.idCursoSelecionado).id );
+        this.cursoEscolhido.codigoCurso = Number(this.idCursoSelecionado);
+        this.selectCurso({ target : { value : this.idCursoSelecionado }});
+      }
     });
   }
 
@@ -102,7 +106,7 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
               this.ultimaBuscaValidaCPF = cpf;
               this.alunoAtual = a[0];
             }
-           });
+           },err => console.log('err = ', err));
         }
       } else {
         // this.erroCPF.nativeElement.innerHTML = 'CPF com erro de validação, verifique'

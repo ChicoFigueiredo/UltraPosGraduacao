@@ -1,35 +1,40 @@
 input, select {
     font-family: Tahoma !important;
-    font-size: 1em !important;
+    font-size: 1.6vh !important;
     font-weight: bold;
     background-color: #efefef;
 }
 
 select {    
-    height: 2.5em;
+    height: 4.2vh;
 }
 
 label.control-label-left {
-    font-size: 0.8em !important;
+    font-size: 1.4vh !important;
 }
+
 
 :host { 
     .main-content ul, .main-content ol {
         margin-left: 0px !important; 
         margin-bottom: 0px !important; 
     }
+    .container {
+        padding: 0 !important;
+    }
+    
 }
 
 .form-group.brdbot {
     margin-bottom: .3em;
     h3 {
-        font-size: 2em;
+        font-size: 2.5vh;
         font-weight: bold;
     }
 }
 
 .panel-heading {
-    font-size: 1.5em;
+    font-size: 2vh;
     font-weight: bold;
 }
 
@@ -67,7 +72,7 @@ iframe {
 }
 
 img.icon {
-    width: 2.5em;
+    width: 2.5em !important;
 }
 
 .nav-tabs>li.active>a,

@@ -1,8 +1,8 @@
 <div class="container-fluid" [style.display]="displayForm" >
     <!-- Form Aluno: {{ formAluno.form.valid | json }} / CPF {{cpfInput.errors | json}} / CPF {{cpfInput.hasError('pattern') | json}} / CPF {{cpfInput.value | json}}<br>
     WhatsApp: {{whatsappInput.errors | json}} | CEP: {{cepInput.errors | json}}| e-mail: {{emailInput.errors | json}} -->
-    <div class="row">
-        <div class="container-fluid shadow">
+    <div class="row flex-center">
+        <div class="container-fluid shadow  col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
             <div class="row">
                 <div id="valErr" class="row viewerror clearfix hidden">
                     <div class="alert alert-danger">Oops! Seems there are some errors..</div>
@@ -12,7 +12,7 @@
                 </div>
 
 
-                <div class="row">
+                <div class="row flex">
                     <div class="col-md-12">
                         <div class="form-group brdbot">
                             <h3>Fomulário de Matricula</h3>
@@ -22,7 +22,7 @@
 
                         </div>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div id="panel2" class="panelcepInput panel-default" data-role="panel">
                                     <div class="panel-heading">Dados do aluno</div>
                                     <div class="panel-body">
@@ -52,7 +52,7 @@
 
                                                     <input autocomplete="off" #emailInput="ngModel" id="email" [(ngModel)]='alunoAtual.email' type="text" class="form-control k-textbox" data-role="text" placeholder="Digite seu e-mail" required="required" name="email" data-parsley-errors-container="#errId4"
                                                         pattern='^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$'>
-                                                    <span id="errId4" class="error" *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)">e-mail não validado</span>
+                                                    <span id="errId4" class="error" *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)">e-mail não validado &nbsp;</span>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -61,8 +61,8 @@
 
                                                     <input autocomplete="off" #emailInput2="ngModel" [(ngModel)]='alunoAtual.email_validado' id="email2" type="text" class="form-control k-textbox" data-role="text" placeholder="Digite seu e-mail" required="required" name="email_validado" data-parsley-errors-container="#errId4"
                                                         pattern='^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$'>
-                                                    <span id="errId4" class="error" *ngIf="emailInput2.invalid && (emailInput2.dirty || emailInput2.touched)">e-mail não validado</span>
-                                                    <span id="errId4" class="error" *ngIf="emailInput2.value != emailInput.value">E-Mail não bate</span>
+                                                    <span id="errId4" class="error" *ngIf="emailInput2.invalid && (emailInput2.dirty || emailInput2.touched)">e-mail não validado &nbsp;</span>
+                                                    <span id="errId4" class="error" *ngIf="emailInput2.value != emailInput.value">E-Mail não bate &nbsp;</span>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -153,7 +153,7 @@
 
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label" for="uf">UF:<span class="req"> *</span></label>
+                                                <label class="control-label-left" for="uf">UF:<span class="req"> *</span></label>
                                                 <div class="controls">
                                                     <select #ufInput="ngModel" id="uf" [(ngModel)]="alunoAtual.uf" class="form-control" required="required" name="uf" data-parsley-errors-container="#errId14">
                                                       <option *ngFor='let u of ufs' [value]="u.sigla" [selected]="alunoAtual.uf == u.sigla" >{{u.nome}}</option>
@@ -261,7 +261,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div id="panel3" class="panel panel-default" data-role="panel">
                                     <div class="panel-heading">Financeiro</div>
                                     <div class="panel-body">
@@ -284,20 +284,22 @@
                                                     </select><span id="errId24" class="error"></span>
                                             </div>
                                         </div>
-                                        <div class="form-group">
+
+                                        <div class="form-group" id="LiEAceito">
                                             <label class="control-label-left sr-only"></label>
                                             <div class="controls">
-
                                                 <label class="checkbox" for="marcaConcordo">
-                                                    <input  autocomplete="off" [(ngModel)]='alunoAtual.leuAcordo' type="checkbox" value="Li e estou de acordo com os Termos do Contrato" id="marcaConcordo" name="field181" data-parsley-errors-container="#errId25">Li e estou de acordo com os Termos do Contrato</label>
+                                                    <input  autocomplete="off" [(ngModel)]='alunoAtual.leuAcordo' type="checkbox" value="Li e estou de acordo com os Termos do Contrato" id="marcaConcordo" name="field181" data-parsley-errors-container="#errId25">
+                                                    Li e estou de acordo com os Termos do Contrato
+                                                </label>
                                                 <span id="errId25" class="error"></span>
                                             </div>
 
                                         </div>
+
                                         <div class="form-group" style="display: block;">
                                             <label class="control-label-left" for="matricula">Taxa de Matricula<span class="req"> *</span></label>
                                             <div class="controls">
-
                                                 <select #selMatricula id="matricula" [(ngModel)]='cursoEscolhido.pagamento.taxaMatricula' class="form-control" selected="selected" name="matricula" required="required" data-parsley-errors-container="#errId26">
                                                         <option value="{{cursoEscolhido.pagamento.taxaMatricula}}" selected="selected">{{cursoEscolhido.pagamento.taxaMatricula | currency:'BRL':'symbol':'.2-2'}}</option>
                                                     </select>
@@ -332,8 +334,10 @@
                                             <label class="control-label-left sr-only"></label>
                                             <div class="controls">
 
-                                                <label class="checkbox" for="marcaConcordo">
-                                                    <input  autocomplete="off" [(ngModel)]='cursoEscolhido.pagamento.pagarPrimeiraParcelaJuntoComMatricula' type="checkbox" value="Pagar primeira mensalidade junto com a matricula" id="pagarPrimeiraParcelaJuntoComMatricula" name="pagarPrimeiraParcelaJuntoComMatricula" data-parsley-errors-container="#pagarPrimeiraParcelaJuntoComMatricula">Pagar primeira mensalidade junto com a matricula</label>
+                                                <label class="checkbox" for="pagarPrimeiraParcelaJuntoComMatricula">
+                                                    <input  autocomplete="off" [(ngModel)]='cursoEscolhido.pagamento.pagarPrimeiraParcelaJuntoComMatricula' type="checkbox" value="Pagar primeira mensalidade junto com a matricula" id="pagarPrimeiraParcelaJuntoComMatricula" name="pagarPrimeiraParcelaJuntoComMatricula" data-parsley-errors-container="#pagarPrimeiraParcelaJuntoComMatricula">
+                                                    Pagar primeira mensalidade junto com a matricula
+                                                </label>
                                                 <span id="errId25" class="error"></span>
                                             </div>
 
@@ -355,7 +359,7 @@
                                         <div class="form-group" style="display: block;">
                                             <label class="control-label-left" for="cupom">FORMA DE PAGAMENTO</label>
                                         </div>
-                                        <div class="row" id="tab188" data-role="tab" style="display: block;" *ngIf="cursoEscolhido.pagamento.taxaMatricula || cursoEscolhido.pagamento.valorCobrado || false">
+                                        <div class="row" id="tab188" data-role="tab" style="display: block;" *ngIf="(cursoEscolhido.pagamento.taxaMatricula) || (cursoEscolhido.pagamento.valorCobrado && cursoEscolhido.pagamento.valorCobrado > 0) ">
                                             <ul class="nav nav-tabs">
                                                 <li class="">
                                                     <a href="#tabContent189" data-toggle="tab" id="tabLabel189"><img class="icon" src="assets/images/icons/boleto.svg"> Boleto Bancário</a>

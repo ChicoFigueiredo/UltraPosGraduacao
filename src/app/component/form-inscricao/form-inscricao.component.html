@@ -284,20 +284,22 @@
                                                     </select><span id="errId24" class="error"></span>
                                             </div>
                                         </div>
-                                        <div class="form-group">
+
+                                        <div class="form-group" id="LiEAceito">
                                             <label class="control-label-left sr-only"></label>
                                             <div class="controls">
-
                                                 <label class="checkbox" for="marcaConcordo">
-                                                    <input  autocomplete="off" [(ngModel)]='alunoAtual.leuAcordo' type="checkbox" value="Li e estou de acordo com os Termos do Contrato" id="marcaConcordo" name="field181" data-parsley-errors-container="#errId25">Li e estou de acordo com os Termos do Contrato</label>
+                                                    <input  autocomplete="off" [(ngModel)]='alunoAtual.leuAcordo' type="checkbox" value="Li e estou de acordo com os Termos do Contrato" id="marcaConcordo" name="field181" data-parsley-errors-container="#errId25">
+                                                    Li e estou de acordo com os Termos do Contrato
+                                                </label>
                                                 <span id="errId25" class="error"></span>
                                             </div>
 
                                         </div>
+
                                         <div class="form-group" style="display: block;">
                                             <label class="control-label-left" for="matricula">Taxa de Matricula<span class="req"> *</span></label>
                                             <div class="controls">
-
                                                 <select #selMatricula id="matricula" [(ngModel)]='cursoEscolhido.pagamento.taxaMatricula' class="form-control" selected="selected" name="matricula" required="required" data-parsley-errors-container="#errId26">
                                                         <option value="{{cursoEscolhido.pagamento.taxaMatricula}}" selected="selected">{{cursoEscolhido.pagamento.taxaMatricula | currency:'BRL':'symbol':'.2-2'}}</option>
                                                     </select>
@@ -332,8 +334,10 @@
                                             <label class="control-label-left sr-only"></label>
                                             <div class="controls">
 
-                                                <label class="checkbox" for="marcaConcordo">
-                                                    <input  autocomplete="off" [(ngModel)]='cursoEscolhido.pagamento.pagarPrimeiraParcelaJuntoComMatricula' type="checkbox" value="Pagar primeira mensalidade junto com a matricula" id="pagarPrimeiraParcelaJuntoComMatricula" name="pagarPrimeiraParcelaJuntoComMatricula" data-parsley-errors-container="#pagarPrimeiraParcelaJuntoComMatricula">Pagar primeira mensalidade junto com a matricula</label>
+                                                <label class="checkbox" for="pagarPrimeiraParcelaJuntoComMatricula">
+                                                    <input  autocomplete="off" [(ngModel)]='cursoEscolhido.pagamento.pagarPrimeiraParcelaJuntoComMatricula' type="checkbox" value="Pagar primeira mensalidade junto com a matricula" id="pagarPrimeiraParcelaJuntoComMatricula" name="pagarPrimeiraParcelaJuntoComMatricula" data-parsley-errors-container="#pagarPrimeiraParcelaJuntoComMatricula">
+                                                    Pagar primeira mensalidade junto com a matricula
+                                                </label>
                                                 <span id="errId25" class="error"></span>
                                             </div>
 

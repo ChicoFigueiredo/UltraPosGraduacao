@@ -1,6 +1,6 @@
 import { Component, OnInit, DoCheck, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import { ApiUltraService } from './../../services/api-ultra.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 // import { card, cvc, expiration } from 'creditcards';
 import * as card from 'creditcards/card';
 import * as cvv from 'creditcards/cvc';
@@ -46,6 +46,7 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
     public alunoService: ApiUltraService,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
+    private router: Router,
     private winRef: WindowRef
   ) {
 
@@ -347,6 +348,7 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
     }
     if (! al.leuAcordo) {
       alert('Para prosseguir é necessário aceitar os Termos do Contrato.');
+      this.router.navigateByUrl('#LiEAceito');
       return false;
     }
     return true;

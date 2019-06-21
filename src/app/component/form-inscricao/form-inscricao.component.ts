@@ -276,9 +276,9 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
               msgRetorno = 'Sua matricula foi registrada com sucesso<br>' + 
               'Seu boleto pode ser visualizado em ' + 
               '<a target="_blank" href="' + retorno.fat.bill.url + '">' + retorno.fat.bill.url + '</a>' ;
-              this.TituloModal.nativeElement.innerHTML = TituloModal;
-              this.msgRetorno.nativeElement.innerHTML = msgRetorno;
-              this.winRef.nativeWindow.open('/finish?TituloModal=' + encodeURIComponent(TituloModal) + '&msgRetorno=' + encodeURIComponent(msgRetorno));
+              // this.TituloModal.nativeElement.innerHTML = TituloModal;
+              // this.msgRetorno.nativeElement.innerHTML = msgRetorno;
+              // this.winRef.nativeWindow.open('/finish?TituloModal=' + encodeURIComponent(TituloModal) + '&msgRetorno=' + encodeURIComponent(msgRetorno));
             $('#exampleModal').modal();
           } else if (tipoPagamento === 'cartao') {
             if ( retorno.fat.bill.charges[0].last_transaction.status === 'rejected' ) {
@@ -290,9 +290,9 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
               'Entretanto houveram problemas com seu cartão, acesse o endereço ' + 
               '<a target="_blank" href="' + retorno.fat.bill.url + '">' + retorno.fat.bill.url + '</a>' + 
               'e verifique ou troque o cartão utilizado';
-              this.TituloModal.nativeElement.innerHTML = TituloModal;
-              this.msgRetorno.nativeElement.innerHTML = msgRetorno;
-              this.winRef.nativeWindow.open('/finish?TituloModal=' + encodeURIComponent(TituloModal) + '&msgRetorno=' + encodeURIComponent(msgRetorno));
+              // this.TituloModal.nativeElement.innerHTML = TituloModal;
+              // this.msgRetorno.nativeElement.innerHTML = msgRetorno;
+              // this.winRef.nativeWindow.open('/finish?TituloModal=' + encodeURIComponent(TituloModal) + '&msgRetorno=' + encodeURIComponent(msgRetorno));
               $('#exampleModal').modal();
             } else {
               this.displayForm = 'none';
@@ -302,9 +302,9 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
               msgRetorno = 'Sua matricula foi registrada com sucesso<br>' + 
               'Seu pagamento foi registrado e sua fatura pode ser visualizado em ' + 
               '<a target="_blank" href="' + retorno.fat.bill.url + '">' + retorno.fat.bill.url + '</a>';
-              this.TituloModal.nativeElement.innerHTML = TituloModal;
-              this.msgRetorno.nativeElement.innerHTML = msgRetorno;
-              this.winRef.nativeWindow.open('/finish?TituloModal=' + encodeURIComponent(TituloModal) + '&msgRetorno=' + encodeURIComponent(msgRetorno));
+              // this.TituloModal.nativeElement.innerHTML = TituloModal;
+              // this.msgRetorno.nativeElement.innerHTML = msgRetorno;
+              // this.winRef.nativeWindow.open('/finish?TituloModal=' + encodeURIComponent(TituloModal) + '&msgRetorno=' + encodeURIComponent(msgRetorno));
               $('#exampleModal').modal();
             }
           }

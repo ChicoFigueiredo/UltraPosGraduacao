@@ -41,6 +41,7 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
   @ViewChild('TituloModal', { static: true }) private TituloModal: ElementRef;
   @ViewChild('msgRetorno', { static: true }) private msgRetorno: ElementRef;
   @ViewChild('ifrmMensagem', { static: false }) private ifrmMensagem: ElementRef;
+  @ViewChild('LiEAceito', { static: true }) private LiEAceito: ElementRef;
 
   constructor(
     public alunoService: ApiUltraService,
@@ -349,7 +350,7 @@ export class FormInscricaoComponent implements OnInit, DoCheck {
     }
     if (! al.leuAcordo) {
       alert('Para prosseguir é necessário aceitar os Termos do Contrato.');
-      this.router.navigateByUrl('#LiEAceito');
+      this.LiEAceito.nativeElement.scrollIntoView();
       return false;
     }
     return true;

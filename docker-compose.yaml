@@ -1,0 +1,20 @@
+version: "3.5"
+services:
+  web.inscricao.ultra:
+    container_name: web.inscricao.ultra
+    image: httpd:latest
+    ports:
+      - "6601:80"
+    volumes:
+      - ./conf:/usr/local/apache2/conf
+      - ./dist:/usr/local/apache2/htdocs/
+      - ./tmp:/tmp
+    restart: always
+    networks:
+        - rede-ultrapos
+        
+networks:
+  rede-ultrapos:
+    external: true
+
+   
